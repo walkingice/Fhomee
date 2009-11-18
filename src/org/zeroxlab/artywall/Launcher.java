@@ -23,16 +23,39 @@ import android.util.Log;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
 
 /* Arty Wall (Temporary Name) is the Launcher of 0xLab for Android.  *\
 \* This Launcher is disigned by CMLab of National Taiwan University. */
 
 public class Launcher extends Activity {
 
+    final String TAG="Launcher";
+    TotalScreen screen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
+	LinearLayout layout = new LinearLayout(this);
+	screen = new TotalScreen(this);
+	layout.addView(screen);
+	setContentView(layout);
+    }
+
+    class TotalScreen extends View {
+	TotalScreen(Context context) {
+	    super(context);
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+	    Log.i(TAG,"Screen was touched");
+	    return true;
+	}
     }
 }
 
