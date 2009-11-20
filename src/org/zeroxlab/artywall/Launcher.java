@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -50,9 +51,29 @@ public class Launcher extends Activity {
 	setContentView(layout);
     }
 
-    class TotalScreen extends View {
+    @Override
+    protected void onPause() {
+	super.onPause();
+	screen.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+	super.onResume();
+	screen.onResume();
+    }
+
+    class TotalScreen extends GLSurfaceView {
+	ViewManager mViewManager;
 	TotalScreen(Context context) {
 	    super(context);
+	    mViewManager = new ViewManager(context, this);
+	}
+
+	public void onPause() {
+	}
+
+	public void onResume() {
 	}
 
 	@Override
