@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-
 package org.zeroxlab.artywall;
 
 import android.util.Log;
@@ -38,29 +37,29 @@ import android.graphics.*;
 public class Launcher extends Activity {
 
     final String TAG="Launcher";
-    TotalScreen screen;
+    TotalScreen mScreen;
     GestureInterpreter mInterpreter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	LinearLayout layout = new LinearLayout(this);
-	screen = new TotalScreen(this);
+	mScreen = new TotalScreen(this);
 	mInterpreter = new GestureInterpreter(320,480);
-	layout.addView(screen);
+	layout.addView(mScreen);
 	setContentView(layout);
     }
 
     @Override
     protected void onPause() {
 	super.onPause();
-	screen.onPause();
+	mScreen.onPause();
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
-	screen.onResume();
+	mScreen.onResume();
     }
 
     class TotalScreen extends GLSurfaceView {
@@ -71,25 +70,17 @@ public class Launcher extends Activity {
 	}
 
 	public void onPause() {
+	    super.onPause();
 	}
 
 	public void onResume() {
+	    super.onResume();
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 	    mInterpreter.processMotionEvent(event);
 	    return true;
-	}
-
-	protected void dispatchDraw(Canvas canvas) {
-	    Paint p = new Paint();
-	    p.setColor(Color.BLUE);
-	    canvas.drawRect(mInterpreter.scaleArea,p);
-	    p.setColor(Color.YELLOW);
-	    canvas.drawRect(mInterpreter.shiftArea, p);
-	    p.setColor(Color.RED);
-	    canvas.drawRect(mInterpreter.triggerArea, p);
 	}
     }
 }
