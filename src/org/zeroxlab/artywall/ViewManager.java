@@ -52,6 +52,8 @@ public class ViewManager {
     private Rect mViewPort;
     private GLSurfaceView mSurfaceView;
     private WallRenderer  mRenderer;
+    private ResourcesManager mResourceManager;
+    private TextureManager   mTextureManager;
 
     public ViewManager(Context context,GLSurfaceView surface) {
 	mContext     = context;
@@ -59,6 +61,8 @@ public class ViewManager {
 	mRenderer = new WallRenderer(mContext);
 	mSurfaceView.setEGLConfigChooser(false);
 	mSurfaceView.setRenderer(mRenderer);
+	mResourceManager = ResourcesManager.getInstance(mContext);
+	mTextureManager  = TextureManager.getInstance(mContext);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
@@ -121,9 +125,7 @@ public class ViewManager {
 	    gl.glEnable(GL10.GL_DEPTH_TEST);
 	    gl.glEnable(GL10.GL_TEXTURE_2D);
 	    
-	    TextureManager manager = TextureManager.getInstance();
-	    manager.setContext(mContext);
-	    mTextureID = manager.generateOneTexture(gl, R.drawable.robot);
+	    mTextureID = mTextureManager.generateOneTexture(gl, "robot");
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
