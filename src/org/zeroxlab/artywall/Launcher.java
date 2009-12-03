@@ -45,6 +45,7 @@ public class Launcher extends Activity {
 	super.onCreate(savedInstanceState);
 	LinearLayout layout = new LinearLayout(this);
 	mScreen = new TotalScreen(this);
+	mScreen.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	mInterpreter = new GestureInterpreter(320,480);
 	layout.addView(mScreen);
 	setContentView(layout);
@@ -80,6 +81,7 @@ public class Launcher extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 	    mInterpreter.processMotionEvent(event);
+	    mScreen.requestRender();
 	    return true;
 	}
     }
