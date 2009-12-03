@@ -38,24 +38,25 @@ public class TextureManager {
 
     private static TextureManager manager = new TextureManager();
     final String TAG="TextureManager";
-    Context   mContext;
-    Resources mResources;
+    private static Context          mContext;
+    private static ResourcesManager mResManager;
     private TextureManager() {
     }
 
-    synchronized static public TextureManager getInstance() {
+    synchronized static public TextureManager getInstance(Context context) {
 	if(manager == null) {
 	    manager = new TextureManager();
 	}
+
+	mContext    = context;
+	mResManager = ResourcesManager.getInstance(context);
 	return manager;
     }
 
     public void setContext(Context context) {
-	mContext   = context;
-	mResources = mContext.getResources();
     }
 
-    public int generateOneTexture(GL10 gl, int resource) {
+    public int generateOneTexture(GL10 gl, String name) {
 	    int[] textures = new int[1];
 	    gl.glGenTextures(1, textures, 0);
 	    gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
@@ -70,17 +71,7 @@ public class TextureManager {
 		    GL10.GL_CLAMP_TO_EDGE);
 	    gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
 		    GL10.GL_REPLACE);
-	    InputStream istream = mResources.openRawResource(resource);
-	    Bitmap bitmap;
-	    try {
-		bitmap = BitmapFactory.decodeStream(istream);
-	    } finally {
-		try {
-		    istream.close();
-		} catch(IOException e) {
-		    // ignore
-		}
-	    }
+	    Bitmap bitmap = mResManager.getBitmapByName(name);
 	    GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 	    bitmap.recycle();
 	    return textures[0];
