@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import java.util.HashMap;
 
 
 /* TextureManager is a singleton instance */
@@ -40,7 +41,9 @@ public class TextureManager {
     final String TAG="TextureManager";
     private static Context          mContext;
     private static ResourcesManager mResManager;
+    private HashMap mTextureMap;
     private TextureManager() {
+	mTextureMap = new HashMap();
     }
 
     synchronized static public TextureManager getInstance(Context context) {
@@ -57,7 +60,12 @@ public class TextureManager {
     }
 
     public int generateOneTexture(GL10 gl, String name) {
+
+	Integer textureId = (Integer)mTextureMap.get(name);
+
+	if(textureId == null) {
 	    int[] textures = new int[1];
+
 	    gl.glGenTextures(1, textures, 0);
 	    gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
 	    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
@@ -71,10 +79,22 @@ public class TextureManager {
 		    GL10.GL_CLAMP_TO_EDGE);
 	    gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
 		    GL10.GL_REPLACE);
+
 	    Bitmap bitmap = mResManager.getBitmapByName(name);
 	    GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 	    bitmap.recycle();
-	    return textures[0];
+
+	    textureId = new Integer(textures[0]);
+	    recordTextureName(name, textureId);
+	} else {
+	    Log.i(TAG, name + "created");
+	}
+
+	return textureId.intValue();
+    }
+
+    private void recordTextureName(String name, Integer index) {
+	mTextureMap.put(name, index);
     }
 }
 
