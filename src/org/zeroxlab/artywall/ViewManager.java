@@ -52,6 +52,7 @@ public class ViewManager {
     private Rect mViewPort;
     private GLSurfaceView mSurfaceView;
     private WallRenderer  mRenderer;
+    private Timeline mTimeline;
     private ResourcesManager mResourceManager;
     private TextureManager   mTextureManager;
 
@@ -63,57 +64,24 @@ public class ViewManager {
 	mSurfaceView.setRenderer(mRenderer);
 	mResourceManager = ResourcesManager.getInstance(mContext);
 	mTextureManager  = TextureManager.getInstance(mContext);
+	mTimeline        = Timeline.getInstance(mContext);
+	mTimeline.monitor(mSurfaceView);
+	GLAnimation ani = new GLAnimation(10000,50,5);
+	mTimeline.addAnimation(ani);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
 	private Context mContext;
-	private int mTextureID;
 
 	private final static int VERTS = 3;
 	private FloatBuffer mFVertexBuffer;
 	private FloatBuffer mTexBuffer;
 	private ShortBuffer mIndexBuffer;
 
+	private Triangle mTriangle;
+
 	public WallRenderer(Context context) {
 	    mContext = context;
-	    ByteBuffer vbb = ByteBuffer.allocateDirect(VERTS * 3 * 4);
-	    vbb.order(ByteOrder.nativeOrder());
-	    mFVertexBuffer = vbb.asFloatBuffer();
-
-	    ByteBuffer tbb = ByteBuffer.allocateDirect(VERTS * 2 * 4);
-	    tbb.order(ByteOrder.nativeOrder());
-	    mTexBuffer = tbb.asFloatBuffer();
-
-	    ByteBuffer ibb = ByteBuffer.allocateDirect(VERTS * 2);
-	    ibb.order(ByteOrder.nativeOrder());
-	    mIndexBuffer = ibb.asShortBuffer();
-
-	    float[] coords = {
-		// X, Y, Z
-		-0.5f, -0.25f, 0,
-		0.5f, -0.25f, 0,
-		0.0f,  0.559016994f, 0
-	    };
-
-	    for (int i = 0; i < VERTS; i++) {
-		for(int j = 0; j < 3; j++) {
-		    mFVertexBuffer.put(coords[i*3+j] * 2.0f);
-		}
-	    }
-
-	    for (int i = 0; i < VERTS; i++) {
-		for(int j = 0; j < 2; j++) {
-		    mTexBuffer.put(coords[i*3+j] * 2.0f + 0.5f);
-		}
-	    }
-
-	    for(int i = 0; i < VERTS; i++) {
-		mIndexBuffer.put((short) i);
-	    }
-
-	    mFVertexBuffer.position(0);
-	    mTexBuffer.position(0);
-	    mIndexBuffer.position(0);
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -125,7 +93,7 @@ public class ViewManager {
 	    gl.glEnable(GL10.GL_DEPTH_TEST);
 	    gl.glEnable(GL10.GL_TEXTURE_2D);
 	    
-	    mTextureID = mTextureManager.generateOneTexture(gl, "robot");
+	    mTriangle = new Triangle(mContext, gl, "robot");
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
@@ -151,19 +119,7 @@ public class ViewManager {
 
 	    GLU.gluLookAt(gl, 0, 0, -5, -2f, 0f, 0f, 0f, 1.0f, 0.0f);
 
-	    gl.glActiveTexture(GL10.GL_TEXTURE0);
-	    gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
-	    gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
-	    gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
-	    gl.glTranslatef(-2.0f,0.0f,0.0f);
-	    gl.glRotatef(2, 0, 1.0f, 1.0f);
-	    gl.glFrontFace(GL10.GL_CCW);
-	    gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer);
-	    gl.glEnable(GL10.GL_TEXTURE_2D);
-	    gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTexBuffer);
-	    gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, VERTS,
-		    GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
-
+	    mTriangle.onDrawFrame(gl);
 	}
     }
 
