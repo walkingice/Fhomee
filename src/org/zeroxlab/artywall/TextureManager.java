@@ -32,7 +32,9 @@ import java.io.IOException;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import java.util.HashMap;
-
+import java.util.Collection;
+import java.util.Iterator;
+import java.nio.IntBuffer;
 
 /* TextureManager is a singleton instance */
 public class TextureManager {
@@ -57,6 +59,18 @@ public class TextureManager {
     }
 
     public void setContext(Context context) {
+    }
+
+    public void clearTextures(GL10 gl) {
+	Collection c = mTextureMap.values();
+	IntBuffer buffer = IntBuffer.allocate(c.size());
+	Iterator<Integer> itr = c.iterator();
+	while(itr.hasNext()) {
+	    Integer i = itr.next();
+	    buffer.put(i.intValue());
+	}
+	mTextureMap.clear();
+	gl.glDeleteTextures(buffer.capacity(),buffer);
     }
 
     public int generateOneTexture(GL10 gl, String name) {
