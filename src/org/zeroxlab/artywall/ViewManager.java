@@ -63,18 +63,25 @@ public class ViewManager {
 	mSurfaceView = surface;
 	mTriangle = new Triangle(mContext);
 	mRenderer = new WallRenderer(mContext);
+	mRenderer.setViewManager(this);
 	mSurfaceView.setEGLConfigChooser(false);
 	mSurfaceView.setRenderer(mRenderer);
 	mResourceManager = ResourcesManager.getInstance(mContext);
 	mTextureManager  = TextureManager.getInstance(mContext);
 	mTimeline        = Timeline.getInstance(mContext);
 	mTimeline.monitor(mSurfaceView);
+    }
+
+    public void initGLViews(GL10 gl) {
+	mTriangle.createTextures(gl);
+
 	GLAnimation ani = new GLAnimation(10000,50,5);
 	mTimeline.addAnimation(ani);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
 	private Context mContext;
+	private ViewManager mManager;
 
 	private final static int VERTS = 3;
 	private FloatBuffer mFVertexBuffer;
@@ -83,6 +90,10 @@ public class ViewManager {
 
 	public WallRenderer(Context context) {
 	    mContext = context;
+	}
+
+	public void setViewManager(ViewManager manager) {
+	    mManager = manager;
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -94,7 +105,7 @@ public class ViewManager {
 	    gl.glEnable(GL10.GL_DEPTH_TEST);
 	    gl.glEnable(GL10.GL_TEXTURE_2D);
 
-	    mTriangle.createTextures(gl);
+	    mManager.initGLViews(gl);
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
