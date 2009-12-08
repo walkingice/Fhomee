@@ -35,13 +35,14 @@ public class Timeline {
     final String TAG="Timeline";
 
     public  static int ENDLESS = -1;
+    private int DEFAULT_UPDATE = 5000; // 5 secs
 
     private static Timeline mTimeline = new Timeline();
     private static Context mContext;
     private static int sleepingPeriod = 35;
 
     private long mLastRedraw;
-    private long mUpdate = 500;
+    private long mUpdate = DEFAULT_UPDATE;
 
     private GLSurfaceView mSurface;
     private RedrawThread  mThread;
@@ -62,6 +63,10 @@ public class Timeline {
     public void addAnimation(GLAnimation animation) {
 	animation.setStart(SystemClock.uptimeMillis());
 	mAnimations.add(animation);
+	long update = animation.getUpdateTime();
+	if (mUpdate > update) {
+	    mUpdate = update;
+	}
     }
 
     public void monitor(GLSurfaceView surface) {
@@ -77,7 +82,7 @@ public class Timeline {
 	    return;
 	}
 	Iterator<GLAnimation> iterator = mAnimations.iterator();
-	long minimal = 500;
+	long minimal = DEFAULT_UPDATE;
 
 	while (iterator.hasNext()) {
 	    GLAnimation ani = iterator.next();
@@ -100,7 +105,7 @@ public class Timeline {
 	if (mAnimations.isEmpty()) {
 	    //No animation, do nothing
 	} else {
-	    if (mLastRedraw + mUpdate > now) {
+	    if (mLastRedraw + mUpdate < now) {
 		haveToRedraw = true;
 	    }
 	}
