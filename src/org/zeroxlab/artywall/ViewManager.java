@@ -56,9 +56,12 @@ public class ViewManager {
     private ResourcesManager mResourceManager;
     private TextureManager   mTextureManager;
 
+    private Triangle mTriangle;
+
     public ViewManager(Context context,GLSurfaceView surface) {
 	mContext     = context;
 	mSurfaceView = surface;
+	mTriangle = new Triangle(mContext);
 	mRenderer = new WallRenderer(mContext);
 	mSurfaceView.setEGLConfigChooser(false);
 	mSurfaceView.setRenderer(mRenderer);
@@ -78,8 +81,6 @@ public class ViewManager {
 	private FloatBuffer mTexBuffer;
 	private ShortBuffer mIndexBuffer;
 
-	private Triangle mTriangle;
-
 	public WallRenderer(Context context) {
 	    mContext = context;
 	}
@@ -92,8 +93,8 @@ public class ViewManager {
 	    gl.glShadeModel(GL10.GL_SMOOTH);
 	    gl.glEnable(GL10.GL_DEPTH_TEST);
 	    gl.glEnable(GL10.GL_TEXTURE_2D);
-	    
-	    mTriangle = new Triangle(mContext, gl, "robot");
+
+	    mTriangle.createTextures(gl);
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
