@@ -32,14 +32,16 @@ public class GLAnimation {
     private long mStart  = 0;
     private long mEnd    = 0;
     private long mLife   = 0;
+    private long mUpdate = 0;
     private int  mRepeat = 1;
 
     GLAnimation(long howLong) {
-	this(howLong, 1);
+	this(howLong,500, 1);
     }
 
-    GLAnimation(long howLong, int repeatTimes) {
+    GLAnimation(long howLong,long update, int repeatTimes) {
 	mLife   = howLong;
+	mUpdate = update;
 	mRepeat = repeatTimes;
     }
 
@@ -50,6 +52,10 @@ public class GLAnimation {
     public void setStart(long start) {
 	mStart = start;
 	mEnd   = mStart + mLife;
+    }
+
+    public long getUpdateTime() {
+	return mUpdate;
     }
 
     public boolean isFinish(long now) {
