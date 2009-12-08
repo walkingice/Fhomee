@@ -79,6 +79,11 @@ public class ViewManager {
 	mTimeline.addAnimation(ani);
     }
 
+    public void drawGLViews(GL10 gl) {
+	GLU.gluLookAt(gl, 0, 0, -5, -2f, 0f, 0f, 0f, 1.0f, 0.0f);
+	mTriangle.onDrawFrame(gl);
+    }
+
     class WallRenderer implements GLSurfaceView.Renderer {
 	private Context mContext;
 	private ViewManager mManager;
@@ -129,9 +134,7 @@ public class ViewManager {
 	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 	    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
-	    GLU.gluLookAt(gl, 0, 0, -5, -2f, 0f, 0f, 0f, 1.0f, 0.0f);
-
-	    mTriangle.onDrawFrame(gl);
+	    mManager.drawGLViews(gl);
 	}
     }
 
