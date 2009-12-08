@@ -88,11 +88,6 @@ public class ViewManager {
 	private Context mContext;
 	private ViewManager mManager;
 
-	private final static int VERTS = 3;
-	private FloatBuffer mFVertexBuffer;
-	private FloatBuffer mTexBuffer;
-	private ShortBuffer mIndexBuffer;
-
 	public WallRenderer(Context context) {
 	    mContext = context;
 	}
