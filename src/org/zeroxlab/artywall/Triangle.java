@@ -59,8 +59,8 @@ public class Triangle{
     private ShortBuffer mIndexBuffer;
     private long mTime;
 
-    public Triangle(Context context, GL10 gl, String imgName) {
-	mTextureID = TextureManager.getInstance(context).generateOneTexture(gl, imgName);
+    public Triangle(Context context) {
+	mContext = context;
 	ByteBuffer vbb = ByteBuffer.allocateDirect(VERTS * 3 * 4);
 	vbb.order(ByteOrder.nativeOrder());
 	mFVertexBuffer = vbb.asFloatBuffer();
@@ -102,6 +102,11 @@ public class Triangle{
 	mTime = SystemClock.uptimeMillis();
     }
 
+    public void createTextures(GL10 gl) {
+	String imgName = "robot";
+	TextureManager manager = TextureManager.getInstance(mContext);
+	mTextureID = manager.generateOneTexture(gl, imgName);
+    }
 
     public void onDrawFrame(GL10 gl) {
 
