@@ -38,7 +38,10 @@ public class Timeline {
 
     private static Timeline mTimeline = new Timeline();
     private static Context mContext;
-    private static int millisSecond = 35;
+    private static int sleepingPeriod = 35;
+
+    private long mLastRedraw;
+    private long mUpdate = 500;
 
     private GLSurfaceView mSurface;
     private RedrawThread  mThread;
@@ -64,35 +67,47 @@ public class Timeline {
     public void monitor(GLSurfaceView surface) {
 	mSurface = surface;
 	mAnimations = new ArrayList<GLAnimation>();
+	mLastRedraw = SystemClock.uptimeMillis();
 	mThread = new RedrawThread();
 	mThread.start();
     }
 
-    private void clearExpiredAnimation() {
+    private void clearExpiredAnimation(long now) {
 	if (mAnimations.isEmpty()) {
 	    return;
 	}
-	long now = SystemClock.uptimeMillis();
 	Iterator<GLAnimation> iterator = mAnimations.iterator();
+	long minimal = 500;
 
 	while (iterator.hasNext()) {
 	    GLAnimation ani = iterator.next();
 	    if(ani.isFinish(now)) {
 		ani.callback();
 		iterator.remove();
+	    } else {
+		if(minimal > ani.getUpdateTime()) {
+		    minimal = ani.getUpdateTime();
+		}
 	    }
 	}
+	mUpdate = minimal;
     }
 
     private void processRedraw() {
 	boolean haveToRedraw = false;
-	clearExpiredAnimation();
-	if (!mAnimations.isEmpty()) {
-	    haveToRedraw = true;
+	long now = SystemClock.uptimeMillis();
+	clearExpiredAnimation(now);
+	if (mAnimations.isEmpty()) {
+	    //No animation, do nothing
+	} else {
+	    if (mLastRedraw + mUpdate > now) {
+		haveToRedraw = true;
+	    }
 	}
 
 	if (haveToRedraw) {
 	    mSurface.requestRender();
+	    mLastRedraw = now;
 	}
     }
 
@@ -108,7 +123,7 @@ public class Timeline {
 	public void run() {
 	    while (keepRunning) {
 		try {
-		    sleep(millisSecond);
+		    sleep(sleepingPeriod);
 		    processRedraw();
 		} catch (InterruptedException exception) {
 		    Log.i(TAG,"ooops, RedrawThread was interrupted!");
