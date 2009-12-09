@@ -66,8 +66,8 @@ public class ViewManager {
 	mSurfaceView.setRenderer(mRenderer);
 
 	mResourceManager = ResourcesManager.getInstance(mContext);
-	mTextureManager  = TextureManager.getInstance(mContext);
 
+	mTextureManager  = TextureManager.getInstance();
 	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
     }
