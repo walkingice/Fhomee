@@ -66,7 +66,7 @@ public class TextureManager {
 	gl.glDeleteTextures(buffer.capacity(),buffer);
     }
 
-    public int generateOneTexture(GL10 gl, Bitmap bitmap) {
+    public int generateOneTexture(GL10 gl, Bitmap bitmap, String name) {
 
 	Integer textureId = (Integer)mTextureMap.get(name);
 
