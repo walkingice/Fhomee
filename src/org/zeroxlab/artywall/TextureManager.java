@@ -41,24 +41,17 @@ public class TextureManager {
 
     private static TextureManager manager = new TextureManager();
     final String TAG="TextureManager";
-    private static Context          mContext;
-    private static ResourcesManager mResManager;
     private HashMap mTextureMap;
     private TextureManager() {
 	mTextureMap = new HashMap();
     }
 
-    synchronized static public TextureManager getInstance(Context context) {
+    synchronized static public TextureManager getInstance() {
 	if(manager == null) {
 	    manager = new TextureManager();
 	}
 
-	mContext    = context;
-	mResManager = ResourcesManager.getInstance(context);
 	return manager;
-    }
-
-    public void setContext(Context context) {
     }
 
     public void clearTextures(GL10 gl) {
@@ -73,7 +66,7 @@ public class TextureManager {
 	gl.glDeleteTextures(buffer.capacity(),buffer);
     }
 
-    public int generateOneTexture(GL10 gl, String name) {
+    public int generateOneTexture(GL10 gl, Bitmap bitmap) {
 
 	Integer textureId = (Integer)mTextureMap.get(name);
 
@@ -94,7 +87,6 @@ public class TextureManager {
 	    gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
 		    GL10.GL_REPLACE);
 
-	    Bitmap bitmap = mResManager.getBitmapByName(name);
 	    GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 	    bitmap.recycle();
 
