@@ -38,7 +38,6 @@ public class Timeline {
     private int DEFAULT_UPDATE = 5000; // 5 secs
 
     private static Timeline mTimeline = new Timeline();
-    private static Context mContext;
     private static int sleepingPeriod = 35;
 
     private long mLastRedraw;
@@ -51,12 +50,11 @@ public class Timeline {
     private Timeline() {
     }
 
-    synchronized static public Timeline getInstance(Context context) {
+    synchronized static public Timeline getInstance() {
 	if (mTimeline == null) {
 	    mTimeline = new Timeline();
 	}
 
-	mContext = context;
 	return mTimeline;
     }
 

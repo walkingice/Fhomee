@@ -64,9 +64,11 @@ public class ViewManager {
 	mRenderer = new WallRenderer(this);
 	mSurfaceView.setEGLConfigChooser(false);
 	mSurfaceView.setRenderer(mRenderer);
+
 	mResourceManager = ResourcesManager.getInstance(mContext);
 	mTextureManager  = TextureManager.getInstance(mContext);
-	mTimeline        = Timeline.getInstance(mContext);
+
+	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
     }
 
