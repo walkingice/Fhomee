@@ -62,8 +62,7 @@ public class ViewManager {
 	mContext     = context;
 	mSurfaceView = surface;
 	mTriangle = new Triangle(mContext);
-	mRenderer = new WallRenderer(mContext);
-	mRenderer.setViewManager(this);
+	mRenderer = new WallRenderer(this);
 	mSurfaceView.setEGLConfigChooser(false);
 	mSurfaceView.setRenderer(mRenderer);
 	mResourceManager = ResourcesManager.getInstance(mContext);
@@ -85,14 +84,9 @@ public class ViewManager {
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
-	private Context mContext;
 	private ViewManager mManager;
 
-	public WallRenderer(Context context) {
-	    mContext = context;
-	}
-
-	public void setViewManager(ViewManager manager) {
+	public WallRenderer(ViewManager manager) {
 	    mManager = manager;
 	}
 
