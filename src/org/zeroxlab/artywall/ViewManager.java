@@ -61,7 +61,6 @@ public class ViewManager {
     public ViewManager(Context context,GLSurfaceView surface) {
 	mContext     = context;
 	mSurfaceView = surface;
-	mTriangle = new Triangle(mContext);
 	mRenderer = new WallRenderer(this);
 	mSurfaceView.setEGLConfigChooser(false);
 	mSurfaceView.setRenderer(mRenderer);
@@ -72,6 +71,7 @@ public class ViewManager {
     }
 
     public void initGLViews(GL10 gl) {
+	mTriangle = new Triangle(mContext);
 	mTriangle.createTextures(gl);
 
 	GLAnimation ani = new GLAnimation(10000,50,5);
