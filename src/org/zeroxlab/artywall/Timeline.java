@@ -105,6 +105,7 @@ public class Timeline {
 	if (mAnimations.isEmpty()) {
 	    //No animation, do nothing
 	} else {
+	    // FIXME: the time may be reset. maybe use Math.abs?
 	    if (mLastRedraw + mUpdate < now) {
 		haveToRedraw = true;
 	    }
