@@ -104,8 +104,10 @@ public class Triangle{
 
     public void createTextures(GL10 gl) {
 	String imgName = "robot";
-	TextureManager manager = TextureManager.getInstance(mContext);
-	mTextureID = manager.generateOneTexture(gl, imgName);
+	ResourcesManager resManager = ResourcesManager.getInstance(mContext);
+	TextureManager manager = TextureManager.getInstance();
+	Bitmap bitmap = resManager.getBitmapByName(imgName);
+	mTextureID = manager.generateOneTexture(gl, bitmap, imgName);
     }
 
     public void onDrawFrame(GL10 gl) {
