@@ -33,8 +33,8 @@ import android.graphics.*;
 
 public class GLView {
 
-    public boolean visible = true;
-    final String TAG="GLView";
+    private boolean visible = true;
+    final String TAG = "GLView";
     private float updateRate = 1f;
 
     Rect mArea; // quick hack, it supposed to be 4 arbitrary points
@@ -42,6 +42,17 @@ public class GLView {
 		// arbitrary triangle in the feature...hope so.
 
     public void drawGLView() {
+	if(!visible) {
+	    return;
+	}
+    }
+
+    public void hide() {
+	visible = false;
+    }
+
+    pubic void show() {
+	visible = true;
     }
 }
 
