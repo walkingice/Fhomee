@@ -119,8 +119,6 @@ public class Triangle{
 	gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
 	gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 	gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
-	gl.glTranslatef(-2.0f,0.0f,0.0f);
-	gl.glRotatef(angle, 0, 1.0f, 1.0f);
 	gl.glFrontFace(GL10.GL_CCW);
 	gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mFVertexBuffer);
 	gl.glEnable(GL10.GL_TEXTURE_2D);

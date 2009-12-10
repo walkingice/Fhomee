@@ -57,6 +57,7 @@ public class ViewManager {
     private TextureManager   mTextureManager;
 
     private Triangle mTriangle;
+    private Triangle mTriangle2;
 
     public ViewManager(Context context,GLSurfaceView surface) {
 	mContext     = context;
@@ -76,13 +77,18 @@ public class ViewManager {
 	mTriangle = new Triangle(mContext);
 	mTriangle.createTextures(gl);
 
-	GLAnimation ani = new GLAnimation(10000,50,5);
-	mTimeline.addAnimation(ani);
+	mTriangle2 = new Triangle(mContext);
+	mTriangle2.createTextures(gl);
     }
 
     public void drawGLViews(GL10 gl) {
-	GLU.gluLookAt(gl, 0, 0, -5, -2f, 0f, 0f, 0f, 1.0f, 0.0f);
+	gl.glLoadIdentity();
+	gl.glTranslatef(-1.0f, 0.5f, -4.0f);
 	mTriangle.onDrawFrame(gl);
+
+	gl.glLoadIdentity();
+	gl.glTranslatef(0.0f, -0.5f, -2.0f);
+	mTriangle2.onDrawFrame(gl);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
@@ -109,8 +115,7 @@ public class ViewManager {
 	    float ratio = (float) w / h;
 	    gl.glMatrixMode(GL10.GL_PROJECTION);
 	    gl.glLoadIdentity();
-	    gl.glFrustumf(-ratio, ratio, -1, 1, 3, 7); 
-
+	    gl.glFrustumf(-ratio-1, ratio+1, -2f, 2f, 0.5f, 10f);
 	}
 
 	public void onDrawFrame(GL10 gl) {
@@ -126,6 +131,8 @@ public class ViewManager {
 	    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 
 	    mManager.drawGLViews(gl);
+
+	    gl.glLoadIdentity();
 	}
     }
 
