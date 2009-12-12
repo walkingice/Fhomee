@@ -45,6 +45,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
 
+import android.graphics.RectF;
+
 public class ViewManager {
 
     final String TAG="ViewManager";
@@ -56,8 +58,7 @@ public class ViewManager {
     private ResourcesManager mResourceManager;
     private TextureManager   mTextureManager;
 
-    private Triangle mTriangle;
-    private Triangle mTriangle2;
+    private GLView view1;
 
     public ViewManager(Context context,GLSurfaceView surface) {
 	mContext     = context;
@@ -74,21 +75,22 @@ public class ViewManager {
     }
 
     public void initGLViews(GL10 gl) {
-	mTriangle = new Triangle(mContext);
-	mTriangle.createTextures(gl);
+	view1 = new GLView(mContext);
+	String imgName = "robot";
+	ResourcesManager resManager = ResourcesManager.getInstance(mContext);
+	TextureManager manager = TextureManager.getInstance();
+	Bitmap bitmap = resManager.getBitmapByName(imgName);
+	int id = manager.generateOneTexture(gl, bitmap, imgName);
+	view1.setTextureID(id);
 
-	mTriangle2 = new Triangle(mContext);
-	mTriangle2.createTextures(gl);
+	RectF rect = new RectF(0f, 0f, 2.5f, 2.5f);
+	view1.setSize(rect);
     }
 
     public void drawGLViews(GL10 gl) {
 	gl.glLoadIdentity();
-	gl.glTranslatef(-1.0f, 0.5f, -4.0f);
-	mTriangle.onDrawFrame(gl);
-
-	gl.glLoadIdentity();
-	gl.glTranslatef(0.0f, -0.5f, -2.0f);
-	mTriangle2.onDrawFrame(gl);
+	gl.glTranslatef(-0.0f, 0.5f, -4.0f);
+	view1.drawGLView(gl);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
@@ -116,11 +118,10 @@ public class ViewManager {
 	    gl.glMatrixMode(GL10.GL_PROJECTION);
 	    gl.glLoadIdentity();
 	    gl.glFrustumf(-ratio-1, ratio+1, -2f, 2f, 0.5f, 10f);
+	    Log.i(TAG,"Set frustumf to: ratio="+ ratio);
 	}
 
 	public void onDrawFrame(GL10 gl) {
-	    gl.glDisable(GL10.GL_DITHER);
-
 	    gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
 		    GL10.GL_MODULATE);
 	    gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
@@ -128,7 +129,10 @@ public class ViewManager {
 	    gl.glLoadIdentity();
 
 	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-	    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+	    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+	    gl.glEnableClientState(GL10.GL_COLOR_BUFFER_BIT);
+	    //gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+	    gl.glEnable(gl.GL_CULL_FACE);
 
 	    mManager.drawGLViews(gl);
 
