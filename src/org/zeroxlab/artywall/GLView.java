@@ -30,6 +30,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import android.graphics.*;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -41,13 +43,14 @@ public class GLView {
     final static String TAG = "GLView";
     final static int VERTEX_DIMENSION  = 3;
     final static int TEXTURE_DIMENSION = 2;
+    final static int COLOR_SIZE = 4; // RGBA
 
     private boolean visible = true;
     private float updateRate = 1f;
     private Context mContext;
 
-    private int mVertexNum = 3;
-    private ShortBuffer mIndexBuf;
+    private int mVertexNum = 4;
+    private ByteBuffer  mIndexBuf;
     private FloatBuffer mVertexBuf;
     private FloatBuffer mTextureBuf;
     private FloatBuffer mColorBuf;
@@ -66,38 +69,46 @@ public class GLView {
 	ByteBuffer texture;
 	ByteBuffer color;
 	// 1short = 2byte, 1float = 4 byte
-	index   = ByteBuffer.allocateDirect(3 * 2);
+	index   = ByteBuffer.allocateDirect(6);
 	vertex  = ByteBuffer.allocateDirect(mVertexNum * VERTEX_DIMENSION * 4);
-	texture = ByteBuffer.allocateDirect(4 * TEXTURE_DIMENSION * 4);
-	color   = ByteBuffer.allocateDirect(mVertexNum * 4 * 4);
+	texture = ByteBuffer.allocateDirect(mVertexNum * TEXTURE_DIMENSION * 4);
+	color   = ByteBuffer.allocateDirect(mVertexNum * COLOR_SIZE * 4);
 
-	mIndexBuf   = index.asShortBuffer();
+	index.order(ByteOrder.nativeOrder());
+	vertex.order(ByteOrder.nativeOrder());
+	texture.order(ByteOrder.nativeOrder());
+	color.order(ByteOrder.nativeOrder());
+
+	mIndexBuf   = index;
 	mVertexBuf  = vertex.asFloatBuffer();
 	mTextureBuf = texture.asFloatBuffer();
 	mColorBuf   = color.asFloatBuffer();
 
 	mIndexBuf.position(0);
-	mIndexBuf.put((short)0);
-	mIndexBuf.put((short)1);
-	mIndexBuf.put((short)2);
+	mIndexBuf.put((byte)0);
+	mIndexBuf.put((byte)1);
+	mIndexBuf.put((byte)3);
+	mIndexBuf.put((byte)1);
+	mIndexBuf.put((byte)2);
+	mIndexBuf.put((byte)3);
 	mIndexBuf.position(0);
 
 	mTextureBuf.position(0);
-	mTextureBuf.put(0f); // (0, 0)
-	mTextureBuf.put(0f);
-	mTextureBuf.put(1f); // (1, 0)
-	mTextureBuf.put(0f);
-	mTextureBuf.put(1f); // (1, 1)
-	mTextureBuf.put(1f);
 	mTextureBuf.put(0f); // (0, 1)
 	mTextureBuf.put(1f);
+	mTextureBuf.put(1f); // (1, 1)
+	mTextureBuf.put(1f);
+	mTextureBuf.put(1f); // (1, 0)
+	mTextureBuf.put(0f);
+	mTextureBuf.put(0f); // (0, 0)
+	mTextureBuf.put(0f);
 	mTextureBuf.position(0);
 
 	mColorBuf.position(0);
-	for (int i=0; i< 3; i++) {
-	    mColorBuf.put(1f);
-	    mColorBuf.put(1f);
-	    mColorBuf.put(0.5f);
+	for (int i=0; i< mVertexNum; i++) {
+	    mColorBuf.put(0f);
+	    mColorBuf.put(0f);
+	    mColorBuf.put(i*0.5f);
 	    mColorBuf.put(0.7f);
 	}
 	mColorBuf.position(0);
@@ -108,29 +119,33 @@ public class GLView {
     }
 
     public void setSize(RectF rect) {
+	/*  0    1
+	 *  |----|
+	 *  |    |
+	 *  |----|
+	 *  3    2
+	 */
 	mArea = rect;
 	float height = mArea.height();
 	float width  = mArea.width();
 
-	Log.i(TAG,"width:"+width+" height:"+height);
-
 	mVertexBuf.position(0);
-
-	mVertexBuf.put(-0.5f*2);
-	mVertexBuf.put(0.25f*2);
-	mVertexBuf.put(0);
-
-	mVertexBuf.put(0.5f*2);
-	mVertexBuf.put(0.25f*2);
-	mVertexBuf.put(0);
-/*
-	mVertexBuf.put(width);
-	mVertexBuf.put(-height);
-	mVertexBuf.put(0);
-*/
-	mVertexBuf.put(0);
-	mVertexBuf.put(0.55f*2);
-	mVertexBuf.put(0);
+	// point 0
+	mVertexBuf.put((float)0);
+	mVertexBuf.put((float)height);
+	mVertexBuf.put((float)0);
+	// point 1
+	mVertexBuf.put((float)width);
+	mVertexBuf.put((float)height);
+	mVertexBuf.put((float)0);
+	// point 2
+	mVertexBuf.put((float)width);
+	mVertexBuf.put((float)0);
+	mVertexBuf.put((float)0);
+	// point 3
+	mVertexBuf.put((float)0);
+	mVertexBuf.put((float)0);
+	mVertexBuf.put((float)0);
 
 	mVertexBuf.position(0);
     }
@@ -139,6 +154,13 @@ public class GLView {
 	if (!visible) {
 	    return;
 	}
+
+	gl.glFrontFace(gl.GL_CW);
+	gl.glVertexPointer(VERTEX_DIMENSION, GL10.GL_FLOAT, 0, mVertexBuf);
+	gl.glColorPointer(4, gl.GL_FLOAT, 0, mColorBuf);
+	gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuf);
+
+/*
 	gl.glActiveTexture(GL10.GL_TEXTURE0);
 	gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
 	gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
@@ -149,13 +171,7 @@ public class GLView {
 	gl.glEnable(GL10.GL_TEXTURE_2D);
 	gl.glTexCoordPointer(TEXTURE_DIMENSION, GL10.GL_FLOAT, 0, mTextureBuf);
 	gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuf);
-
-	gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 3,
-		GL10.GL_UNSIGNED_SHORT, mIndexBuf);
-	mVertexBuf.position(0);
-	mTextureBuf.position(0);
-	mIndexBuf.position(0);
-	mColorBuf.position(0);
+*/
     }
 
     public void hide() {

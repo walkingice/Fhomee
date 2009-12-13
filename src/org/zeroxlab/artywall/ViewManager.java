@@ -80,7 +80,7 @@ public class ViewManager {
     }
 
     public void initGLViews(GL10 gl) {
-	/*
+
 	view1 = new GLView(mContext);
 	String imgName = "robot";
 	ResourcesManager resManager = ResourcesManager.getInstance(mContext);
@@ -89,14 +89,16 @@ public class ViewManager {
 	int id = manager.generateOneTexture(gl, bitmap, imgName);
 	view1.setTextureID(id);
 
-	RectF rect = new RectF(0f, 0f, 2.5f, 2.5f);
+	RectF rect = new RectF(0f, 0f, 2f, 2f);
 	view1.setSize(rect);
-	*/
     }
 
     public void drawGLViews(GL10 gl) {
+	gl.glMatrixMode(gl.GL_MODELVIEW);
 	gl.glLoadIdentity();
-	gl.glTranslatef(-0.0f, 0.5f, -4.0f);
+	gl.glTranslatef(-1f, -1f, -3.0f);
+	gl.glRotatef(mX, 0, 1, 0);
+	gl.glRotatef(mY, 0, 0, 1);
 	view1.drawGLView(gl);
     }
 
@@ -108,7 +110,6 @@ public class ViewManager {
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-	    gl.glDisable(GL10.GL_DITHER);
 	    gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
 		    GL10.GL_FASTEST);
 	    gl.glClearColor(.5f, .1f, .1f, 1);
@@ -116,106 +117,31 @@ public class ViewManager {
 	    gl.glEnable(GL10.GL_DEPTH_TEST);
 	    gl.glEnable(GL10.GL_TEXTURE_2D);
 
+	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+	    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+	    gl.glEnable(gl.GL_CULL_FACE);
+
 	    mManager.initGLViews(gl);
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
-	    gl.glViewport(0, 0, w, h);
-	/*    float ratio = (float) w / h;
-	    gl.glMatrixMode(GL10.GL_PROJECTION);
 	    gl.glLoadIdentity();
-	    gl.glFrustumf(-ratio-1, ratio+1, -2f, 2f, 0.5f, 10f);
-	    Log.i(TAG,"Set frustumf to: ratio="+ ratio);
-*/
+	    gl.glViewport(0, 0, w, h);
+
+	    float ratio = (float)w / h;
+	    gl.glMatrixMode(gl.GL_PROJECTION);
+	    gl.glLoadIdentity();
+	    Log.i(TAG,"w="+w+" h="+h+" ration = "+ratio);
+	    gl.glFrustumf(-1, 1, -1, 1, 3.0f, 4.0f);
+
 	}
 
 	public void onDrawFrame(GL10 gl) {
-       IntBuffer   mVertexBuffer;
-        IntBuffer   mColorBuffer;
-        ByteBuffer  mIndexBuffer;
-
-           int one = 0x10000;
-            /* Every vertex got 3 values, for
-             * x / y / z position in the kartesian space.
-             */
-            int vertices[] = { 
-                -one, -one, -one,
-                one, -one, -one,
-                one,  one, -one,
-                -one,  one, -one,
-                -one, -one,  one,
-                one, -one,  one,
-                one,  one,  one,
-                -one,  one,  one,
-            };  
-            int colors[] = { 
-             0,    0,    0,  one,
-             one,    0,    0,  one,
-             one,  one,    0,  one,
-             0,  one,    0,  one,
-             0,    0,  one,  one,
-             one,    0,  one,  one,
-             one,  one,  one,  one,
-             0,  one,  one,  one,
-             };
-           byte indices[] = {
-                0, 4, 5,
-                0, 5, 1,
-                1, 5, 6,
-                1, 6, 2,
-                2, 6, 7,
-                2, 7, 3,
-                3, 7, 4,
-                3, 4, 0,
-                4, 7, 6
-            };
-           ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length*4);
-            vbb.order(ByteOrder.nativeOrder());
-            mVertexBuffer = vbb.asIntBuffer();
-            mVertexBuffer.put(vertices);
-            mVertexBuffer.position(0);
-            ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length*4);
-            cbb.order(ByteOrder.nativeOrder());
-            mColorBuffer = cbb.asIntBuffer();
-            mColorBuffer.put(colors);
-            mColorBuffer.position(0);
-            mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
-            mIndexBuffer.put(indices);
-            mIndexBuffer.position(0);
-
 	    gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
 		    GL10.GL_MODULATE);
 	    gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-int w=200, h=200;
-gl.glViewport(0, 0, w, h);
-
-       float ratio = (float)w / h;
-       gl.glMatrixMode(gl.GL_PROJECTION);
-        gl.glLoadIdentity();
-        gl.glFrustumf(-ratio, ratio, -1, 1, 2, 12);
-
-gl.glDisable(gl.GL_DITHER);
-
-        gl.glMatrixMode(gl.GL_MODELVIEW);
-        gl.glLoadIdentity();
-        gl.glTranslatef(0, 0, -3.0f-3);
-        //gl.glScalef(0.5f, 0.5f, 0.5f);
-        gl.glRotatef(mX, 0, 1, 0);
-        gl.glRotatef(mY, 0, 0, 1);
-        gl.glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
-
-	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-	    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-	    gl.glEnable(gl.GL_CULL_FACE);
-	
-		gl.glFrontFace(gl.GL_CW);
-           gl.glVertexPointer(3, gl.GL_FIXED, 0, mVertexBuffer);
-            gl.glColorPointer(4, gl.GL_FIXED, 0, mColorBuffer);
-            gl.glDrawElements(gl.GL_TRIANGLES, 3, gl.GL_UNSIGNED_BYTE, mIndexBuffer);
-
-	    gl.glLoadIdentity();
+	    mManager.drawGLViews(gl);
 	}
     }
 
