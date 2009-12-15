@@ -137,7 +137,7 @@ public class ViewManager {
 	    gl.glViewport(0, 0, w, h);
 	    gl.glMatrixMode(gl.GL_PROJECTION);
 	    gl.glLoadIdentity();
-	    gl.glOrthof(-16, 16, -23, 23, 3.0f, 4.0f);
+	    gl.glOrthof(-16, 16, -23, 23, 3.0f, 50.0f);
 
 	}
 
