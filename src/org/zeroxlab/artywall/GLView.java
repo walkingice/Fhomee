@@ -93,15 +93,16 @@ public class GLView {
 	mIndexBuf.put((byte)3);
 	mIndexBuf.position(0);
 
+	// (0, 0) is Left-Top corner of Texture image
 	mTextureBuf.position(0);
-	mTextureBuf.put(0f); // (0, 1)
-	mTextureBuf.put(1f);
-	mTextureBuf.put(1f); // (1, 1)
-	mTextureBuf.put(1f);
-	mTextureBuf.put(1f); // (1, 0)
-	mTextureBuf.put(0f);
 	mTextureBuf.put(0f); // (0, 0)
 	mTextureBuf.put(0f);
+	mTextureBuf.put(1f); // (1, 0)
+	mTextureBuf.put(0f);
+	mTextureBuf.put(1f); // (1, 1)
+	mTextureBuf.put(1f);
+	mTextureBuf.put(0f); // (0, 1)
+	mTextureBuf.put(1f);
 	mTextureBuf.position(0);
 
 	mColorBuf.position(0);
@@ -157,21 +158,9 @@ public class GLView {
 
 	gl.glFrontFace(gl.GL_CW);
 	gl.glVertexPointer(VERTEX_DIMENSION, GL10.GL_FLOAT, 0, mVertexBuf);
-	gl.glColorPointer(4, gl.GL_FLOAT, 0, mColorBuf);
-	gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuf);
-
-/*
-	gl.glActiveTexture(GL10.GL_TEXTURE0);
 	gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
-	gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
-	gl.glTexParameterx(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
-	gl.glRotatef(15f,1f,1f,1f);
-	gl.glFrontFace(GL10.GL_CCW);
-	gl.glVertexPointer(mVertexNum, GL10.GL_FLOAT, 0, mVertexBuf);
-	gl.glEnable(GL10.GL_TEXTURE_2D);
 	gl.glTexCoordPointer(TEXTURE_DIMENSION, GL10.GL_FLOAT, 0, mTextureBuf);
-	gl.glColorPointer(4, GL10.GL_FLOAT, 0, mColorBuf);
-*/
+	gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuf);
     }
 
     public void hide() {
