@@ -165,54 +165,5 @@ public class ViewManager {
 	    mManager.drawGLViews(gl);
 	}
     }
-
-    class GLObject {
-	GLView mGLView;
-	PointF mPosition;
-	RectF  mRect;
-
-	GLObject(GLView view, PointF position, RectF rect) {
-	    mGLView   = view;
-	    mPosition = position;
-	    mRect     = rect;
-
-	    view.setSize(mRect);
-	}
-
-	GLObject(float l, float t, float r, float b) {
-	    this(null, l, t, r, b);
-	}
-
-	GLObject(GLView view, float l, float t, float r, float b) {
-	    if (view == null) {
-		view = new GLView();
-	    }
-
-	    float width  = Math.abs(r - l);
-	    float height = Math.abs(b - t);
-
-	    mGLView = view;
-	    mRect = new RectF(0, 0, width, height);
-	    mPosition = new PointF(l, t);
-
-	    view.setSize(mRect);
-	}
-
-	public float getPositionX() {
-	    return mPosition.x;
-	}
-
-	public float getPositionY() {
-	    return mPosition.y;
-	}
-
-	public void setTextureID(int id) {
-	    mGLView.setTextureID(id);
-	}
-
-	public void draw(GL10 gl) {
-	    mGLView.drawGLView(gl);
-	}
-    }
 }
 
