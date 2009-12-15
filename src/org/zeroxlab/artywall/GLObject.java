@@ -21,6 +21,7 @@ package org.zeroxlab.artywall;
 
 import android.util.Log;
 
+import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
@@ -41,6 +42,8 @@ public class GLObject {
     GLView mGLView;
     PointF mPosition;
     RectF  mRect;
+
+    String mTextureName = "zeroxdoll"; //default
 
     GLObject(GLView view, PointF position, RectF rect) {
 	mGLView   = view;
@@ -78,6 +81,18 @@ public class GLObject {
     }
 
     public void setTextureID(int id) {
+	mGLView.setTextureID(id);
+    }
+
+    public void setTextureName(String name) {
+	mTextureName = name;
+    }
+
+    public void generateTextures(GL10 gl, ResourcesManager resM, TextureManager texM) {
+	int    id;
+	Bitmap bitmap;
+	bitmap = resM.getBitmapByName(mTextureName);
+	id     = texM.generateOneTexture(gl, bitmap, mTextureName);
 	mGLView.setTextureID(id);
     }
 
