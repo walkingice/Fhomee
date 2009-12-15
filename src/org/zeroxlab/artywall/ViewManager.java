@@ -86,7 +86,14 @@ public class ViewManager {
 	ResourcesManager resManager = ResourcesManager.getInstance(mContext);
 	TextureManager manager = TextureManager.getInstance();
 
-	obj    = new GLObject(-7, 5 , 0, 0);
+	obj    = new GLObject(-20, -20 , 0, 0);
+	bitmap = resManager.getBitmapByName("flower");
+	id     = manager.generateOneTexture(gl, bitmap, "flower");
+	obj.setTextureID(id);
+
+	mGLObjects.add(obj);
+
+	obj    = new GLObject(1, 1 , 21, 21);
 	bitmap = resManager.getBitmapByName("robot");
 	id     = manager.generateOneTexture(gl, bitmap, "robot");
 	obj.setTextureID(id);
@@ -173,7 +180,7 @@ public class ViewManager {
 	    }
 
 	    mGLView = view;
-	    mRect = new RectF(0f, 0f, r - l, b - t);
+	    mRect = new RectF(l, t, r, b);
 	    mPosition = new PointF(l, t);
 
 	    view.setSize(mRect);
