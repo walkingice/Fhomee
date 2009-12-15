@@ -76,34 +76,30 @@ public class ViewManager {
 	mTimeline.monitor(mSurfaceView);
 
 	mGLObjects = new LinkedList<GLObject>();
+	initGLViews();
     }
 
-    public void initGLViews(GL10 gl) {
+    public void initGLViews() {
 	GLObject obj;
-	Bitmap bitmap;
-	int id;
 
-	obj    = new GLObject(-5, 5, 5, -5);
-	bitmap = mResourceManager.getBitmapByName("robot");
-	id     = mTextureManager.generateOneTexture(gl, bitmap, "robot");
-	obj.setTextureID(id);
-
+	obj = new GLObject(-5, 5, 5, -5);
+	obj.setTextureName("robot");
 	mGLObjects.add(obj);
 
-	obj    = new GLObject(-6, 4, 4, -6);
-	bitmap = mResourceManager.getBitmapByName("flower");
-	id     = mTextureManager.generateOneTexture(gl, bitmap, "flower");
-	obj.setTextureID(id);
-
+	obj = new GLObject(-6, 4, 4, -6);
+	obj.setTextureName("flower");
 	mGLObjects.add(obj);
 
-    	obj    = new GLObject(-3, -10, 9, -22);
-	bitmap = mResourceManager.getBitmapByName("zeroxdoll");
-	id     = mTextureManager.generateOneTexture(gl, bitmap, "zeroxdoll");
-	obj.setTextureID(id);
-
+	obj = new GLObject(-3, -10, 9, -22);
 	mGLObjects.add(obj);
-}
+    }
+
+    public void generateTextures(GL10 gl) {
+	for (int i = 0; i < mGLObjects.size(); i++) {
+	    GLObject obj = mGLObjects.get(i);
+	    obj.generateTextures(gl, mResourceManager, mTextureManager);
+	}
+    }
 
     public void drawGLViews(GL10 gl) {
 	GLObject obj;
@@ -145,7 +141,7 @@ public class ViewManager {
 	    gl.glEnable(gl.GL_BLEND);
 	    gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
 
-	    mManager.initGLViews(gl);
+	    mManager.generateTextures(gl);
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
