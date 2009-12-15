@@ -125,6 +125,9 @@ public class ViewManager {
 	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+
+	    mTextureManager.clearAll();
+
 	    gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
 		    GL10.GL_FASTEST);
 	    gl.glClearColor(.5f, .1f, .1f, 1);
