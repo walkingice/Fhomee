@@ -89,7 +89,7 @@ public class ViewManager {
 	int id = manager.generateOneTexture(gl, bitmap, imgName);
 	view1.setTextureID(id);
 
-	RectF rect = new RectF(0f, 0f, 2f, 2f);
+	RectF rect = new RectF(0f, 0f, 12f, 12f);
 	view1.setSize(rect);
     }
 
@@ -144,10 +144,35 @@ public class ViewManager {
 
     class GLObject {
 	GLView mGLView;
-	Point mPosition;
-	GLObject(GLView view, Point position) {
+	PointF mPosition;
+	RectF  mRect;
+
+	GLObject(GLView view, PointF position, RectF rect) {
 	    mGLView   = view;
 	    mPosition = position;
+	    mRect     = rect;
+	}
+
+	GLObject(GLView view, float l, float t, float r, float b) {
+	    mGLView = view;
+	    mRect = new RectF(0f, 0f, r - l, b - t);
+	    mPosition = new PointF(l, t);
+	}
+
+	public void getPositionX() {
+	    return mPosition.x;
+	}
+
+	public void getPositionY() {
+	    return mPosition.y;
+	}
+
+	public void setTextureID(int id) {
+	    mGLView.setTextureID(id);
+	}
+
+	public void draw(GL10 gl) {
+	    mGLView.drawGLView(gl);
 	}
     }
 }
