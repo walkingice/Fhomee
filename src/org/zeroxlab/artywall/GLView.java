@@ -23,7 +23,6 @@ import android.util.Log;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,7 +46,6 @@ public class GLView {
 
     private boolean visible = true;
     private float updateRate = 1f;
-    private Context mContext;
 
     private int mVertexNum = 4;
     private ByteBuffer  mIndexBuf;
@@ -61,9 +59,7 @@ public class GLView {
 		// but not a Rectangle. Maybe a GLView will compose
 		// arbitrary triangle in the feature...hope so.
 
-    public GLView(Context context)  {
-	mContext = context;
-
+    public GLView()  {
 	ByteBuffer index;
 	ByteBuffer vertex;
 	ByteBuffer texture;
