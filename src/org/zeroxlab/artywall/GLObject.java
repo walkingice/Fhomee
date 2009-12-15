@@ -39,6 +39,8 @@ public class GLObject {
 
     final String TAG = "GLObject";
 
+    protected float mDepth = -20f;
+
     GLView mGLView;
     PointF mPosition;
     RectF  mRect;
@@ -86,6 +88,10 @@ public class GLObject {
 
     public void setTextureName(String name) {
 	mTextureName = name;
+    }
+
+    public void moveModelViewToPosition(GL10 gl) {
+	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
     }
 
     public void generateTextures(GL10 gl, ResourcesManager resM, TextureManager texM) {
