@@ -118,7 +118,7 @@ public class ViewManager {
 	    gl.glEnable(GL10.GL_TEXTURE_2D);
 
 	    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-	    gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
+	    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	    gl.glEnable(gl.GL_CULL_FACE);
 
 	    mManager.initGLViews(gl);
