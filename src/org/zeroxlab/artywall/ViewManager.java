@@ -83,26 +83,23 @@ public class ViewManager {
 	Bitmap bitmap;
 	int id;
 
-	ResourcesManager resManager = ResourcesManager.getInstance(mContext);
-	TextureManager manager = TextureManager.getInstance();
-
 	obj    = new GLObject(-5, 5, 5, -5);
-	bitmap = resManager.getBitmapByName("robot");
-	id     = manager.generateOneTexture(gl, bitmap, "robot");
+	bitmap = mResourceManager.getBitmapByName("robot");
+	id     = mTextureManager.generateOneTexture(gl, bitmap, "robot");
 	obj.setTextureID(id);
 
 	mGLObjects.add(obj);
 
 	obj    = new GLObject(-6, 4, 4, -6);
-	bitmap = resManager.getBitmapByName("flower");
-	id     = manager.generateOneTexture(gl, bitmap, "flower");
+	bitmap = mResourceManager.getBitmapByName("flower");
+	id     = mTextureManager.generateOneTexture(gl, bitmap, "flower");
 	obj.setTextureID(id);
 
 	mGLObjects.add(obj);
 
     	obj    = new GLObject(-3, -10, 9, -22);
-	bitmap = resManager.getBitmapByName("zeroxdoll");
-	id     = manager.generateOneTexture(gl, bitmap, "zeroxdoll");
+	bitmap = mResourceManager.getBitmapByName("zeroxdoll");
+	id     = mTextureManager.generateOneTexture(gl, bitmap, "zeroxdoll");
 	obj.setTextureID(id);
 
 	mGLObjects.add(obj);
