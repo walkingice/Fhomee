@@ -54,16 +54,8 @@ public class TextureManager {
 	return manager;
     }
 
-    public void clearTextures(GL10 gl) {
-	Collection c = mTextureMap.values();
-	IntBuffer buffer = IntBuffer.allocate(c.size());
-	Iterator<Integer> itr = c.iterator();
-	while(itr.hasNext()) {
-	    Integer i = itr.next();
-	    buffer.put(i.intValue());
-	}
+    public void clearAll() {
 	mTextureMap.clear();
-	gl.glDeleteTextures(buffer.capacity(),buffer);
     }
 
     public int generateOneTexture(GL10 gl, Bitmap bitmap, String name) {
