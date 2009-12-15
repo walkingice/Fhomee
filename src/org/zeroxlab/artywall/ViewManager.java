@@ -99,7 +99,14 @@ public class ViewManager {
 	obj.setTextureID(id);
 
 	mGLObjects.add(obj);
-    }
+
+    	obj    = new GLObject(-3, -10, 9, -22);
+	bitmap = resManager.getBitmapByName("zeroxdoll");
+	id     = manager.generateOneTexture(gl, bitmap, "zeroxdoll");
+	obj.setTextureID(id);
+
+	mGLObjects.add(obj);
+}
 
     public void drawGLViews(GL10 gl) {
 	GLObject obj;
