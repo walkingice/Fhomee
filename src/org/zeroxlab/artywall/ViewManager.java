@@ -81,8 +81,7 @@ public class ViewManager {
 
     public void initGLViews(GL10 gl) {
 
-	view1 = new GLView(mContext);
-	obj1 = new GLObject(view1, -7, 5 , 0, 0);
+	obj1 = new GLObject(-7, 5 , 0, 0);
 
 	ResourcesManager resManager = ResourcesManager.getInstance(mContext);
 	TextureManager manager = TextureManager.getInstance();
@@ -150,6 +149,11 @@ public class ViewManager {
 	    mGLView   = view;
 	    mPosition = position;
 	    mRect     = rect;
+	}
+
+	GLObject(float l, float t, float r, float b) {
+	    GLView view = new GLView();
+	    this(view, l, t, r, b);
 	}
 
 	GLObject(GLView view, float l, float t, float r, float b) {
