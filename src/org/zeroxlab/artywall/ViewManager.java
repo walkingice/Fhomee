@@ -127,12 +127,9 @@ public class ViewManager {
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
 	    gl.glLoadIdentity();
 	    gl.glViewport(0, 0, w, h);
-
-	    float ratio = (float)w / h;
 	    gl.glMatrixMode(gl.GL_PROJECTION);
 	    gl.glLoadIdentity();
-	    Log.i(TAG,"w="+w+" h="+h+" ration = "+ratio);
-	    gl.glFrustumf(-1, 1, -1, 1, 3.0f, 4.0f);
+	    gl.glOrthof(-16, 16, -23, 23, 3.0f, 4.0f);
 
 	}
 
