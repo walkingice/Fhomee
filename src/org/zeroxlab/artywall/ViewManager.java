@@ -182,8 +182,11 @@ public class ViewManager {
 		view = new GLView();
 	    }
 
+	    float width  = Math.abs(r - l);
+	    float height = Math.abs(b - t);
+
 	    mGLView = view;
-	    mRect = new RectF(l, t, r, b);
+	    mRect = new RectF(0, 0, width, height);
 	    mPosition = new PointF(l, t);
 
 	    view.setSize(mRect);
