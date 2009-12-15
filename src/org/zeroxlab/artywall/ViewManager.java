@@ -60,7 +60,7 @@ public class ViewManager {
     private ResourcesManager mResourceManager;
     private TextureManager   mTextureManager;
 
-    private GLView view1;
+    private GLObject obj1;
 
     float mX=0, mY=0;
     public void setXY(float x, float y) {mX =x; mY = y;};
@@ -82,15 +82,14 @@ public class ViewManager {
     public void initGLViews(GL10 gl) {
 
 	view1 = new GLView(mContext);
-	String imgName = "robot";
+	obj1 = new GLObject(view1, -7, 5 , 0, 0);
+
 	ResourcesManager resManager = ResourcesManager.getInstance(mContext);
 	TextureManager manager = TextureManager.getInstance();
+	String imgName = "robot";
 	Bitmap bitmap = resManager.getBitmapByName(imgName);
 	int id = manager.generateOneTexture(gl, bitmap, imgName);
-	view1.setTextureID(id);
-
-	RectF rect = new RectF(0f, 0f, 12f, 12f);
-	view1.setSize(rect);
+	obj1.setTextureID(id);
     }
 
     public void drawGLViews(GL10 gl) {
