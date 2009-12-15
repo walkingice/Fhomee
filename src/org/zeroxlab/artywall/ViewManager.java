@@ -35,6 +35,8 @@ import android.graphics.*;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import java.util.LinkedList;
+
 import android.graphics.*;
 import java.io.InputStream;
 import java.io.IOException;
@@ -55,7 +57,7 @@ public class ViewManager {
     private ResourcesManager mResourceManager;
     private TextureManager   mTextureManager;
 
-    private GLObject obj1;
+    private LinkedList<GLObject> mGLObjects;
 
     float mX=0, mY=0;
     public void setXY(float x, float y) {mX =x; mY = y;};
@@ -72,27 +74,40 @@ public class ViewManager {
 	mTextureManager  = TextureManager.getInstance();
 	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
+
+	mGLObjects = new LinkedList<GLObject>();
     }
 
     public void initGLViews(GL10 gl) {
-
-	obj1 = new GLObject(-7, 5 , 0, 0);
+	GLObject obj;
+	Bitmap bitmap;
+	int id;
 
 	ResourcesManager resManager = ResourcesManager.getInstance(mContext);
 	TextureManager manager = TextureManager.getInstance();
-	String imgName = "robot";
-	Bitmap bitmap = resManager.getBitmapByName(imgName);
-	int id = manager.generateOneTexture(gl, bitmap, imgName);
-	obj1.setTextureID(id);
+
+	obj    = new GLObject(-7, 5 , 0, 0);
+	bitmap = resManager.getBitmapByName("robot");
+	id     = manager.generateOneTexture(gl, bitmap, "robot");
+	obj.setTextureID(id);
+
+	mGLObjects.add(obj);
     }
 
     public void drawGLViews(GL10 gl) {
+	GLObject obj;
+
 	gl.glMatrixMode(gl.GL_MODELVIEW);
-	gl.glLoadIdentity();
-	gl.glTranslatef(-1f, -1f, -3.0f);
-	gl.glRotatef(mX, 0, 1, 0);
-	gl.glRotatef(mY, 0, 0, 1);
-	obj1.draw(gl);
+
+	for (int i = 0; i < mGLObjects.size(); i++) {
+	    obj = mGLObjects.get(i);
+
+	    gl.glLoadIdentity();
+	    gl.glTranslatef(obj.getPositionX(), obj.getPositionY(), -3.0f);
+	    gl.glRotatef(mX, 0, 1, 0);
+	    gl.glRotatef(mY, 0, 0, 1);
+	    obj.draw(gl);
+	}
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
