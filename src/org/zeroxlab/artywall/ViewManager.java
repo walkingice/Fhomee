@@ -35,11 +35,6 @@ import android.graphics.*;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-
 import android.graphics.*;
 import java.io.InputStream;
 import java.io.IOException;
@@ -97,7 +92,7 @@ public class ViewManager {
 	gl.glTranslatef(-1f, -1f, -3.0f);
 	gl.glRotatef(mX, 0, 1, 0);
 	gl.glRotatef(mY, 0, 0, 1);
-	view1.drawGLView(gl);
+	obj1.draw(gl);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
@@ -149,24 +144,31 @@ public class ViewManager {
 	    mGLView   = view;
 	    mPosition = position;
 	    mRect     = rect;
+
+	    view.setSize(mRect);
 	}
 
 	GLObject(float l, float t, float r, float b) {
-	    GLView view = new GLView();
-	    this(view, l, t, r, b);
+	    this(null, l, t, r, b);
 	}
 
 	GLObject(GLView view, float l, float t, float r, float b) {
+	    if (view == null) {
+		view = new GLView();
+	    }
+
 	    mGLView = view;
 	    mRect = new RectF(0f, 0f, r - l, b - t);
 	    mPosition = new PointF(l, t);
+
+	    view.setSize(mRect);
 	}
 
-	public void getPositionX() {
+	public float getPositionX() {
 	    return mPosition.x;
 	}
 
-	public void getPositionY() {
+	public float getPositionY() {
 	    return mPosition.y;
 	}
 
