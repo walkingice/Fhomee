@@ -136,6 +136,9 @@ public class ViewManager {
 	    gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 	    gl.glEnable(gl.GL_CULL_FACE);
 
+	    gl.glEnable(gl.GL_BLEND);
+	    gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
+
 	    mManager.initGLViews(gl);
 	}
 
