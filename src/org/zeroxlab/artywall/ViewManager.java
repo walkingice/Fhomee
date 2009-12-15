@@ -86,16 +86,16 @@ public class ViewManager {
 	ResourcesManager resManager = ResourcesManager.getInstance(mContext);
 	TextureManager manager = TextureManager.getInstance();
 
-	obj    = new GLObject(-20, -20 , 0, 0);
-	bitmap = resManager.getBitmapByName("flower");
-	id     = manager.generateOneTexture(gl, bitmap, "flower");
+	obj    = new GLObject(-15, -15, -1, -1);
+	bitmap = resManager.getBitmapByName("robot");
+	id     = manager.generateOneTexture(gl, bitmap, "robot");
 	obj.setTextureID(id);
 
 	mGLObjects.add(obj);
 
-	obj    = new GLObject(1, 1 , 21, 21);
-	bitmap = resManager.getBitmapByName("robot");
-	id     = manager.generateOneTexture(gl, bitmap, "robot");
+	obj    = new GLObject(-16, -16, -2, -2);
+	bitmap = resManager.getBitmapByName("flower");
+	id     = manager.generateOneTexture(gl, bitmap, "flower");
 	obj.setTextureID(id);
 
 	mGLObjects.add(obj);
