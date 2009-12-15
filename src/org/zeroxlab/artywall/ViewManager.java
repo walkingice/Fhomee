@@ -117,7 +117,7 @@ public class ViewManager {
 	    obj = mGLObjects.get(i);
 
 	    gl.glLoadIdentity();
-	    gl.glTranslatef(obj.getPositionX(), obj.getPositionY(), -3.0f);
+	    gl.glTranslatef(obj.getPositionX(), obj.getPositionY(), -20.0f);
 	    gl.glRotatef(mX, 0, 1, 0);
 	    gl.glRotatef(mY, 0, 0, 1);
 	    obj.draw(gl);
