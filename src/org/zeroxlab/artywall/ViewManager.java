@@ -86,6 +86,7 @@ public class ViewManager {
 
     public void initGLViews() {
 	GLObject obj;
+	GLObject ground;
 
 	obj = new GLObject(-5, 5, 5, -5);
 	obj.setTextureName("robot");
@@ -95,8 +96,13 @@ public class ViewManager {
 	obj.setTextureName("flower");
 	mGLObjects.add(obj);
 
-	obj = new GLObject(-3, -10, 9, -22);
-	mGLObjects.add(obj);
+	ground = new GLObject(PROJ_LEFT, PROJ_BOTTOM, PROJ_RIGHT, -15);
+	ground.setTextureName("ground");
+	mGLObjects.add(ground);
+
+	obj = new GLObject(5, 1, 10, 6);
+	obj.setDepth(0);
+	ground.addChild(obj);
     }
 
     public void generateTextures(GL10 gl) {
