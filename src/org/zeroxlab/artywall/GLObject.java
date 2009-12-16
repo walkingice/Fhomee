@@ -119,6 +119,14 @@ public class GLObject {
 	bitmap = resM.getBitmapByName(mTextureName);
 	id     = texM.generateOneTexture(gl, bitmap, mTextureName);
 	mGLView.setTextureID(id);
+
+	if (mHasChildren) {
+	    GLObject obj;
+	    for (int i = 0; i < mChildren.size(); i++) {
+		obj = mChildren.get(i);
+		obj.generateTextures(gl, resM, texM);
+	    }
+	}
     }
 
     public void draw(GL10 gl) {
