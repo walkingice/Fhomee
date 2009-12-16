@@ -105,6 +105,10 @@ public class GLObject {
 	return obj;
     }
 
+    public void setDepth(float depth) {
+	mDepth = depth;
+    }
+
     private void moveModelViewToPosition(GL10 gl) {
 	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
     }
