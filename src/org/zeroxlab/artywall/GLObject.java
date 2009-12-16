@@ -90,7 +90,7 @@ public class GLObject {
 	mTextureName = name;
     }
 
-    public void moveModelViewToPosition(GL10 gl) {
+    private void moveModelViewToPosition(GL10 gl) {
 	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
     }
 
@@ -103,6 +103,7 @@ public class GLObject {
     }
 
     public void draw(GL10 gl) {
+	moveModelViewToPosition(gl);
 	mGLView.drawGLView(gl);
     }
 }
