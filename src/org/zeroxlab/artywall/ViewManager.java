@@ -96,7 +96,7 @@ public class ViewManager {
 	obj.setTextureName("flower");
 	mGLObjects.add(obj);
 
-	ground = new GLObject(PROJ_LEFT, PROJ_BOTTOM, PROJ_RIGHT, -15);
+	ground = new GLObject(PROJ_LEFT, -15, PROJ_RIGHT, PROJ_BOTTOM);
 	ground.setTextureName("ground");
 	mGLObjects.add(ground);
 
