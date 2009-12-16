@@ -81,7 +81,6 @@ public class Launcher extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 	    mInterpreter.processMotionEvent(event);
-	    mViewManager.setXY(event.getX(), event.getY());
 	    mScreen.requestRender();
 	    return true;
 	}

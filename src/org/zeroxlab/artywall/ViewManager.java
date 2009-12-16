@@ -67,9 +67,6 @@ public class ViewManager {
 
     private LinkedList<GLObject> mGLObjects;
 
-    float mX=0, mY=0;
-    public void setXY(float x, float y) {mX =x; mY = y;};
-
     public ViewManager(Context context,GLSurfaceView surface) {
 	mContext     = context;
 	mSurfaceView = surface;
@@ -118,8 +115,6 @@ public class ViewManager {
 	    obj = mGLObjects.get(i);
 
 	    gl.glLoadIdentity();
-	    gl.glRotatef(mX, 0, 1, 0);
-	    gl.glRotatef(mY, 0, 0, 1);
 	    obj.draw(gl);
 	}
     }
