@@ -27,6 +27,7 @@ import android.graphics.RectF;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import java.util.LinkedList;
 import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
@@ -46,6 +47,9 @@ public class GLObject {
     RectF  mRect;
 
     String mTextureName = "zeroxdoll"; //default
+
+    private boolean mHasChildren = false;
+    LinkedList<GLObject> mChildren;
 
     GLObject(float l, float t, float r, float b) {
 	this(null, l, t, r, b);
@@ -80,6 +84,25 @@ public class GLObject {
 
     public void setTextureName(String name) {
 	mTextureName = name;
+    }
+
+    public void addChild(GLObject obj) {
+	if (mChildren == null) {
+	    mChildren = new LinkedList<GLObject>();
+	}
+
+	mChildren.add(obj);
+	mHasChildren = true;
+    }
+
+    public GLObject removeChild(int index) {
+	GLObject obj = mChildren.remove(index);
+
+	if (mChildren.size() == 0) {
+	    mHasChildren = false;
+	}
+
+	return obj;
     }
 
     private void moveModelViewToPosition(GL10 gl) {
