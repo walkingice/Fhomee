@@ -48,6 +48,14 @@ import java.nio.*;
 
 public class ViewManager {
 
+    public static boolean USE_ORTHO = true;
+    public static float PROJ_LEFT   = -16f;
+    public static float PROJ_RIGHT  = 16f;
+    public static float PROJ_BOTTOM = -23f;
+    public static float PROJ_TOP    = 23f;
+    public static float PROJ_NEAR   = 3f;
+    public static float PROJ_FAR    = 50f;
+
     final String TAG="ViewManager";
     private Context mContext;
     private Rect mViewPort;
@@ -147,10 +155,18 @@ public class ViewManager {
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
 	    gl.glLoadIdentity();
 	    gl.glViewport(0, 0, w, h);
+
 	    gl.glMatrixMode(gl.GL_PROJECTION);
 	    gl.glLoadIdentity();
-	    gl.glOrthof(-16, 16, -23, 23, 3.0f, 50.0f);
-
+	    if (USE_ORTHO) {
+		gl.glOrthof(PROJ_LEFT, PROJ_RIGHT
+			, PROJ_BOTTOM, PROJ_TOP
+			, PROJ_NEAR, PROJ_FAR);
+	    } else {
+		gl.glFrustumf(PROJ_LEFT, PROJ_RIGHT
+			, PROJ_BOTTOM, PROJ_TOP
+			, PROJ_NEAR, PROJ_FAR);
+	    }
 	}
 
 	public void onDrawFrame(GL10 gl) {
