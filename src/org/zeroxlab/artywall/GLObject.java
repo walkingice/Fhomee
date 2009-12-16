@@ -47,14 +47,6 @@ public class GLObject {
 
     String mTextureName = "zeroxdoll"; //default
 
-    GLObject(GLView view, PointF position, RectF rect) {
-	mGLView   = view;
-	mPosition = position;
-	mRect     = rect;
-
-	view.setSize(mRect);
-    }
-
     GLObject(float l, float t, float r, float b) {
 	this(null, l, t, r, b);
     }
