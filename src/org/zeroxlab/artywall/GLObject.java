@@ -120,6 +120,19 @@ public class GLObject {
     public void draw(GL10 gl) {
 	moveModelViewToPosition(gl);
 	mGLView.drawGLView(gl);
+
+	if (mHasChildren) {
+	    GLObject obj;
+	    for (int i = 0; i < mChildren.size(); i++) {
+		obj = mChildren.get(i);
+
+		gl.glPushMatrix();
+		obj.draw(gl);
+		gl.glPopMatrix();
+	    }
+	}
+
+	return;
     }
 }
 
