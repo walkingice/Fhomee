@@ -66,6 +66,15 @@ public class ViewManager {
     private TextureManager   mTextureManager;
 
     private LinkedList<GLObject> mGLObjects;
+    private Room room, room2;
+
+    private float ratio = 1.0f;
+    public void updateRatio(float x, float y) {
+	float temp = (1000 - y) / 1000;
+	temp = Math.max(0.5f, temp);
+	temp = Math.min(1.0f, temp);
+	ratio = temp;
+    }
 
     public ViewManager(Context context,GLSurfaceView surface) {
 	mContext     = context;
@@ -85,31 +94,19 @@ public class ViewManager {
     }
 
     public void initGLViews() {
-	GLObject obj;
-	GLObject ground;
-
-	obj = new GLObject(-5, 5, 5, -5);
-	obj.setTextureName("robot");
-	mGLObjects.add(obj);
-
-	obj = new GLObject(-6, 4, 4, -6);
-	obj.setTextureName("flower");
-	mGLObjects.add(obj);
-
-	ground = new GLObject(PROJ_LEFT, -15, PROJ_RIGHT, PROJ_BOTTOM);
-	ground.setTextureName("ground");
-	mGLObjects.add(ground);
-
-	obj = new GLObject(5, 1, 10, 6);
-	obj.setDepth(0);
-	ground.addChild(obj);
+	room = new Room(0, "wall", "ground");
+	room2 = new Room(1, "wall_2", "ground");
     }
 
     public void generateTextures(GL10 gl) {
+	/*
 	for (int i = 0; i < mGLObjects.size(); i++) {
 	    GLObject obj = mGLObjects.get(i);
 	    obj.generateTextures(gl, mResourceManager, mTextureManager);
 	}
+	*/
+	room.generateTextures(gl, mResourceManager, mTextureManager);
+	room2.generateTextures(gl, mResourceManager, mTextureManager);
     }
 
     public void drawGLViews(GL10 gl) {
@@ -117,12 +114,26 @@ public class ViewManager {
 
 	gl.glMatrixMode(gl.GL_MODELVIEW);
 
+	/*
 	for (int i = 0; i < mGLObjects.size(); i++) {
 	    obj = mGLObjects.get(i);
 
 	    gl.glLoadIdentity();
 	    obj.draw(gl);
 	}
+	*/
+	gl.glLoadIdentity();
+	gl.glScalef(ratio, ratio, ratio);
+	gl.glTranslatef(0f, 0f, -20f);
+	gl.glPushMatrix();
+	gl.glTranslatef(PROJ_LEFT, PROJ_TOP, 0);
+	room.draw(gl);
+	gl.glPopMatrix();
+	gl.glTranslatef(32f, 0f, 0f);
+	gl.glPushMatrix();
+	gl.glTranslatef(PROJ_LEFT, PROJ_TOP, 0);
+	room2.draw(gl);
+	gl.glPopMatrix();
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
