@@ -124,14 +124,23 @@ public class ViewManager {
 	*/
 	gl.glLoadIdentity();
 	gl.glScalef(ratio, ratio, ratio);
-	gl.glTranslatef(0f, 0f, -20f);
+
+	/* the coordinate of OpenGL is different from normal computer system
+	 * We may rotate the coordinate so we don't have to worry about that.
+	 */
+	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
+					//         +y is heading for bottom
+	gl.glTranslatef(-16f, -23f, 0f);// move to Left-Top
+	gl.glTranslatef(0f, 0f, 20f);   // after rotating, the Z-axis upside down
+
 	gl.glPushMatrix();
-	gl.glTranslatef(PROJ_LEFT, PROJ_TOP, 0);
 	room.draw(gl);
 	gl.glPopMatrix();
+
+	// Move to next room
 	gl.glTranslatef(32f, 0f, 0f);
+
 	gl.glPushMatrix();
-	gl.glTranslatef(PROJ_LEFT, PROJ_TOP, 0);
 	room2.draw(gl);
 	gl.glPopMatrix();
     }
