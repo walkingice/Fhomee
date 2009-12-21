@@ -75,7 +75,7 @@ public class GLObject {
 	return mPosition.y;
     }
 
-    public void setTextureID(int id) {
+    private void setTextureID(int id) {
 	mGLView.setTextureID(id);
     }
 
