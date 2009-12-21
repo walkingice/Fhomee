@@ -54,8 +54,8 @@ public class Room {
 	mWallTexture   = wall;
 	mGroundTexture = ground;
 
-	mWall   = new GLObject(0, 0, WIDTH, -38f);
-	mGround = new GLObject(0, -38f, WIDTH, -46f);
+	mWall   = new GLObject(0, 0, WIDTH, 38f);
+	mGround = new GLObject(0, 38f, WIDTH, 8f);
 
 	mWall.setDepth(0);
 	mGround.setDepth(0);
