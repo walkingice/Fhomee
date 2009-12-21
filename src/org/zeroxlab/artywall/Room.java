@@ -43,8 +43,10 @@ public class Room {
 
     public static final float WIDTH  = ViewManager.PROJ_RIGHT - ViewManager.PROJ_LEFT;
     public static final float HEIGHT = ViewManager.PROJ_BOTTOM - ViewManager.PROJ_TOP;
-    public static final float LEFT   = ViewManager.PROJ_LEFT;
-    public static final float TOP    = ViewManager.PROJ_TOP;
+    public static final float LEFT   = 0f;
+    public static final float TOP    = 0f;
+    public static final float WALL_HEIGHT   = 38f;
+    public static final float GROUND_HEIGHT = HEIGHT - WALL_HEIGHT;
 
     private String mWallTexture   = "wall";
     private String mGroundTexture = "ground";
@@ -54,8 +56,8 @@ public class Room {
 	mWallTexture   = wall;
 	mGroundTexture = ground;
 
-	mWall   = new GLObject(0, 0, WIDTH, 38f);
-	mGround = new GLObject(0, 38f, WIDTH, 8f);
+	mWall   = new GLObject(0, 0, WIDTH, WALL_HEIGHT);
+	mGround = new GLObject(0, WALL_HEIGHT, WIDTH, GROUND_HEIGHT);
 
 	mWall.setDepth(0);
 	mGround.setDepth(0);
