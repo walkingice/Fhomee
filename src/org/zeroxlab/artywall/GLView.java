@@ -116,11 +116,12 @@ public class GLView {
     }
 
     public void setSize(RectF rect) {
-	/*  0    1
-	 *  |----|
-	 *  |    |
-	 *  |----|
-	 *  3    2
+	/*  0      1
+	 *  +------+
+	 *  |      |
+	 *  |      |
+	 *  +------+
+	 *  3      2
 	 */
 	mArea = rect;
 	float height = mArea.height();
@@ -137,11 +138,11 @@ public class GLView {
 	mVertexBuf.put((float)0);
 	// point 2
 	mVertexBuf.put((float)width);
-	mVertexBuf.put((float)height * -1);
+	mVertexBuf.put((float)height);
 	mVertexBuf.put((float)0);
 	// point 3
 	mVertexBuf.put((float)0);
-	mVertexBuf.put((float)height * -1);
+	mVertexBuf.put((float)height);
 	mVertexBuf.put((float)0);
 
 	mVertexBuf.position(0);
