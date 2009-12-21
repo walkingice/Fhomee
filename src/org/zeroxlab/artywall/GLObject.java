@@ -51,21 +51,18 @@ public class GLObject {
     private boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
-    GLObject(float l, float t, float r, float b) {
-	this(null, l, t, r, b);
+    GLObject(float x, float y, float width, float height) {
+	this(null, x, y, width, height);
     }
 
-    GLObject(GLView view, float l, float t, float r, float b) {
+    GLObject(GLView view, float x, float y, float width, float height) {
 	if (view == null) {
 	    view = new GLView();
 	}
 
-	float width  = Math.abs(r - l);
-	float height = Math.abs(b - t);
-
 	mGLView = view;
 	mRect = new RectF(0, 0, width, height);
-	mPosition = new PointF(l, t);
+	mPosition = new PointF(x, y);
 
 	view.setSize(mRect);
     }
