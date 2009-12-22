@@ -42,5 +42,11 @@ public class Wall extends GLObject {
 
 	setTextureName(background);
     }
+
+    public void addItem(GLObject obj, float x, float y, float angle) {
+	obj.setAngle(angle);
+	obj.setXY(x, y);
+	addChild(obj);
+    }
 }
 
