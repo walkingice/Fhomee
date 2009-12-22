@@ -45,6 +45,7 @@ public class GLObject {
     GLView mGLView;
     PointF mPosition;
     RectF  mRect;
+    float  mAngle = 0f;
 
     String mTextureName = "zeroxdoll"; //default
 
@@ -73,6 +74,10 @@ public class GLObject {
     public void setSize(float width, float height) {
 	mRect.set(0, 0, width, height);
 	mGLView.setSize(mRect);
+    }
+
+    public void setAngle(float angle) {
+	mAngle = angle % 360;
     }
 
     public float width() {
@@ -127,6 +132,7 @@ public class GLObject {
 
     private void moveModelViewToPosition(GL10 gl) {
 	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
+	gl.glRotatef(mAngle, 0, 0, 1f);
     }
 
     public void generateTextures(GL10 gl, ResourcesManager resM, TextureManager texM) {
