@@ -33,6 +33,10 @@ public class Wall extends GLObject {
 
     final String TAG = "Wall";
 
+    public Wall(float width, float height, String background) {
+	this(-1, width, height, background);
+    }
+
     public Wall(int id, float width, float height, String background) {
 	super(id, 0, 0, width, height);
 
