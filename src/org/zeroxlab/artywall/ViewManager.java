@@ -96,6 +96,40 @@ public class ViewManager {
     public void initGLViews() {
 	room = new Room(0, "wall", "ground");
 	room2 = new Room(1, "wall_2", "ground");
+
+	GLObject elf1 = new GLObject(0, 0, 1, 1);
+	GLObject elf2 = new GLObject(0, 0, 1, 1);
+	GLObject elf3 = new GLObject(0, 0, 1, 1);
+	GLObject elf4 = new GLObject(0, 0, 1, 1);
+
+	elf1.setTextureName("zeroxdoll");
+	elf2.setTextureName("android");
+	elf3.setTextureName("beagle");
+	elf4.setTextureName("flower");
+
+	room.addElf(elf1);
+	room.addElf(elf2);
+	room.addElf(elf3);
+	room2.addElf(elf4);
+
+	GLObject wanted1 = new GLObject(1, 1, 13, 13);
+	GLObject wanted2 = new GLObject(10, 1, 14, 13);
+	GLObject wanted3 = new GLObject(1, 9, 13, 13);
+	GLObject wanted4 = new GLObject(15, 8, 14, 13);
+	GLObject wanted5 = new GLObject(1, 1, 15, 15);
+	GLObject wanted6 = new GLObject(22, 15, 13, 13);
+	wanted1.setTextureName("luffy");
+	wanted2.setTextureName("nami");
+	wanted3.setTextureName("sanji");
+	wanted4.setTextureName("robin");
+	wanted5.setTextureName("buggy");
+	wanted6.setTextureName("zoro");
+	room.addItem(wanted1, 1f, 1f, 0f);
+	room.addItem(wanted2, 15f, 1f, 15f);
+	room.addItem(wanted3, 3f, 15f, 33f);
+	room.addItem(wanted4, 15f, 21f, 3f);
+	room2.addItem(wanted5, 1f, 1f, 20f);
+	room2.addItem(wanted6, 22f, 15f, 180f);
     }
 
     public void generateTextures(GL10 gl) {
