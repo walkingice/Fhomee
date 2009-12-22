@@ -70,6 +70,19 @@ public class GLObject {
 	return mPosition.y;
     }
 
+    public void setSize(float width, float height) {
+	mRect.set(0, 0, width, height);
+	mGLView.setSize(mRect);
+    }
+
+    public float width() {
+	return mRect.width();
+    }
+
+    public float height() {
+	return mRect.height();
+    }
+
     public void setXY(float x, float y) {
 	mPosition.x = x;
 	mPosition.y = y;
