@@ -32,17 +32,17 @@ import javax.microedition.khronos.opengles.GL10;
 /** 
  * Room is a basic data structure which contain a Wall, Ground and other GLObjects.
  */
-public class Room {
+public class Room extends GLObject {
 
     final String TAG = "Room";
 
-    public int mID = 0;
+    public int mID = -1;
 
     GLObject mWall;
     GLObject mGround;
 
-    public static final float WIDTH  = ViewManager.PROJ_RIGHT - ViewManager.PROJ_LEFT;
-    public static final float HEIGHT = ViewManager.PROJ_BOTTOM - ViewManager.PROJ_TOP;
+    public static final float WIDTH  = Math.abs(ViewManager.PROJ_RIGHT - ViewManager.PROJ_LEFT);
+    public static final float HEIGHT = Math.abs(ViewManager.PROJ_TOP - ViewManager.PROJ_BOTTOM);
     public static final float LEFT   = 0f;
     public static final float TOP    = 0f;
     public static final float WALL_HEIGHT   = 38f;
@@ -52,6 +52,7 @@ public class Room {
     private String mGroundTexture = "ground";
 
     public Room(int id, String wall, String ground) {
+	super(0, 0, WIDTH, HEIGHT);
 	mID = id;
 	mWallTexture   = wall;
 	mGroundTexture = ground;
@@ -59,31 +60,21 @@ public class Room {
 	mWall   = new GLObject(0, 0, WIDTH, WALL_HEIGHT);
 	mGround = new GLObject(0, WALL_HEIGHT, WIDTH, GROUND_HEIGHT);
 
-	mWall.setDepth(0);
-	mGround.setDepth(0);
-
 	mWall.setTextureName(mWallTexture);
 	mGround.setTextureName(mGroundTexture);
+
+	addChild(mWall);
+	addChild(mGround);
     }
 
     public Room(int id, GLObject wall, GLObject ground) {
+	super(0, 0, WIDTH, HEIGHT);
 	mID     = id;
 	mWall   = wall;
 	mGround = ground;
-    }
 
-    public void generateTextures(GL10 gl, ResourcesManager resM, TextureManager texM) {
-	mWall.generateTextures(gl, resM, texM);
-	mGround.generateTextures(gl, resM, texM);
-    }
-
-    public void draw(GL10 gl) {
-	/* Every time you start drawing this room, the position of ModelView
-	   should be placed at TOP-LEFT corner of this room */
-	gl.glPushMatrix();
-	mWall.draw(gl);
-	mGround.draw(gl);
-	gl.glPopMatrix();
+	addChild(mWall);
+	addChild(mGround);
     }
 }
 
