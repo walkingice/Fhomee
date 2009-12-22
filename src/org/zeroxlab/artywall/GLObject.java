@@ -40,7 +40,7 @@ public class GLObject {
 
     final String TAG = "GLObject";
 
-    protected float mDepth = -20f;
+    protected float mDepth = 0f;
 
     GLView mGLView;
     PointF mPosition;
@@ -52,26 +52,15 @@ public class GLObject {
     LinkedList<GLObject> mChildren;
 
     GLObject(float x, float y, float width, float height) {
-	this(null, x, y, width, height);
-    }
-
-    GLObject(GLView view, float x, float y, float width, float height) {
-	if (view == null) {
-	    view = new GLView();
-	}
-
-	mGLView = view;
 	mRect = new RectF(0, 0, width, height);
 	mPosition = new PointF(x, y);
-
-	view.setSize(mRect);
     }
 
-    public float getPositionX() {
+    public float getX() {
 	return mPosition.x;
     }
 
-    public float getPositionY() {
+    public float getY() {
 	return mPosition.y;
     }
 
@@ -80,6 +69,12 @@ public class GLObject {
     }
 
     public void setTextureName(String name) {
+	/* This GLObjew is visible and has texture, create a GLView */
+	if (mGLView == null) {
+	    mGLView = new GLView();
+	    mGLView.setSize(mRect);
+	}
+
 	mTextureName = name;
     }
 
@@ -111,11 +106,13 @@ public class GLObject {
     }
 
     public void generateTextures(GL10 gl, ResourcesManager resM, TextureManager texM) {
-	int    id;
-	Bitmap bitmap;
-	bitmap = resM.getBitmapByName(mTextureName);
-	id     = texM.generateOneTexture(gl, bitmap, mTextureName);
-	mGLView.setTextureID(id);
+	if (mGLView != null) {
+	    int    id;
+	    Bitmap bitmap;
+	    bitmap = resM.getBitmapByName(mTextureName);
+	    id     = texM.generateOneTexture(gl, bitmap, mTextureName);
+	    mGLView.setTextureID(id);
+	}
 
 	if (mHasChildren) {
 	    GLObject obj;
@@ -128,7 +125,9 @@ public class GLObject {
 
     public void draw(GL10 gl) {
 	moveModelViewToPosition(gl);
-	mGLView.drawGLView(gl);
+	if (mGLView != null) {
+	    mGLView.drawGLView(gl);
+	}
 
 	if (mHasChildren) {
 	    GLObject obj;
