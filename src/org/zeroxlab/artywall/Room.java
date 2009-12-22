@@ -74,5 +74,9 @@ public class Room extends GLObject {
 	addChild(mWall);
 	addChild(mGround);
     }
+
+    public void addElf(GLObject elf) {
+	mGround.addElf(elf);
+    }
 }
 
