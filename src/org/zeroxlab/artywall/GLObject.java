@@ -48,10 +48,12 @@ public class GLObject {
 
     String mTextureName = "zeroxdoll"; //default
 
+    private int mID = -1;
     private boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
-    GLObject(float x, float y, float width, float height) {
+    GLObject(int id, float x, float y, float width, float height) {
+	mID   = id;
 	mRect = new RectF(0, 0, width, height);
 	mPosition = new PointF(x, y);
     }
