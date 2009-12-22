@@ -37,7 +37,7 @@ public class Room extends GLObject {
     final String TAG = "Room";
 
     Wall mWall;
-    GLObject mGround;
+    Ground mGround;
 
     public static final float WIDTH  = Math.abs(ViewManager.PROJ_RIGHT - ViewManager.PROJ_LEFT);
     public static final float HEIGHT = Math.abs(ViewManager.PROJ_TOP - ViewManager.PROJ_BOTTOM);
@@ -55,7 +55,10 @@ public class Room extends GLObject {
 	mGroundTexture = ground;
 
 	mWall   = new Wall(WIDTH, WALL_HEIGHT, mWallTexture);
-	mGround = new GLObject(-1, 0f, WALL_HEIGHT, WIDTH, GROUND_HEIGHT);
+	mGround = new Ground(WIDTH, GROUND_HEIGHT, mGroundTexture);
+
+	mWall.setXY(0f, 0f);
+	mGround.setXY(0f, WALL_HEIGHT);
 
 	mGround.setTextureName(mGroundTexture);
 
@@ -63,7 +66,7 @@ public class Room extends GLObject {
 	addChild(mGround);
     }
 
-    public Room(int id, Wall wall, GLObject ground) {
+    public Room(int id, Wall wall, Ground ground) {
 	super(id, 0, 0, WIDTH, HEIGHT);
 	mWall   = wall;
 	mGround = ground;
