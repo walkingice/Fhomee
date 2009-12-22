@@ -52,6 +52,10 @@ public class GLObject {
     private boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
+    GLObject(float x, float y, float width, float height) {
+	this(-1, x, y, width, height);
+    }
+
     GLObject(int id, float x, float y, float width, float height) {
 	mID   = id;
 	mRect = new RectF(0, 0, width, height);
