@@ -66,6 +66,11 @@ public class GLObject {
 	return mPosition.y;
     }
 
+    public void setXY(float x, float y) {
+	mPosition.x = x;
+	mPosition.y = y;
+    }
+
     private void setTextureID(int id) {
 	mGLView.setTextureID(id);
     }
