@@ -36,8 +36,6 @@ public class Room extends GLObject {
 
     final String TAG = "Room";
 
-    public int mID = -1;
-
     GLObject mWall;
     GLObject mGround;
 
@@ -52,8 +50,7 @@ public class Room extends GLObject {
     private String mGroundTexture = "ground";
 
     public Room(int id, String wall, String ground) {
-	super(0, 0, WIDTH, HEIGHT);
-	mID = id;
+	super(id, 0, 0, WIDTH, HEIGHT);
 	mWallTexture   = wall;
 	mGroundTexture = ground;
 
@@ -69,7 +66,6 @@ public class Room extends GLObject {
 
     public Room(int id, GLObject wall, GLObject ground) {
 	super(0, 0, WIDTH, HEIGHT);
-	mID     = id;
 	mWall   = wall;
 	mGround = ground;
 
