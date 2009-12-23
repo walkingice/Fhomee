@@ -99,6 +99,7 @@ public class Timeline {
     private void processRedraw() {
 	boolean haveToRedraw = false;
 	long now = SystemClock.uptimeMillis();
+	GLAnimation.setNow(now);
 	clearExpiredAnimation(now);
 	if (mAnimations.isEmpty()) {
 	    //No animation, do nothing
