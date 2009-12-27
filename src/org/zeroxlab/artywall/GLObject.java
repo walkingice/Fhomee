@@ -53,6 +53,8 @@ public class GLObject {
     private boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
+    private GLAnimation mAnimation;
+
     GLObject(float x, float y, float width, float height) {
 	this(-1, x, y, width, height);
     }
@@ -91,6 +93,14 @@ public class GLObject {
     public void setXY(float x, float y) {
 	mPosition.x = x;
 	mPosition.y = y;
+    }
+
+    public void setAnimation(GLAnimation animation) {
+	mAnimation = animation;
+    }
+
+    public void clearAnimation() {
+	mAnimation = null;
     }
 
     private void setTextureID(int id) {
@@ -156,7 +166,14 @@ public class GLObject {
     public void draw(GL10 gl) {
 	moveModelViewToPosition(gl);
 	if (mGLView != null) {
-	    mGLView.drawGLView(gl);
+	    boolean drawMyself = true;
+	    if (mAnimation != null) {
+		drawMyself = mAnimation.applyAnimation(gl);
+	    }
+
+	    if (drawMyself) {
+		mGLView.drawGLView(gl);
+	    }
 	}
 
 	if (mHasChildren) {
