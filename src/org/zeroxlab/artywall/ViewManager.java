@@ -68,12 +68,35 @@ public class ViewManager {
     private LinkedList<GLObject> mGLObjects;
     private Room room, room2;
 
+    GLObject wanted1;
+    GLObject wanted2;
+    GLObject wanted3;
+    GLObject wanted4;
+    GLObject wanted5;
+    GLObject wanted6;
+
     private float ratio = 1.0f;
     public void updateRatio(float x, float y) {
 	float temp = (1000 - y) / 1000;
 	temp = Math.max(0.5f, temp);
 	temp = Math.min(1.0f, temp);
 	ratio = temp;
+    }
+
+    private boolean test = true;
+    public void performClick() {
+	long time = 300;
+	if (test) {
+	    GLTranslate test = new GLTranslate(time, 15f, 10f);
+	    test.bindGLObject(wanted1);
+	    mTimeline.addAnimation(test);
+	} else {
+	    GLTranslate test = new GLTranslate(time, 5f, 0f);
+	    test.bindGLObject(wanted1);
+	    mTimeline.addAnimation(test);
+	}
+
+	test = !test;
     }
 
     public ViewManager(Context context,GLSurfaceView surface) {
@@ -112,12 +135,12 @@ public class ViewManager {
 	room.addElf(elf3);
 	room2.addElf(elf4);
 
-	GLObject wanted1 = new GLObject(1, 1, 13, 13);
-	GLObject wanted2 = new GLObject(10, 1, 14, 13);
-	GLObject wanted3 = new GLObject(1, 9, 13, 13);
-	GLObject wanted4 = new GLObject(15, 8, 14, 13);
-	GLObject wanted5 = new GLObject(1, 1, 15, 15);
-	GLObject wanted6 = new GLObject(22, 15, 13, 13);
+	wanted1 = new GLObject(1, 1, 13, 13);
+	wanted2 = new GLObject(10, 1, 14, 13);
+	wanted3 = new GLObject(1, 9, 13, 13);
+	wanted4 = new GLObject(15, 8, 14, 13);
+	wanted5 = new GLObject(1, 1, 15, 15);
+	wanted6 = new GLObject(22, 15, 13, 13);
 	wanted1.setTextureName("luffy");
 	wanted2.setTextureName("nami");
 	wanted3.setTextureName("sanji");
@@ -130,6 +153,7 @@ public class ViewManager {
 	room.addItem(wanted4, 15f, 21f, 3f);
 	room2.addItem(wanted5, 1f, 1f, 20f);
 	room2.addItem(wanted6, 22f, 15f, 180f);
+
     }
 
     public void generateTextures(GL10 gl) {
@@ -144,6 +168,7 @@ public class ViewManager {
     }
 
     public void drawGLViews(GL10 gl) {
+	Log.i(TAG,"DRAW!!!!!");
 	GLObject obj;
 
 	gl.glMatrixMode(gl.GL_MODELVIEW);
