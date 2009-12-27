@@ -23,17 +23,22 @@ import android.util.Log;
 
 import android.content.Context;
 
+import javax.microedition.khronos.opengles.GL10;
+
 public class GLAnimation {
 
     final static String TAG="GLAnimation";
     public final static int CONTINUOUS = -1;
+    protected static long mNow = 0;
 
     private GLAnimationListener mListener;
-    private long mStart  = 0;
-    private long mEnd    = 0;
-    private long mLife   = 0;
-    private long mUpdate = 0;
-    private int  mRepeat = 1;
+    protected long mStart  = 0;
+    protected long mEnd    = 0;
+    protected long mLife   = 0;
+    protected long mUpdate = 0;
+    protected int  mRepeat = 1;
+
+    protected GLObject mObject;
 
     GLAnimation(long howLong) {
 	this(howLong,500, 1);
@@ -43,6 +48,10 @@ public class GLAnimation {
 	mLife   = howLong;
 	mUpdate = update;
 	mRepeat = repeatTimes;
+    }
+
+    public static void setNow(long now) {
+	mNow = now;
     }
 
     public void setListener(GLAnimationListener listener) {
@@ -65,10 +74,27 @@ public class GLAnimation {
 	return false;
     }
 
+    public void bindGLObject(GLObject object) {
+	mObject = object;
+	mObject.setAnimation(this);
+    }
+
+    public void unbindGLObject() {
+	if (mObject != null) {
+	    mObject.clearAnimation();
+	}
+    }
+
     public void callback() {
 	if (mListener != null) {
 	    mListener.onAnimationEnd();
 	}
+    }
+
+    public boolean applyAnimation(GL10 gl) {
+	// do nothing yet, subclass overwrite me
+	boolean glObjectDrawItself = true;
+	return glObjectDrawItself;
     }
 
     interface GLAnimationListener {
