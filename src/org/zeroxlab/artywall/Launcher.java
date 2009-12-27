@@ -63,11 +63,12 @@ public class Launcher extends Activity {
 	mScreen.onResume();
     }
 
-    class TotalScreen extends GLSurfaceView {
+    class TotalScreen extends GLSurfaceView implements View.OnClickListener {
 	ViewManager mViewManager;
 	TotalScreen(Context context) {
 	    super(context);
 	    mViewManager = new ViewManager(context, this);
+	    setOnClickListener(this);
 	}
 
 	public void onPause() {
@@ -78,12 +79,16 @@ public class Launcher extends Activity {
 	    super.onResume();
 	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-	    mInterpreter.processMotionEvent(event);
-	    mViewManager.updateRatio(event.getX(), event.getY());
-	    mScreen.requestRender();
-	    return true;
+//	@Override
+//	public boolean onTouchEvent(MotionEvent event) {
+//	    mInterpreter.processMotionEvent(event);
+//	    mViewManager.updateRatio(event.getX(), event.getY());
+//	    mScreen.requestRender();
+//	    return true;
+//	}
+
+	public void onClick(View v) {
+	    mViewManager.performClick();
 	}
     }
 }
