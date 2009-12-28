@@ -67,6 +67,10 @@ public class GLAnimation {
 	return mUpdate;
     }
 
+    public long getEndTime() {
+	return mEnd;
+    }
+
     public boolean isFinish(long now) {
 	if (now > mEnd) {
 	    return true;
