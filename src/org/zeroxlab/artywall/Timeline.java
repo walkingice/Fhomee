@@ -97,7 +97,7 @@ public class Timeline {
 	while (keepWalking) {
 	    GLAnimation ani = mAnimations.first();
 	    if (ani.isFinish(now)) {
-		ani.callback();
+		ani.complete();
 
 		synchronized(mLocker) {
 		    mAnimations.remove(ani);
