@@ -96,6 +96,10 @@ public class ViewManager {
 	    mTimeline.addAnimation(test);
 	}
 
+	GLRotate rr = new GLRotate(time, wanted2.getAngle()+90f, GLRotate.CLOCKWISE);
+	wanted2.setAnimation(rr);
+	mTimeline.addAnimation(rr);
+
 	test = !test;
     }
 
