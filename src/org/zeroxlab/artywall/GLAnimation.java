@@ -79,6 +79,10 @@ public class GLAnimation {
     }
 
     public void bindGLObject(GLObject object) {
+	if (mObject != null) {
+	    unbindGLObject();
+	}
+
 	mObject = object;
 	mObject.setAnimation(this);
     }
@@ -87,6 +91,8 @@ public class GLAnimation {
 	if (mObject != null) {
 	    mObject.clearAnimation();
 	}
+
+	mObject = null;
     }
 
     public void callback() {
