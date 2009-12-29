@@ -55,7 +55,7 @@ public class GLTranslate extends GLAnimation{
 	if (mObject != null) {
 	    mObject.setXY(mEndX, mEndY);
 	}
-	super.unbindGLObject();
+	super.complete();
     }
 
     public boolean applyAnimation(GL10 gl) {
