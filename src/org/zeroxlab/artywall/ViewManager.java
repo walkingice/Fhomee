@@ -88,11 +88,11 @@ public class ViewManager {
 	long time = 300;
 	if (test) {
 	    GLTranslate test = new GLTranslate(time, 15f, 10f);
-	    test.bindGLObject(wanted1);
+	    wanted1.setAnimation(test);
 	    mTimeline.addAnimation(test);
 	} else {
 	    GLTranslate test = new GLTranslate(time, 5f, 0f);
-	    test.bindGLObject(wanted1);
+	    wanted1.setAnimation(test);
 	    mTimeline.addAnimation(test);
 	}
 
