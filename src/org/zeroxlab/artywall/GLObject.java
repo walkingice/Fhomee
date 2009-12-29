@@ -82,6 +82,10 @@ public class GLObject {
 	mAngle = angle % 360;
     }
 
+    public float getAngle() {
+	return mAngle;
+    }
+
     public float width() {
 	return mRect.width();
     }
