@@ -96,10 +96,17 @@ public class GLObject {
     }
 
     public void setAnimation(GLAnimation animation) {
+	if (mAnimation != null) {
+	    clearAnimation();
+	}
 	mAnimation = animation;
+	mAnimation.bindGLObject(this);
     }
 
     public void clearAnimation() {
+	if (mAnimation != null) {
+	    mAnimation.unbindGLObject();
+	}
 	mAnimation = null;
     }
 
