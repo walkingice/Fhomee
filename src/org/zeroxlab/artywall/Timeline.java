@@ -49,8 +49,10 @@ public class Timeline {
     private RedrawThread  mThread;
 
     private Object mLocker;
-    private TreeSet<GLAnimation> mAnimations;
+    private LinkedList<GLAnimation> mAnimations;
     private LinkedList<GLAnimation> mUpdateTime;
+
+    private boolean processing = false;
 
     private Timeline() {
     }
@@ -67,7 +69,8 @@ public class Timeline {
 	animation.setStart(SystemClock.uptimeMillis());
 	synchronized(mLocker) {
 	    mUpdateTime.add(animation);
-	    mAnimations.add(animation);
+	    int position = linearSearchEndTime(animation.getEndTime());
+	    mAnimations.add(position, animation);
 	    updateFrequency(animation.getUpdateTime());
 	}
     }
@@ -79,12 +82,23 @@ public class Timeline {
 	mThread.start();
 
 	mLocker = new Object();
-	AnimationComparator comparator = new AnimationComparator();
-	mAnimations = new TreeSet<GLAnimation>(comparator);
-
+	mAnimations = new LinkedList<GLAnimation>();
 	mUpdateTime = new LinkedList<GLAnimation>();
 	//UpdateComparator update = new UpdateComparator();
 	//mUpdateTime = new TreeSet<GLAnimation>(update);
+    }
+
+    /* Find out the position for new Animation by EndTime*/
+    private int linearSearchEndTime(long endTime) {
+	long end;
+	int counter = 0;
+	for (counter = mAnimations.size() - 1; counter > 0;counter--) {
+	    end = mAnimations.get(counter).getEndTime();
+	    if (end > endTime) {
+		return counter;
+	    }
+	}
+	return 0;
     }
 
     private boolean clearExpiredAnimation(long now) {
@@ -96,7 +110,7 @@ public class Timeline {
 
 	boolean keepWalking = true;
 	while (keepWalking) {
-	    GLAnimation ani = mAnimations.first();
+	    GLAnimation ani = mAnimations.getFirst();
 	    if (ani.isFinish(now)) {
 		ani.complete();
 		redraw = true;
@@ -118,15 +132,18 @@ public class Timeline {
 	return redraw;
     }
 
-    private void updateFrequency(long newFrequency) {
-	if (newFrequency == mUpdate) {
+    private void updateFrequency(long oldFrequency) {
+	/*
+	if (oldFrequency == mUpdate) {
 	    mUpdate = minimalFrequency();
-	} else if (newFrequency < mUpdate) {
+	} else if (oldFrequency < mUpdate) {
 	    mUpdate = newFrequency;
 	} else {
 	    mUpdate = DEFAULT_UPDATE;
 	}
+	*/
 
+	mUpdate = minimalFrequency();
 	return;
     }
 
@@ -137,7 +154,7 @@ public class Timeline {
 	    GLAnimation ani = iterator.next();
 	    long update = ani.getUpdateTime();
 
-	    if(update < mUpdate) {
+	    if(update < minimal) {
 		minimal = update;
 	    }
 	}
@@ -146,6 +163,12 @@ public class Timeline {
     }
 
     private void processRedraw() {
+	/* Making sure the redraw thread will not keep asking redraw*/
+	if (processing) {
+	    return;
+	}
+	processing = true;
+
 	boolean haveToRedraw = false;
 	long now = SystemClock.uptimeMillis();
 	GLAnimation.setNow(now);
@@ -163,6 +186,8 @@ public class Timeline {
 	    mSurface.requestRender();
 	    mLastRedraw = now;
 	}
+
+	processing = false;
     }
 
     private class RedrawThread extends Thread {
