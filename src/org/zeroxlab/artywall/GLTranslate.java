@@ -50,15 +50,12 @@ public class GLTranslate extends GLAnimation{
 	mGapY = mEndY - mStartY;
     }
 
-    public void unbindGLObject() {
-	Log.i(TAG, "unbindGLObject called");
-	mObject.setXY(mEndX, mEndY);
+    public void complete() {
+	/* if this animation is interrupted, mObject becomes null */
+	if (mObject != null) {
+	    mObject.setXY(mEndX, mEndY);
+	}
 	super.unbindGLObject();
-    }
-
-    public void callback() {
-	super.callback();
-	unbindGLObject();
     }
 
     public boolean applyAnimation(GL10 gl) {
