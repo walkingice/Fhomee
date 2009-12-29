@@ -87,10 +87,11 @@ public class Timeline {
 	//mUpdateTime = new TreeSet<GLAnimation>(update);
     }
 
-    private void clearExpiredAnimation(long now) {
+    private boolean clearExpiredAnimation(long now) {
 	if (mAnimations.isEmpty()) {
-	    return;
+	    return false;
 	}
+	boolean redraw = false;
 	long minimal = DEFAULT_UPDATE;
 
 	boolean keepWalking = true;
@@ -98,6 +99,7 @@ public class Timeline {
 	    GLAnimation ani = mAnimations.first();
 	    if (ani.isFinish(now)) {
 		ani.complete();
+		redraw = true;
 
 		synchronized(mLocker) {
 		    mAnimations.remove(ani);
@@ -112,6 +114,8 @@ public class Timeline {
 		keepWalking = false;
 	    }
 	}
+
+	return redraw;
     }
 
     private void updateFrequency(long newFrequency) {
@@ -145,7 +149,7 @@ public class Timeline {
 	boolean haveToRedraw = false;
 	long now = SystemClock.uptimeMillis();
 	GLAnimation.setNow(now);
-	clearExpiredAnimation(now);
+	haveToRedraw = clearExpiredAnimation(now);
 	if (mAnimations.isEmpty()) {
 	    //No animation, do nothing
 	} else {
