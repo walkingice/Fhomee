@@ -79,26 +79,24 @@ public class GLAnimation {
     }
 
     public void bindGLObject(GLObject object) {
-	if (mObject != null) {
-	    unbindGLObject();
-	}
-
 	mObject = object;
-	mObject.setAnimation(this);
     }
 
     public void unbindGLObject() {
-	if (mObject != null) {
-	    mObject.clearAnimation();
-	}
-
 	mObject = null;
     }
 
-    public void callback() {
+    /* This method was called iff this Animation complete but not be interrupted.*/
+    public void complete() {
 	if (mListener != null) {
 	    mListener.onAnimationEnd();
 	}
+
+	/* If this animation is interrupted, mObject becomes null */
+	if (mObject != null) {
+	    mObject.clearAnimation();
+	}
+	unbindGLObject();
     }
 
     public boolean applyAnimation(GL10 gl) {
