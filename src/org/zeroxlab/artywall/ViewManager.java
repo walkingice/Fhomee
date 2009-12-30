@@ -96,6 +96,10 @@ public class ViewManager {
 	    mTimeline.addAnimation(test);
 	}
 
+	GLFade fade = new GLFade(2000, 1f, 1f, 1f);
+	wanted4.setAnimation(fade);
+	mTimeline.addAnimation(fade);
+
 	GLRotate rr = new GLRotate(time, wanted2.getAngle()+90f, GLRotate.CLOCKWISE);
 	wanted2.setAnimation(rr);
 	mTimeline.addAnimation(rr);
