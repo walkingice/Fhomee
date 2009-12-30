@@ -103,8 +103,8 @@ public class GLObject {
 	if (mAnimation != null) {
 	    clearAnimation();
 	}
+	animation.bindGLObject(this);
 	mAnimation = animation;
-	mAnimation.bindGLObject(this);
     }
 
     public void clearAnimation() {
