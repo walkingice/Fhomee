@@ -67,7 +67,6 @@ public class GLTranslate extends GLAnimation{
 	float x = mGapX * ratio + mStartX;
 	float y = mGapY * ratio + mStartY;
 	mObject.setXY(x, y);
-	Log.i(TAG,"Set to X="+x+" Y="+y);
 	return glObjectDrawItself;
     }
 }
