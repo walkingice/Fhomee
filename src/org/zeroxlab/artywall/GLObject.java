@@ -185,6 +185,7 @@ public class GLObject {
 	    if (drawMyself) {
 		mGLView.drawGLView(gl);
 	    }
+	    gl.glColor4f(1f, 1f, 1f, 1f);
 	}
 
 	if (mHasChildren) {
