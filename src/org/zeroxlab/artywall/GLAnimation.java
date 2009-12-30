@@ -101,6 +101,11 @@ public class GLAnimation {
 
     public boolean applyAnimation(GL10 gl) {
 	// do nothing yet, subclass overwrite me
+	/* FIXME: if a subclass want to operate mObject at applyAnimation
+	   it might cause a null pointer exception because while another thread
+	   set a new animation to GLObject, it call unbindGLObject
+	   then clear mObject
+	 */
 	boolean glObjectDrawItself = true;
 	return glObjectDrawItself;
     }
