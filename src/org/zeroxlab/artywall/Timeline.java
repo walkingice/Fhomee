@@ -40,7 +40,7 @@ public class Timeline {
     private int DEFAULT_UPDATE = 5000; // 5 secs
 
     private static Timeline mTimeline = new Timeline();
-    private static int sleepingPeriod = 35;
+    private static int sleepingPeriod = 15;
 
     private long mLastRedraw;
     private long mUpdate = DEFAULT_UPDATE;
