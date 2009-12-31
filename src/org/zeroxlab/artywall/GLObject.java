@@ -54,6 +54,7 @@ public class GLObject {
     LinkedList<GLObject> mChildren;
 
     private GLAnimation mAnimation;
+    private Object mAnimationLock;
 
     GLObject(float x, float y, float width, float height) {
 	this(-1, x, y, width, height);
@@ -63,6 +64,7 @@ public class GLObject {
 	mID   = id;
 	mRect = new RectF(0, 0, width, height);
 	mPosition = new PointF(x, y);
+	mAnimationLock = new Object();
     }
 
     public float getX() {
@@ -108,10 +110,12 @@ public class GLObject {
     }
 
     public void clearAnimation() {
-	if (mAnimation != null) {
-	    mAnimation.unbindGLObject();
+	synchronized (mAnimationLock) {
+	    if (mAnimation != null) {
+		mAnimation.unbindGLObject();
+	    }
+	    mAnimation = null;
 	}
-	mAnimation = null;
     }
 
     private void setTextureID(int id) {
@@ -178,8 +182,10 @@ public class GLObject {
 	moveModelViewToPosition(gl);
 	if (mGLView != null) {
 	    boolean drawMyself = true;
-	    if (mAnimation != null) {
-		drawMyself = mAnimation.applyAnimation(gl);
+	    synchronized (mAnimationLock) {
+		if (mAnimation != null) {
+		    drawMyself = mAnimation.applyAnimation(gl);
+		}
 	    }
 
 	    if (drawMyself) {
