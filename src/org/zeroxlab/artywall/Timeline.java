@@ -92,10 +92,10 @@ public class Timeline {
     private int linearSearchEndTime(long endTime) {
 	long end;
 	int counter = 0;
-	for (counter = mAnimations.size() - 1; counter > 0;counter--) {
+	for (counter = mAnimations.size() - 1; counter >= 0;counter--) {
 	    end = mAnimations.get(counter).getEndTime();
 	    if (end > endTime) {
-		return counter;
+		return counter+1;
 	    }
 	}
 	return 0;
@@ -110,7 +110,7 @@ public class Timeline {
 
 	boolean keepWalking = true;
 	while (keepWalking) {
-	    GLAnimation ani = mAnimations.getFirst();
+	    GLAnimation ani = mAnimations.getLast();
 	    if (ani.isFinish(now)) {
 		ani.complete();
 		redraw = true;
