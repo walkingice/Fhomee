@@ -31,6 +31,7 @@ public class World extends GLObject {
 
     final String TAG = "World";
     private LinkedList<Room> mRooms;
+    private int mCurrentRoom = 0;
 
     public final static float WIDTH  = Room.WIDTH;
     public final static float HEIGHT = Room.HEIGHT;
@@ -66,13 +67,45 @@ public class World extends GLObject {
     }
 
     public void draw(GL10 gl) {
+	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
 	Room room;
+	synchronized(mAnimationLock) {
+	    if (mAnimation != null) {
+		mAnimation.applyAnimation(gl);
+	    }
+	}
 	for (int i = 0; i < mRooms.size(); i++) {
 	    room = mRooms.get(i);
 	    gl.glPushMatrix();
 	    room.draw(gl);
 	    gl.glPopMatrix();
 	}
+    }
+
+    public void moveToNextRoom() {
+	moveToRoom(mCurrentRoom + 1);
+    }
+
+    public void moveToPrevRoom() {
+	moveToRoom(mCurrentRoom - 1);
+    }
+
+    public void moveToRoom(int newRoom) {
+	int nextRoom = newRoom;
+	long time = 100;
+
+	if (nextRoom >= mRooms.size()) {
+	    nextRoom = mRooms.size() -1;
+	} else if (nextRoom < 0) {
+	    nextRoom = 0;
+	}
+
+	mCurrentRoom = nextRoom;
+
+	float endX = -1 * nextRoom * WIDTH;
+	GLTranslate ani = new GLTranslate(time, endX, 0);
+	this.setAnimation(ani);
+	Timeline.getInstance().addAnimation(ani);
     }
 }
 
