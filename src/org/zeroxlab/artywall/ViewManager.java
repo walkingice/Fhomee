@@ -67,7 +67,7 @@ public class ViewManager {
 
     private LinkedList<GLObject> mGLObjects;
     private World world;
-    private Room room, room2;
+    private Room room, room2, room3, room4, room5;
 
     GLObject wanted1;
     GLObject wanted2;
@@ -128,6 +128,9 @@ public class ViewManager {
     public void initGLViews() {
 	room = new Room(0, "wall", "ground");
 	room2 = new Room(1, "wall_2", "ground");
+	room3 = new Room(2, "wall_3", "ground");
+	room4 = new Room(3, "wall_4", "ground");
+	room5 = new Room(4, "wall_5", "ground");
 
 	GLObject elf1 = new GLObject(0, 0, 1, 1);
 	GLObject elf2 = new GLObject(0, 0, 1, 1);
@@ -166,6 +169,9 @@ public class ViewManager {
 	world = new World();
 	world.addRoom(room);
 	world.addRoom(room2);
+	world.addRoom(room3);
+	world.addRoom(room4);
+	world.addRoom(room5);
     }
 
     public void generateTextures(GL10 gl) {
@@ -177,6 +183,9 @@ public class ViewManager {
 	*/
 	room.generateTextures(gl, mResourceManager, mTextureManager);
 	room2.generateTextures(gl, mResourceManager, mTextureManager);
+	room3.generateTextures(gl, mResourceManager, mTextureManager);
+	room4.generateTextures(gl, mResourceManager, mTextureManager);
+	room5.generateTextures(gl, mResourceManager, mTextureManager);
     }
 
     public void drawGLViews(GL10 gl) {
