@@ -56,6 +56,9 @@ public class GestureInterpreter {
     final static private int TRIGGER_SHIFT = 3;
     final static private int SHIFTING      = 4;
 
+    private float mPressX = -1;
+    private float mPressY = -1;
+
     GestureInterpreter(int width, int height) {
 	updateScreenSize(width, height);
 	mWhere = TOPLEVEL;
@@ -92,9 +95,13 @@ public class GestureInterpreter {
 
 	switch (action) {
 	    case MotionEvent.ACTION_UP:
+		mPressX = -1f;
+		mPressY = -1f;
 		now = NOTHING;
 		break;
 	    case MotionEvent.ACTION_DOWN:
+		mPressX = event.getX();
+		mPressY = event.getY();
 		if (triggerArea.contains(x,y)) {
 		    now = TRIGGER_SCALE;
 		} else {
