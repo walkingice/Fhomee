@@ -66,6 +66,7 @@ public class ViewManager {
     private TextureManager   mTextureManager;
 
     private LinkedList<GLObject> mGLObjects;
+    private World world;
     private Room room, room2;
 
     GLObject wanted1;
@@ -162,6 +163,9 @@ public class ViewManager {
 	room2.addItem(wanted5, 1f, 1f, 20f);
 	room2.addItem(wanted6, 22f, 15f, 180f);
 
+	world = new World();
+	world.addRoom(room);
+	world.addRoom(room2);
     }
 
     public void generateTextures(GL10 gl) {
@@ -201,14 +205,7 @@ public class ViewManager {
 	gl.glTranslatef(0f, 0f, 20f);   // after rotating, the Z-axis upside down
 
 	gl.glPushMatrix();
-	room.draw(gl);
-	gl.glPopMatrix();
-
-	// Move to next room
-	gl.glTranslatef(32f, 0f, 0f);
-
-	gl.glPushMatrix();
-	room2.draw(gl);
+	world.draw(gl);
 	gl.glPopMatrix();
     }
 
