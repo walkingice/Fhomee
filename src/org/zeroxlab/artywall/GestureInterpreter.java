@@ -50,11 +50,11 @@ public class GestureInterpreter {
     final static private int TOPLEVEL = 0;
 
     private int mNow;
-    final static private int NOTHING       = 0;
-    final static private int TRIGGER_SCALE = 1;
-    final static private int SCALING       = 2;
-    final static private int TRIGGER_SHIFT = 3;
-    final static private int SHIFTING      = 4;
+    final static int NOTHING       = 0;
+    final static int TRIGGER_SCALE = 1;
+    final static int SCALING       = 2;
+    final static int TRIGGER_SHIFT = 3;
+    final static int SHIFTING      = 4;
 
     private float mPressX = -1;
     private float mPressY = -1;
