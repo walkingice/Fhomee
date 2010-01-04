@@ -91,7 +91,7 @@ public class GestureInterpreter {
 	int action = event.getAction();
 	int x = (int) event.getX();
 	int y = (int) event.getY();
-	int now = NOTHING;
+	int now = mNow;
 
 	switch (action) {
 	    case MotionEvent.ACTION_UP:
