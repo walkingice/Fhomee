@@ -51,6 +51,7 @@ public class GestureInterpreter {
 
     private int mNow;
     final static int NOTHING       = 0;
+    final static int NORMAL        = 1;
     final static int SCALING       = 2;
     final static int SHIFTING      = 4;
 
@@ -74,12 +75,8 @@ public class GestureInterpreter {
 	String out="";
 	if(mNow == NOTHING) {
 	    out = "nothing";
-	} else if (mNow == TRIGGER_SCALE) {
-	    out = "trigger scale";
 	} else if (mNow == SCALING) {
 	    out = "scaling";
-	} else if (mNow == TRIGGER_SHIFT) {
-	    out = "trigger shift";
 	} else if (mNow == SHIFTING) {
 	    out = "shifting";
 	}
@@ -95,10 +92,26 @@ public class GestureInterpreter {
 
 	switch (action) {
 	    case MotionEvent.ACTION_UP:
-		mPressX = -1;
-		mPressY = -1;
 		mReleaseX = x;
 		mReleaseY = y;
+
+		if (now == NORMAL) {
+		    int deltaX = mPressX - mReleaseX;
+		    int delteY = mPressY - mReleaseY;
+		    int threshold = (int) (mScreenWidth / 2);
+		    if (Math.abs(deltaX) > threshold) {
+			if (deltaX > 0) {
+			    Log.i(TAG, "Move to next room");
+			} else {
+			    Log.i(TAG, "Move to previous room");
+			}
+		    } else {
+			Log.i(TAG, "back to original room");
+		    }
+		}
+
+		mPressX = -1;
+		mPressY = -1;
 		now = NOTHING;
 		break;
 	    case MotionEvent.ACTION_DOWN:
@@ -109,7 +122,7 @@ public class GestureInterpreter {
 		if (triggerArea.contains(x,y)) {
 		    now = SCALING;
 		} else {
-		    now = NOTHING;
+		    now = NORMAL;
 		}
 		break;
 	    case MotionEvent.ACTION_MOVE:
@@ -120,6 +133,8 @@ public class GestureInterpreter {
 		} else if (now == SHIFTING || now == SCALING) {
 		    // back to Scaling
 		    now = SCALING;
+		} else if (now == NORMAL) {
+		    // Normal dragging
 		} else {
 		    now = NOTHING;
 		}
