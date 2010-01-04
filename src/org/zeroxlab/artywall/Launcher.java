@@ -79,13 +79,17 @@ public class Launcher extends Activity {
 	    super.onResume();
 	}
 
-//	@Override
-//	public boolean onTouchEvent(MotionEvent event) {
-//	    mInterpreter.processMotionEvent(event);
-//	    mViewManager.updateRatio(event.getX(), event.getY());
-//	    mScreen.requestRender();
-//	    return true;
-//	}
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+	    int result = mInterpreter.processMotionEvent(event);
+	    if (result == GestureInterpreter.SCALING) {
+		mViewManager.updateRatio(event.getX(), event.getY());
+	    } else if (result == GestureInterpreter.NOTHING) {
+		mViewManager.updateRatio(0, 0);
+	    }
+	    mScreen.requestRender();
+	    return true;
+	}
 
 	public void onClick(View v) {
 	    mViewManager.performClick();
