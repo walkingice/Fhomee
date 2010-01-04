@@ -209,6 +209,14 @@ public class ViewManager {
 	gl.glPopMatrix();
     }
 
+    public void moveToNextRoom() {
+	world.moveToNextRoom();
+    }
+
+    public void moveToPrevRoom() {
+	world.moveToPrevRoom();
+    }
+
     class WallRenderer implements GLSurfaceView.Renderer {
 	private ViewManager mManager;
 
