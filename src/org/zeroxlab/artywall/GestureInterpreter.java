@@ -54,6 +54,8 @@ public class GestureInterpreter {
     final static int NORMAL        = 1;
     final static int SCALING       = 2;
     final static int SHIFTING      = 4;
+    final static int MOVE_NEXT     = 5;
+    final static int MOVE_PREV     = 6;
 
     public int mPressX = -1;
     public int mPressY = -1;
@@ -102,17 +104,21 @@ public class GestureInterpreter {
 		    if (Math.abs(deltaX) > threshold) {
 			if (deltaX > 0) {
 			    Log.i(TAG, "Move to next room");
+			    now = MOVE_NEXT;
 			} else {
 			    Log.i(TAG, "Move to previous room");
+			    now = MOVE_PREV;
 			}
 		    } else {
 			Log.i(TAG, "back to original room");
+			now = NOTHING;
 		    }
+		} else {
+		    now = NOTHING;
 		}
 
 		mPressX = -1;
 		mPressY = -1;
-		now = NOTHING;
 		break;
 	    case MotionEvent.ACTION_DOWN:
 		mPressX = x;
