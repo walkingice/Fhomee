@@ -51,9 +51,7 @@ public class GestureInterpreter {
 
     private int mNow;
     final static int NOTHING       = 0;
-    final static int TRIGGER_SCALE = 1;
     final static int SCALING       = 2;
-    final static int TRIGGER_SHIFT = 3;
     final static int SHIFTING      = 4;
 
     public int mPressX = -1;
@@ -97,8 +95,8 @@ public class GestureInterpreter {
 
 	switch (action) {
 	    case MotionEvent.ACTION_UP:
-		mPressX = -1f;
-		mPressY = -1f;
+		mPressX = -1;
+		mPressY = -1;
 		mReleaseX = x;
 		mReleaseY = y;
 		now = NOTHING;
@@ -109,22 +107,19 @@ public class GestureInterpreter {
 		mReleaseX = -1;
 		mReleaseY = -1;
 		if (triggerArea.contains(x,y)) {
-		    now = TRIGGER_SCALE;
+		    now = SCALING;
 		} else {
 		    now = NOTHING;
 		}
 		break;
 	    case MotionEvent.ACTION_MOVE:
-		if(now == TRIGGER_SCALE && triggerArea.contains(x,y)) {
-		    // nothing
-		}else if(now == TRIGGER_SCALE && scaleArea.contains(x,y)) {
-		    now = SCALING;
-		}else if(now == SCALING && scaleArea.contains(x,y)) {
-		    // nothing
-		}else if (now == SCALING && shiftArea.contains(x,y)) {
+		if (now == SCALING && shiftArea.contains(x,y)) {
 		    now = SHIFTING;
 		} else if (now == SHIFTING && shiftArea.contains(x,y)) {
-		    // Wow, shifting !!
+		    now = SHIFTING;
+		} else if (now == SHIFTING || now == SCALING) {
+		    // back to Scaling
+		    now = SCALING;
 		} else {
 		    now = NOTHING;
 		}
