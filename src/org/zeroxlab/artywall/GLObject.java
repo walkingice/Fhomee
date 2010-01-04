@@ -53,8 +53,8 @@ public class GLObject {
     private boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
-    private GLAnimation mAnimation;
-    private Object mAnimationLock;
+    protected GLAnimation mAnimation;
+    protected Object mAnimationLock;
 
     GLObject(float x, float y, float width, float height) {
 	this(-1, x, y, width, height);
