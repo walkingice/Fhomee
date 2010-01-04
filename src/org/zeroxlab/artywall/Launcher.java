@@ -84,6 +84,10 @@ public class Launcher extends Activity {
 	    int result = mInterpreter.processMotionEvent(event);
 	    if (result == GestureInterpreter.SCALING) {
 		mViewManager.updateRatio(event.getX(), event.getY());
+	    } else if (result == GestureInterpreter.MOVE_NEXT) {
+		mViewManager.moveToNextRoom();
+	    } else if (result == GestureInterpreter.MOVE_PREV) {
+		mViewManager.moveToPrevRoom();
 	    } else if (result == GestureInterpreter.NOTHING) {
 		mViewManager.updateRatio(0, 0);
 	    }
