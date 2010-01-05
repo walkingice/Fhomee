@@ -39,6 +39,8 @@ public class Launcher extends Activity {
     final String TAG="Launcher";
     TotalScreen mScreen;
     GestureInterpreter mInterpreter;
+    public static int mDefaultWidth  = 320;
+    public static int mDefaultHeight = 480;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class Launcher extends Activity {
 	LinearLayout layout = new LinearLayout(this);
 	mScreen = new TotalScreen(this);
 	mScreen.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-	mInterpreter = new GestureInterpreter(320,480);
+	mInterpreter = new GestureInterpreter(mDefaultWidth, mDefaultHeight);
 	layout.addView(mScreen);
 	setContentView(layout);
     }
@@ -95,6 +97,8 @@ public class Launcher extends Activity {
 			mInterpreter.mNowX - mInterpreter.mPressX, 0);
 	    } else if (result == GestureInterpreter.NOTHING) {
 		mViewManager.updateRatio(0, 0);
+	    } else if (result == GestureInterpreter.SHIFTING) {
+		mViewManager.jumpToRoomByX((int)event.getX());
 	    }
 	    mScreen.requestRender();
 	    return true;
