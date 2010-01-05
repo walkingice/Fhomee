@@ -88,6 +88,11 @@ public class Launcher extends Activity {
 		mViewManager.moveToNextRoom();
 	    } else if (result == GestureInterpreter.MOVE_PREV) {
 		mViewManager.moveToPrevRoom();
+	    } else if (result == GestureInterpreter.MOVE_ORIG) {
+		mViewManager.moveToOrigRoom();
+	    } else if (result == GestureInterpreter.NORMAL) {
+		mViewManager.shiftWorldXY(
+			mInterpreter.mNowX - mInterpreter.mPressX, 0);
 	    } else if (result == GestureInterpreter.NOTHING) {
 		mViewManager.updateRatio(0, 0);
 	    }
