@@ -82,6 +82,10 @@ public class World extends GLObject {
 	}
     }
 
+    public int getCurrentRoom() {
+	return mCurrentRoom;
+    }
+
     public void moveToNextRoom() {
 	moveToRoom(mCurrentRoom + 1);
     }
