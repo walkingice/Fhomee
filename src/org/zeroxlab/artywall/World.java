@@ -82,6 +82,10 @@ public class World extends GLObject {
 	}
     }
 
+    public int getRoomNumber() {
+	return mRooms.size();
+    }
+
     public int getCurrentRoom() {
 	return mCurrentRoom;
     }
