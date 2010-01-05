@@ -56,6 +56,7 @@ public class GestureInterpreter {
     final static int SHIFTING      = 4;
     final static int MOVE_NEXT     = 5;
     final static int MOVE_PREV     = 6;
+    final static int MOVE_ORIG     = 7;
 
     public int mPressX = -1;
     public int mPressY = -1;
@@ -111,7 +112,7 @@ public class GestureInterpreter {
 			}
 		    } else {
 			Log.i(TAG, "back to original room");
-			now = NOTHING;
+			now = MOVE_ORIG;
 		    }
 		} else {
 		    now = NOTHING;
