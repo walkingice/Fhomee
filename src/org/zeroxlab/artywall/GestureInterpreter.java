@@ -77,15 +77,6 @@ public class GestureInterpreter {
 	    return NOTHING;
 	}
 
-	String out="";
-	if(mNow == NOTHING) {
-	    out = "nothing";
-	} else if (mNow == SCALING) {
-	    out = "scaling";
-	} else if (mNow == SHIFTING) {
-	    out = "shifting";
-	}
-	Log.i(TAG,"State is "+out+" X:"+event.getX()+" Y:"+event.getY());
 	return mNow;
     }
 
