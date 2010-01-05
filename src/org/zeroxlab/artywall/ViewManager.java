@@ -65,7 +65,7 @@ public class ViewManager {
     private ResourcesManager mResourceManager;
     private TextureManager   mTextureManager;
 
-    private LinkedList<GLObject> mGLObjects;
+    private LinkedList<Room> mRooms;
     private World world;
     private Room room, room2, room3, room4, room5;
 
@@ -121,7 +121,7 @@ public class ViewManager {
 	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
 
-	mGLObjects = new LinkedList<GLObject>();
+	mRooms = new LinkedList<Room>();
 	initGLViews();
     }
 
@@ -166,12 +166,16 @@ public class ViewManager {
 	room2.addItem(wanted5, 1f, 1f, 20f);
 	room2.addItem(wanted6, 22f, 15f, 180f);
 
+	mRooms.add(room);
+	mRooms.add(room2);
+	mRooms.add(room3);
+	mRooms.add(room4);
+	mRooms.add(room5);
+
 	world = new World();
-	world.addRoom(room);
-	world.addRoom(room2);
-	world.addRoom(room3);
-	world.addRoom(room4);
-	world.addRoom(room5);
+	for (int i = 0; i< mRooms.size(); i++) {
+	    world.addRoom(mRooms.get(i));
+	}
     }
 
     public void generateTextures(GL10 gl) {
@@ -181,11 +185,11 @@ public class ViewManager {
 	    obj.generateTextures(gl, mResourceManager, mTextureManager);
 	}
 	*/
-	room.generateTextures(gl, mResourceManager, mTextureManager);
-	room2.generateTextures(gl, mResourceManager, mTextureManager);
-	room3.generateTextures(gl, mResourceManager, mTextureManager);
-	room4.generateTextures(gl, mResourceManager, mTextureManager);
-	room5.generateTextures(gl, mResourceManager, mTextureManager);
+	for (int i = 0; i< mRooms.size(); i++) {
+	    mRooms.get(i).generateTextures(gl
+		    , mResourceManager
+		    , mTextureManager);
+	}
     }
 
     public void drawGLViews(GL10 gl) {
