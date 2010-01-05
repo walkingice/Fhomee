@@ -218,6 +218,15 @@ public class ViewManager {
 	gl.glPopMatrix();
     }
 
+    public void jumpToRoomByX(int x) {
+	int rooms = world.getRoomNumber();
+	int dest = (int)((rooms * x / Launcher.mDefaultWidth ) );
+	if (dest != world.getCurrentRoom()) {
+	    Log.i(TAG,"Jump to "+dest);
+	    world.moveToRoom(dest);
+	}
+    }
+
     public void shiftWorldXY(int dx, int dy) {
 	int current = world.getCurrentRoom();
 	float screenX = 2 * dx / Room.WIDTH;
