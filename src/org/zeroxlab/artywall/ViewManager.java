@@ -179,12 +179,6 @@ public class ViewManager {
     }
 
     public void generateTextures(GL10 gl) {
-	/*
-	for (int i = 0; i < mGLObjects.size(); i++) {
-	    GLObject obj = mGLObjects.get(i);
-	    obj.generateTextures(gl, mResourceManager, mTextureManager);
-	}
-	*/
 	for (int i = 0; i< mRooms.size(); i++) {
 	    mRooms.get(i).generateTextures(gl
 		    , mResourceManager
@@ -198,14 +192,6 @@ public class ViewManager {
 
 	gl.glMatrixMode(gl.GL_MODELVIEW);
 
-	/*
-	for (int i = 0; i < mGLObjects.size(); i++) {
-	    obj = mGLObjects.get(i);
-
-	    gl.glLoadIdentity();
-	    obj.draw(gl);
-	}
-	*/
 	gl.glLoadIdentity();
 	gl.glScalef(ratio, ratio, ratio);
 
