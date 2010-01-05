@@ -58,6 +58,8 @@ public class GestureInterpreter {
     final static int MOVE_PREV     = 6;
     final static int MOVE_ORIG     = 7;
 
+    public int mNowX = -1;
+    public int mNowY = -1;
     public int mPressX = -1;
     public int mPressY = -1;
     public int mReleaseX = -1;
@@ -91,6 +93,8 @@ public class GestureInterpreter {
 	int action = event.getAction();
 	int x = (int) event.getX();
 	int y = (int) event.getY();
+	mNowX = x;
+	mNowY = y;
 	int now = mNow;
 
 	switch (action) {
