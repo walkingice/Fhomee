@@ -44,7 +44,8 @@ public class Room extends GLObject {
     public static final float LEFT   = 0f;
     public static final float TOP    = 0f;
     public static final float WALL_HEIGHT   = HEIGHT * 0.8f;
-    public static final float GROUND_HEIGHT = HEIGHT - WALL_HEIGHT;
+    public static final float GROUND_HEIGHT =
+	(ViewManager.LEVEL_3 * (HEIGHT-WALL_HEIGHT)) / (HEIGHT / 2);
 
     private String mWallTexture   = "wall";
     private String mGroundTexture = "ground";
@@ -58,7 +59,7 @@ public class Room extends GLObject {
 	mGround = new Ground(WIDTH, GROUND_HEIGHT, mGroundTexture);
 
 	mWall.setXY(0f, 0f);
-	mGround.setXY(0f, WALL_HEIGHT);
+	mGround.setXY(0f, 0f);
 
 	mGround.setTextureName(mGroundTexture);
 
@@ -73,6 +74,20 @@ public class Room extends GLObject {
 
 	addChild(mWall);
 	addChild(mGround);
+    }
+
+    public void draw(GL10 gl) {
+	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
+	gl.glRotatef(mAngle, 0, 0, 1f);
+	gl.glPushMatrix();
+	mWall.draw(gl);
+	gl.glPopMatrix();
+
+	gl.glPushMatrix();
+	gl.glTranslatef(0f, WALL_HEIGHT, 0f);
+	gl.glRotatef(-90f, 1f, 0f, 0f);
+	mGround.draw(gl);
+	gl.glPopMatrix();
     }
 
     public void addElf(GLObject elf) {
