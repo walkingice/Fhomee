@@ -39,11 +39,11 @@ public class Room extends GLObject {
     Wall mWall;
     Ground mGround;
 
-    public static final float WIDTH  = Math.abs(ViewManager.PROJ_RIGHT - ViewManager.PROJ_LEFT);
-    public static final float HEIGHT = Math.abs(ViewManager.PROJ_TOP - ViewManager.PROJ_BOTTOM);
+    public static final float WIDTH  = World.ROOM_WIDTH;
+    public static final float HEIGHT = World.ROOM_HEIGHT;
     public static final float LEFT   = 0f;
     public static final float TOP    = 0f;
-    public static final float WALL_HEIGHT   = 38f;
+    public static final float WALL_HEIGHT   = HEIGHT * 0.8f;
     public static final float GROUND_HEIGHT = HEIGHT - WALL_HEIGHT;
 
     private String mWallTexture   = "wall";
