@@ -253,7 +253,8 @@ public class ViewManager {
 
     public void shiftWorldXY(int dx, int dy) {
 	int current = world.getCurrentRoom();
-	float screenX = 2 * dx / Room.WIDTH;
+	float screenX = 3 * dx / PROJ_WIDTH;
+	screenX = convertToLevel(3, screenX);
 	float endX = -1 * current * Room.WIDTH + screenX;
 	float endY = 0;
 	world.setXY(endX, endY);
