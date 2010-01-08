@@ -50,7 +50,7 @@ public class GLObject {
     String mTextureName = "zeroxdoll"; //default
 
     private int mID = -1;
-    private boolean mHasChildren = false;
+    protected boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
     protected GLAnimation mAnimation;
@@ -155,7 +155,7 @@ public class GLObject {
 	mDepth = depth;
     }
 
-    private void moveModelViewToPosition(GL10 gl) {
+    protected void moveModelViewToPosition(GL10 gl) {
 	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
 	gl.glRotatef(mAngle, 0, 0, 1f);
     }
