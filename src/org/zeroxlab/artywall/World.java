@@ -33,8 +33,8 @@ public class World extends GLObject {
     private LinkedList<Room> mRooms;
     private int mCurrentRoom = 0;
 
-    public final static float WIDTH  = Room.WIDTH;
-    public final static float HEIGHT = Room.HEIGHT;
+    public final static float ROOM_WIDTH  = ViewManager.convertToLevel(3, ViewManager.PROJ_WIDTH);
+    public final static float ROOM_HEIGHT = ViewManager.convertToLevel(3, ViewManager.PROJ_HEIGHT);
 
     public World() {
 	this(-1);
@@ -62,7 +62,7 @@ public class World extends GLObject {
     private void resetRoomPosition() {
 	for (int i = 0; i < mRooms.size(); i++) {
 	    Room room = mRooms.get(i);
-	    room.setXY(i * WIDTH, 0f);
+	    room.setXY(i * ROOM_WIDTH, 0f);
 	}
     }
 
@@ -110,7 +110,7 @@ public class World extends GLObject {
 
 	mCurrentRoom = nextRoom;
 
-	float endX = -1 * nextRoom * WIDTH;
+	float endX = -1 * nextRoom * ROOM_WIDTH;
 	GLTranslate ani = new GLTranslate(time, endX, 0);
 	this.setAnimation(ani);
 	Timeline.getInstance().addAnimation(ani);
