@@ -56,6 +56,24 @@ public class ViewManager {
     public static float PROJ_NEAR   = 3f;
     public static float PROJ_FAR    = 50f;
 
+    public static float PROJ_WIDTH  = Math.abs(PROJ_RIGHT - PROJ_LEFT);
+    public static float PROJ_HEIGHT = Math.abs(PROJ_TOP - PROJ_BOTTOM);
+
+    public static float LEVEL_1     = 20f; // elf
+    public static float LEVEL_2     = 28f; // poster
+    public static float LEVEL_3     = 30f; // wall
+    /* X' : X = Z : NEAR
+     * X' = X * Z / NEAR
+     *
+     * X' - the X location we destination surface
+     * X  - the X location at NEAR surface
+     * NEAR - the Z location at NEAR surface
+     * Z    - the Z location at destination surface
+     */
+    public static float ZN_LEVEL_1  = LEVEL_1 / PROJ_NEAR;
+    public static float ZN_LEVEL_2  = LEVEL_2 / PROJ_NEAR;
+    public static float ZN_LEVEL_3  = LEVEL_3 / PROJ_NEAR;
+
     final String TAG="ViewManager";
     private Context mContext;
     private Rect mViewPort;
@@ -106,6 +124,18 @@ public class ViewManager {
 	mTimeline.addAnimation(rr);
 
 	test = !test;
+    }
+
+    public static float convertToLevel(int level, float from) {
+	if (level == 1) {
+	    return from * ZN_LEVEL_1;
+	} else if (level == 2) {
+	    return from * ZN_LEVEL_2;
+	} else if (level == 3) {
+	    return from * ZN_LEVEL_3;
+	}
+
+	return from;
     }
 
     public ViewManager(Context context,GLSurfaceView surface) {
@@ -200,8 +230,12 @@ public class ViewManager {
 	 */
 	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
 					//         +y is heading for bottom
-	gl.glTranslatef(-16f, -23f, 0f);// move to Left-Top
-	gl.glTranslatef(0f, 0f, 20f);   // after rotating, the Z-axis upside down
+	gl.glTranslatef(
+		convertToLevel(3, PROJ_LEFT)
+		, convertToLevel(3, PROJ_BOTTOM )
+		, 0f);// move to Left-Top
+
+	gl.glTranslatef(0f, 0f, LEVEL_3);   // after rotating, the Z-axis upside down
 
 	gl.glPushMatrix();
 	world.draw(gl);
