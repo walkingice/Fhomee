@@ -236,6 +236,7 @@ public class ViewManager {
 		, 0f);// move to Left-Top
 
 	gl.glTranslatef(0f, 0f, LEVEL_3);   // after rotating, the Z-axis upside down
+	gl.glTranslatef(0f, 0f, 30f*(1-ratio));
 
 	gl.glPushMatrix();
 	world.draw(gl);
