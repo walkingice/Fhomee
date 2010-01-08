@@ -177,24 +177,24 @@ public class ViewManager {
 	room.addElf(elf3);
 	room2.addElf(elf4);
 
-	wanted1 = new GLObject(1, 1, 13, 13);
-	wanted2 = new GLObject(10, 1, 14, 13);
-	wanted3 = new GLObject(1, 9, 13, 13);
-	wanted4 = new GLObject(15, 8, 14, 13);
-	wanted5 = new GLObject(1, 1, 15, 15);
-	wanted6 = new GLObject(22, 15, 13, 13);
+	wanted1 = new GLObject(1, 1, 100, 120);
+	wanted2 = new GLObject(10, 1, 100, 100);
+	wanted3 = new GLObject(1, 9, 100, 100);
+	wanted4 = new GLObject(15, 8, 100, 100);
+	wanted5 = new GLObject(1, 1, 150, 100);
+	wanted6 = new GLObject(22, 15, 100, 100);
 	wanted1.setTextureName("luffy");
 	wanted2.setTextureName("nami");
 	wanted3.setTextureName("sanji");
 	wanted4.setTextureName("robin");
 	wanted5.setTextureName("buggy");
 	wanted6.setTextureName("zoro");
-	room.addItem(wanted1, 1f, 1f, 0f);
-	room.addItem(wanted2, 15f, 1f, 15f);
-	room.addItem(wanted3, 3f, 15f, 33f);
-	room.addItem(wanted4, 15f, 21f, 3f);
-	room2.addItem(wanted5, 1f, 1f, 20f);
-	room2.addItem(wanted6, 22f, 15f, 180f);
+	room.addItem(wanted1, 100f, 100f, 0f);
+	room.addItem(wanted2, 150f, 10f, 15f);
+	room.addItem(wanted3, 30f, 150f, 33f);
+	room.addItem(wanted4, 150f, 210f, 3f);
+	room2.addItem(wanted5, 10f, 10f, 20f);
+	room2.addItem(wanted6, 220f, 150f, 180f);
 
 	mRooms.add(room);
 	mRooms.add(room2);
