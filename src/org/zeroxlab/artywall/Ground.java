@@ -59,11 +59,43 @@ public class Ground extends GLObject {
 
 	float gapX = elfSpace * 0.1f; // 10%
 	float x = count * elfSpace + gapX;
-	float bottom = mRect.height() * 0.75f;
+	float bottom = mRect.height() * 5f;
 	float y = bottom - elf.height();
 
 	elf.setXY(x, y);
 	addChild(elf);
+    }
+
+    public void draw(GL10 gl) {
+	moveModelViewToPosition(gl);
+	if (mGLView != null) {
+	    boolean drawMyself = true;
+	    synchronized (mAnimationLock) {
+		if (mAnimation != null) {
+		    drawMyself = mAnimation.applyAnimation(gl);
+		}
+	    }
+
+	    if (drawMyself) {
+		mGLView.drawGLView(gl);
+	    }
+	    gl.glColor4f(1f, 1f, 1f, 1f);
+	}
+
+	if (mHasChildren) {
+	    GLObject obj;
+	    for (int i = 0; i < mChildren.size(); i++) {
+		obj = mChildren.get(i);
+
+		gl.glPushMatrix();
+		gl.glRotatef(90f, 1f, 0f, 0f);
+		obj.draw(gl);
+		gl.glPopMatrix();
+	    }
+	}
+
+	return;
+
     }
 }
 
