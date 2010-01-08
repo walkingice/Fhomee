@@ -48,7 +48,7 @@ import java.nio.*;
 
 public class ViewManager {
 
-    public static boolean USE_ORTHO = true;
+    public static boolean USE_ORTHO = false;
     public static float PROJ_LEFT   = -16f;
     public static float PROJ_RIGHT  = 16f;
     public static float PROJ_BOTTOM = -23f;
