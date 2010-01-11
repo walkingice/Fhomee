@@ -61,10 +61,24 @@ public class GLObject {
     }
 
     GLObject(int id, float x, float y, float width, float height) {
-	mID   = id;
 	mRect = new RectF(0, 0, width, height);
 	mPosition = new PointF(x, y);
 	mAnimationLock = new Object();
+
+	mID = ObjectManager.getInstance().register(this);
+    }
+
+    /* Before you drop this GLObject, please call this method
+     * for reducing your memory usage.
+     */
+    public void clear() {
+	ObjectManager.getInstance().unregister(this);
+	// Maybe we need clear up its texture like...
+	// TextureManager.clearTexture(blahblah);
+    }
+
+    public int getID() {
+	return mID;
     }
 
     public float getX() {
