@@ -217,7 +217,6 @@ public class ViewManager {
     }
 
     public void drawGLViews(GL10 gl) {
-	Log.i(TAG,"DRAW!!!!!");
 	GLObject obj;
 
 	gl.glMatrixMode(gl.GL_MODELVIEW);
