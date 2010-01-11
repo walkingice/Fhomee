@@ -26,6 +26,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -65,6 +66,9 @@ public class GestureInterpreter {
     public int mReleaseX = -1;
     public int mReleaseY = -1;
 
+    public long mPressTime   = 0;
+    public long mReleaseTime = 0;
+
     GestureInterpreter(int width, int height) {
 	updateScreenSize(width, height);
 	mWhere = TOPLEVEL;
@@ -80,6 +84,10 @@ public class GestureInterpreter {
 	return mNow;
     }
 
+    public long pressTime() {
+	return mReleaseTime - mPressTime;
+    }
+
     private int eventAtToplevel(MotionEvent event) {
 	int action = event.getAction();
 	int x = (int) event.getX();
@@ -92,6 +100,7 @@ public class GestureInterpreter {
 	    case MotionEvent.ACTION_UP:
 		mReleaseX = x;
 		mReleaseY = y;
+		mReleaseTime = SystemClock.uptimeMillis();
 
 		if (now == NORMAL) {
 		    int deltaX = mPressX - mReleaseX;
@@ -117,6 +126,7 @@ public class GestureInterpreter {
 		mPressY = -1;
 		break;
 	    case MotionEvent.ACTION_DOWN:
+		mPressTime = SystemClock.uptimeMillis();
 		mPressX = x;
 		mPressY = y;
 		mReleaseX = -1;
