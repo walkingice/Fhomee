@@ -43,7 +43,7 @@ public class Room extends GLObject {
     public static final float HEIGHT = World.ROOM_HEIGHT;
     public static final float LEFT   = 0f;
     public static final float TOP    = 0f;
-    public static final float WALL_HEIGHT   = HEIGHT * 0.8f;
+    public static final float WALL_HEIGHT   = HEIGHT * 0.9f;
     public static final float GROUND_HEIGHT =
 	(ViewManager.LEVEL_3 * (HEIGHT-WALL_HEIGHT)) / (HEIGHT / 2);
 
