@@ -22,6 +22,7 @@ package org.zeroxlab.artywall;
 import android.util.Log;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
@@ -47,6 +48,9 @@ public class GLObject {
     RectF  mRect;
     float  mAngle = 0f;
 
+    Matrix mInvert;
+    float mPts[];
+
     String mTextureName = "zeroxdoll"; //default
 
     private int mID = -1;
@@ -66,6 +70,52 @@ public class GLObject {
 	mAnimationLock = new Object();
 
 	mID = ObjectManager.getInstance().register(this);
+
+	mInvert = new Matrix();
+	mPts    = new float[2];
+	resetInvertMatrix();
+    }
+
+    public int pointerAt(float x, float y) {
+	int id = -1;
+
+	/* GLView is a rectangle. However, GLObject may be Rotated
+	 * or Translated. If we got a Point, just apply a reverse
+	 * matrix to the point then we can regard the GLObject
+	 * is alinging the Origin.
+	 */
+	mPts[0] = x;
+	mPts[1] = y;
+	mInvert.mapPoints(mPts); // apply reverse matrix
+
+	if (mRect.contains(mPts[0], mPts[1])) {
+	    if (mHasChildren) {
+		GLObject obj;
+		for (int i = 0; i < mChildren.size(); i++) {
+		    obj = mChildren.get(i);
+		    id  = obj.pointerAt(mPts[0], mPts[1]);
+		    if (id != -1) {
+			i = mChildren.size(); // break the loop
+		    }
+		}
+	    }
+	    if (id == -1) {
+		id = mID;
+	    }
+	} else {
+	    id = -1;
+	}
+
+	return id;
+    }
+
+    /* A GLObject may be Translated or Rotated from Origin.
+     * mInvert holds a reverse matrix that could invert a point.
+     */
+    private void resetInvertMatrix() {
+	mInvert.reset();
+	mInvert.postTranslate(-1 * mPosition.x, -1 * mPosition.y);
+	mInvert.postRotate(-1 * mAngle);
     }
 
     /* Before you drop this GLObject, please call this method
@@ -96,6 +146,7 @@ public class GLObject {
 
     public void setAngle(float angle) {
 	mAngle = angle % 360;
+	resetInvertMatrix();
     }
 
     public float getAngle() {
@@ -113,6 +164,7 @@ public class GLObject {
     public void setXY(float x, float y) {
 	mPosition.x = x;
 	mPosition.y = y;
+	resetInvertMatrix();
     }
 
     public void setAnimation(GLAnimation animation) {
