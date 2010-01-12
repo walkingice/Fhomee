@@ -96,6 +96,7 @@ public class ViewManager {
     GLObject wanted4;
     GLObject wanted5;
     GLObject wanted6;
+    GLObject wanted7;
 
     private float ratio = 1.0f;
     public void updateRatio(float x, float y) {
@@ -181,18 +182,21 @@ public class ViewManager {
 	wanted4 = new GLObject(15, 8, 100, 100);
 	wanted5 = new GLObject(1, 1, 150, 100);
 	wanted6 = new GLObject(22, 15, 100, 100);
+	wanted7 = new GLObject(0, 0, 250, 250);
 	wanted1.setTextureName("luffy");
 	wanted2.setTextureName("nami");
 	wanted3.setTextureName("sanji");
 	wanted4.setTextureName("robin");
 	wanted5.setTextureName("buggy");
 	wanted6.setTextureName("zoro");
+	wanted7.setTextureName("bear");
 	room.addItem(wanted1, 100f, 100f, 0f);
 	room.addItem(wanted2, 150f, 10f, 15f);
 	room.addItem(wanted3, 30f, 150f, 33f);
 	room.addItem(wanted4, 150f, 210f, 3f);
 	room2.addItem(wanted5, 10f, 10f, 20f);
 	room2.addItem(wanted6, 220f, 150f, 180f);
+	room3.addItem(wanted7, 130f, 30f, 30f);
 
 	mRooms.add(room);
 	mRooms.add(room2);
