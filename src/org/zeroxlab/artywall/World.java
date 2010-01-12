@@ -66,6 +66,16 @@ public class World extends GLObject {
 	}
     }
 
+    @Override
+    public int pointerAt(float nearX, float nearY) {
+	int current = getCurrentRoom();
+	Room room = mRooms.get(current);
+	// Rooms locate at Level 3 layer
+	float levelX = ViewManager.convertToLevel(3, nearX);
+	float levelY = ViewManager.convertToLevel(3, nearY);
+	return room.pointerAt(levelX + current * ROOM_WIDTH , levelY);
+    }
+
     public void draw(GL10 gl) {
 	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
 	Room room;
