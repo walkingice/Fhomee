@@ -74,6 +74,9 @@ public class ViewManager {
     public static float ZN_LEVEL_2  = LEVEL_2 / PROJ_NEAR;
     public static float ZN_LEVEL_3  = LEVEL_3 / PROJ_NEAR;
 
+    public static int mScreenWidth;
+    public static int mScreenHeight;
+
     final String TAG="ViewManager";
     private Context mContext;
     private Rect mViewPort;
@@ -103,27 +106,22 @@ public class ViewManager {
     }
 
     private boolean test = true;
-    public void performClick() {
-	long time = 300;
-	if (test) {
-	    GLTranslate test = new GLTranslate(time, 15f, 10f);
-	    wanted1.setAnimation(test);
-	    mTimeline.addAnimation(test);
-	} else {
-	    GLTranslate test = new GLTranslate(time, 5f, 0f);
-	    wanted1.setAnimation(test);
-	    mTimeline.addAnimation(test);
+    public void performClick(float screenX, float screenY) {
+	Log.i(TAG,"click on screen x="+screenX+" y="+screenY);
+	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
+	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
+	Log.i(TAG,"near x="+nearX+" y="+nearY);
+	int id = world.pointerAt(nearX, nearY);
+	Log.i(TAG,"Click on GLObject id = "+id);
+
+	if (id != -1) {
+	    GLObject obj = ObjectManager.getInstance().getGLObjectById(id);
+
+	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
+	    obj.setAnimation(fade);
+	    mTimeline.addAnimation(fade);
 	}
 
-	GLFade fade = new GLFade(2000, 1f, 1f, 1f);
-	wanted4.setAnimation(fade);
-	mTimeline.addAnimation(fade);
-
-	GLRotate rr = new GLRotate(time, wanted2.getAngle()+90f, GLRotate.CLOCKWISE);
-	wanted2.setAnimation(rr);
-	mTimeline.addAnimation(rr);
-
-	test = !test;
     }
 
     public static float convertToLevel(int level, float from) {
@@ -300,6 +298,9 @@ public class ViewManager {
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
+	    mScreenWidth  = w;
+	    mScreenHeight = h;
+
 	    gl.glLoadIdentity();
 	    gl.glViewport(0, 0, w, h);
 
