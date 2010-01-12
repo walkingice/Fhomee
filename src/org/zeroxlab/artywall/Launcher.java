@@ -93,7 +93,7 @@ public class Launcher extends Activity {
 	    } else if (result == GestureInterpreter.MOVE_ORIG) {
 		mViewManager.moveToOrigRoom();
 		if (mInterpreter.pressTime() < 100) {
-		    mViewManager.performClick();
+		    mViewManager.performClick(event.getX(), event.getY());
 		}
 	    } else if (result == GestureInterpreter.NORMAL) {
 		mViewManager.shiftWorldXY(
@@ -108,7 +108,6 @@ public class Launcher extends Activity {
 	}
 
 	public void onClick(View v) {
-	    mViewManager.performClick();
 	}
     }
 }
