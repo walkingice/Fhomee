@@ -44,7 +44,7 @@ public class Timeline {
 
     private long mLastRedraw;
     private long mUpdate = DEFAULT_UPDATE;
-    private long mFrameRedrawTime = 0;
+    private long mFrameRedrawTime = -1;
 
     private GLSurfaceView mSurface;
     private RedrawThread  mThread;
@@ -181,6 +181,7 @@ public class Timeline {
 	boolean haveToRedraw = false;
 	long now = SystemClock.uptimeMillis();
 	GLAnimation.setNow(now);
+	GLTransition.setNow(now);
 	haveToRedraw = clearExpiredAnimation(now);
 	if (mAnimations.isEmpty()) {
 	    //No animation, do nothing
