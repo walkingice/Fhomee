@@ -263,15 +263,19 @@ public class ViewManager {
     }
 
     public void moveToOrigRoom() {
-	world.moveToRoom(world.getCurrentRoom());
+	this.moveToRoom(world.getCurrentRoom());
     }
 
     public void moveToNextRoom() {
-	world.moveToNextRoom();
+	this.moveToRoom(world.getCurrentRoom() + 1);
     }
 
     public void moveToPrevRoom() {
-	world.moveToPrevRoom();
+	this.moveToRoom(world.getCurrentRoom() - 1);
+    }
+
+    public void moveToRoom(int next) {
+	world.moveToRoom(next);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
