@@ -44,6 +44,7 @@ public class Timeline {
 
     private long mLastRedraw;
     private long mUpdate = DEFAULT_UPDATE;
+    private long mFrameRedrawTime = 0;
 
     private GLSurfaceView mSurface;
     private RedrawThread  mThread;
@@ -86,6 +87,14 @@ public class Timeline {
 	mUpdateTime = new LinkedList<GLAnimation>();
 	//UpdateComparator update = new UpdateComparator();
 	//mUpdateTime = new TreeSet<GLAnimation>(update);
+    }
+
+    public void setFrameRedrawTime(long time) {
+	if (time > 0) {
+	    mFrameRedrawTime = time;
+	} else {
+	    mFrameRedrawTime = -1; // clear
+	}
     }
 
     /* Find out the position for new Animation by EndTime*/
@@ -180,6 +189,11 @@ public class Timeline {
 	    if (mLastRedraw + mUpdate < now) {
 		haveToRedraw = true;
 	    }
+	}
+
+	if (mFrameRedrawTime != -1
+		&& mLastRedraw + mFrameRedrawTime < now) {
+	    haveToRedraw = true;
 	}
 
 	if (haveToRedraw) {
