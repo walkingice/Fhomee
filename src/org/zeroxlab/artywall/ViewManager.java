@@ -171,6 +171,14 @@ public class ViewManager {
 	elf3.setTextureName("beagle");
 	elf4.setTextureName("flower");
 
+	String name[] = new String[] {"ani_1"
+	    , "ani_2", "ani_3", "ani_4", "ani_5"};
+	long time[] = new long[] {2000
+	    , 100, 100, 100, 100};
+
+	GLTransition transition = new GLTransition(name, time);
+	elf1.setTransition(transition);
+
 	room.addElf(elf1);
 	room.addElf(elf2);
 	room.addElf(elf3);
@@ -219,6 +227,7 @@ public class ViewManager {
     }
 
     public void drawGLViews(GL10 gl) {
+	Log.i(TAG,"Redraw!!");
 	GLObject obj;
 
 	gl.glMatrixMode(gl.GL_MODELVIEW);
@@ -276,6 +285,8 @@ public class ViewManager {
 
     public void moveToRoom(int next) {
 	world.moveToRoom(next);
+	long time = world.getUpdateRate();
+	mTimeline.setFrameRedrawTime(time);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
