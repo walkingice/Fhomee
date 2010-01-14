@@ -51,13 +51,16 @@ public class GLObject {
     Matrix mInvert;
     float mPts[];
 
+    protected int mTextureID = -1;
     String mTextureName = "zeroxdoll"; //default
 
     private int mID = -1;
     protected boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
+    final static long DEFAULT_RATE = 100000; // 100secs
     protected GLAnimation mAnimation;
+    protected GLTransition mTransition;
     protected Object mAnimationLock;
 
     GLObject(float x, float y, float width, float height) {
@@ -167,6 +170,14 @@ public class GLObject {
 	resetInvertMatrix();
     }
 
+    public void setTransition(GLTransition transition) {
+	mTransition = transition;
+    }
+
+    public void clearTransition() {
+	setTransition(null);
+    }
+
     public void setAnimation(GLAnimation animation) {
 	if (mAnimation != null) {
 	    clearAnimation();
@@ -233,6 +244,11 @@ public class GLObject {
 	    bitmap = resM.getBitmapByName(mTextureName);
 	    id     = texM.generateOneTexture(gl, bitmap, mTextureName);
 	    mGLView.setTextureID(id);
+	    mTextureID = id;
+
+	    if (mTransition != null) {
+		mTransition.generateTextures(gl, resM, texM);
+	    }
 	}
 
 	if (mHasChildren) {
@@ -242,6 +258,29 @@ public class GLObject {
 		obj.generateTextures(gl, resM, texM);
 	    }
 	}
+    }
+
+    public long getUpdateRate() {
+	long rate = -1;
+	if (mTransition != null) {
+	    rate = mTransition.getUpdateRate();
+	}
+
+	if (mHasChildren) {
+	    long min = DEFAULT_RATE;
+	    for (int i = 0; i < mChildren.size(); i++) {
+		long childRate = mChildren.get(i).getUpdateRate();
+		if (childRate < min && childRate != -1) {
+		    min = childRate;
+		}
+	    }
+
+	    if(min != DEFAULT_RATE) {
+		rate = min;
+	    }
+	}
+
+	return rate;
     }
 
     public void draw(GL10 gl) {
@@ -255,6 +294,11 @@ public class GLObject {
 	    }
 
 	    if (drawMyself) {
+		if (mTransition != null) {
+		    mGLView.setTextureID(mTransition.getNowTextureID());
+		} else {
+		    mGLView.setTextureID(mTextureID);
+		}
 		mGLView.drawGLView(gl);
 	    }
 	    gl.glColor4f(1f, 1f, 1f, 1f);
