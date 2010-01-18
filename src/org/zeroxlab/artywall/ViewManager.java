@@ -98,6 +98,7 @@ public class ViewManager {
     GLObject wanted6;
     GLObject wanted7;
 
+    BottomBar mBar;
     GLObject elf1;
     GLObject elf2;
     GLObject elf3;
@@ -188,10 +189,14 @@ public class ViewManager {
 	GLTransition transition = new GLTransition(name, time);
 	elf1.setTransition(transition);
 
-	room.addElf(elf1);
-	room.addElf(elf2);
-	room.addElf(elf3);
-	room2.addElf(elf4);
+	float barWidth  = convertToLevel(1, PROJ_WIDTH);
+	float barHeight = convertToLevel(1, PROJ_HEIGHT * 0.15f);
+	mBar = new BottomBar(barWidth, barHeight);
+	mBar.setXY(0, convertToLevel(1, PROJ_HEIGHT * 0.85f));
+	mBar.addElf(elf1);
+	mBar.addElf(elf2);
+	mBar.addElf(elf3);
+	mBar.addElf(elf4);
 
 	wanted1 = new GLObject(1, 1, 100, 120);
 	wanted2 = new GLObject(10, 1, 100, 100);
@@ -228,6 +233,10 @@ public class ViewManager {
     }
 
     public void generateTextures(GL10 gl) {
+	mBar.generateTextures(gl
+		, mResourceManager
+		, mTextureManager);
+
 	for (int i = 0; i< mRooms.size(); i++) {
 	    mRooms.get(i).generateTextures(gl
 		    , mResourceManager
@@ -249,16 +258,27 @@ public class ViewManager {
 	 */
 	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
 					//         +y is heading for bottom
+	gl.glTranslatef(0f, 0f, 30f*(1-ratio));
+
+	gl.glPushMatrix();
 	gl.glTranslatef(
 		convertToLevel(3, PROJ_LEFT)
 		, convertToLevel(3, PROJ_BOTTOM )
 		, 0f);// move to Left-Top
 
 	gl.glTranslatef(0f, 0f, LEVEL_3);   // after rotating, the Z-axis upside down
-	gl.glTranslatef(0f, 0f, 30f*(1-ratio));
+	world.draw(gl);
+	gl.glPopMatrix();
 
 	gl.glPushMatrix();
-	world.draw(gl);
+	gl.glTranslatef(
+		convertToLevel(1, PROJ_LEFT)
+		, convertToLevel(1, PROJ_BOTTOM )
+		, 0f);// move to Left-Top
+
+	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
+
+	mBar.draw(gl);
 	gl.glPopMatrix();
     }
 
