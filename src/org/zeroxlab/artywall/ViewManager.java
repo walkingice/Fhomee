@@ -98,6 +98,11 @@ public class ViewManager {
     GLObject wanted6;
     GLObject wanted7;
 
+    GLObject elf1;
+    GLObject elf2;
+    GLObject elf3;
+    GLObject elf4;
+
     private float ratio = 1.0f;
     public void updateRatio(float x, float y) {
 	float temp = (1000 - y) / 1000;
@@ -115,14 +120,18 @@ public class ViewManager {
 	int id = world.pointerAt(nearX, nearY);
 	Log.i(TAG,"Click on GLObject id = "+id);
 
-	if (id != -1) {
+	if (id > 1) {
 	    GLObject obj = ObjectManager.getInstance().getGLObjectById(id);
 
 	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
 	    obj.setAnimation(fade);
 	    mTimeline.addAnimation(fade);
+	} else if (id == 1){
+	    GLTransition trans = elf1.getTransition();
+	    GLTransAni tr = new GLTransAni(trans);
+	    elf1.setAnimation(tr);
+	    mTimeline.addAnimation(tr);
 	}
-
     }
 
     public static float convertToLevel(int level, float from) {
@@ -161,10 +170,10 @@ public class ViewManager {
 	room4 = new Room(3, "wall_4", "ground");
 	room5 = new Room(4, "wall_5", "ground");
 
-	GLObject elf1 = new GLObject(0, 0, 1, 1);
-	GLObject elf2 = new GLObject(0, 0, 1, 1);
-	GLObject elf3 = new GLObject(0, 0, 1, 1);
-	GLObject elf4 = new GLObject(0, 0, 1, 1);
+	elf1 = new GLObject(0, 0, 1, 1);
+	elf2 = new GLObject(0, 0, 1, 1);
+	elf3 = new GLObject(0, 0, 1, 1);
+	elf4 = new GLObject(0, 0, 1, 1);
 
 	elf1.setTextureName("zeroxdoll");
 	elf2.setTextureName("android");
@@ -285,8 +294,6 @@ public class ViewManager {
 
     public void moveToRoom(int next) {
 	world.moveToRoom(next);
-	long time = world.getUpdateRate();
-	mTimeline.setFrameRedrawTime(time);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
