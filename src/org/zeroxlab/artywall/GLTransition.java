@@ -64,6 +64,10 @@ public class GLTransition{
 	}
     }
 
+    public long getLife() {
+	return mTotal;
+    }
+
     public long getUpdateRate() {
 	long rate = mTime[0];
 	for (int i = 0; i < mTime.length; i++) {
@@ -101,6 +105,10 @@ public class GLTransition{
 
     public static void setNow(long now) {
 	Now = now;
+    }
+
+    public void setStart(long start) {
+	mStart = start;
     }
 }
 
