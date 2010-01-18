@@ -125,11 +125,5 @@ public class World extends GLObject {
 	this.setAnimation(ani);
 	Timeline.getInstance().addAnimation(ani);
     }
-
-    public long getUpdateRate() {
-	int current = getCurrentRoom();
-	Room room = mRooms.get(current);
-	return room.getUpdateRate();
-    }
 }
 
