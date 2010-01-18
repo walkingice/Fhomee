@@ -44,28 +44,6 @@ public class Ground extends GLObject {
 	setTextureName(background);
     }
 
-    public void addElf(GLObject elf) {
-	float elfSpace = mRect.width() / mElfMax;
-	float finalWidth = elfSpace * 0.8f; // 80%
-	float ratio = finalWidth / elf.width();
-	float finalHeight = ratio * elf.height();
-
-	elf.setSize(finalWidth, finalHeight);
-
-	int count = 0;
-	if (mChildren != null) {
-	    count = mChildren.size();
-	}
-
-	float gapX = elfSpace * 0.1f; // 10%
-	float x = count * elfSpace + gapX;
-	float bottom = mRect.height() * 5f;
-	float y = bottom - elf.height();
-
-	elf.setXY(x, y);
-	addChild(elf);
-    }
-
     public void draw(GL10 gl) {
 	moveModelViewToPosition(gl);
 	if (mGLView != null) {
