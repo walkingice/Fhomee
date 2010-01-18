@@ -174,6 +174,10 @@ public class GLObject {
 	mTransition = transition;
     }
 
+    public GLTransition getTransition() {
+	return mTransition;
+    }
+
     public void clearTransition() {
 	setTransition(null);
     }
@@ -195,7 +199,11 @@ public class GLObject {
 	}
     }
 
-    private void setTextureID(int id) {
+    public int getDefaultTextureID() {
+	return mTextureID;
+    }
+
+    public void setTextureID(int id) {
 	mGLView.setTextureID(id);
     }
 
@@ -260,29 +268,6 @@ public class GLObject {
 	}
     }
 
-    public long getUpdateRate() {
-	long rate = -1;
-	if (mTransition != null) {
-	    rate = mTransition.getUpdateRate();
-	}
-
-	if (mHasChildren) {
-	    long min = DEFAULT_RATE;
-	    for (int i = 0; i < mChildren.size(); i++) {
-		long childRate = mChildren.get(i).getUpdateRate();
-		if (childRate < min && childRate != -1) {
-		    min = childRate;
-		}
-	    }
-
-	    if(min != DEFAULT_RATE) {
-		rate = min;
-	    }
-	}
-
-	return rate;
-    }
-
     public void draw(GL10 gl) {
 	moveModelViewToPosition(gl);
 	if (mGLView != null) {
@@ -294,11 +279,6 @@ public class GLObject {
 	    }
 
 	    if (drawMyself) {
-		if (mTransition != null) {
-		    mGLView.setTextureID(mTransition.getNowTextureID());
-		} else {
-		    mGLView.setTextureID(mTextureID);
-		}
 		mGLView.drawGLView(gl);
 	    }
 	    gl.glColor4f(1f, 1f, 1f, 1f);
