@@ -51,14 +51,13 @@ public class GLObject {
     Matrix mInvert;
     float mPts[];
 
-    protected int mTextureID = -1;
+    protected int mDefaultTextureID = -1;
     String mTextureName = "zeroxdoll"; //default
 
     private int mID = -1;
     protected boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
-    final static long DEFAULT_RATE = 100000; // 100secs
     protected GLAnimation mAnimation;
     protected GLTransition mTransition;
     protected Object mAnimationLock;
@@ -200,7 +199,7 @@ public class GLObject {
     }
 
     public int getDefaultTextureID() {
-	return mTextureID;
+	return mDefaultTextureID;
     }
 
     public void setTextureID(int id) {
@@ -252,7 +251,7 @@ public class GLObject {
 	    bitmap = resM.getBitmapByName(mTextureName);
 	    id     = texM.generateOneTexture(gl, bitmap, mTextureName);
 	    mGLView.setTextureID(id);
-	    mTextureID = id;
+	    mDefaultTextureID = id;
 
 	    if (mTransition != null) {
 		mTransition.generateTextures(gl, resM, texM);
