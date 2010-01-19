@@ -93,5 +93,63 @@ public class Room extends GLObject {
     public void addItem(GLObject obj, float x, float y, float angle) {
 	mWall.addItem(obj, x, y , angle);
     }
+
+    class Wall extends GLObject {
+	public Wall(float width, float height, String background) {
+	    this(-1, width, height, background);
+	}
+
+	public Wall(int id, float width, float height, String background) {
+	    super(id, 0, 0, width, height);
+	    setTextureName(background);
+	}
+
+	public void addItem(GLObject obj, float x, float y, float angle) {
+	    obj.setAngle(angle);
+	    obj.setXY(x, y);
+	    addChild(obj);
+	}
+    }
+
+    class Ground extends GLObject {
+	public Ground(float width, float height, String background) {
+	    this(-1, width, height, background);
+	}
+
+	public Ground(int id, float width, float height, String background) {
+	    super(id, 0, 0, width, height);
+	    setTextureName(background);
+	}
+
+	public void draw(GL10 gl) {
+	    moveModelViewToPosition(gl);
+	    if (mGLView != null) {
+		boolean drawMyself = true;
+		synchronized (mAnimationLock) {
+		    if (mAnimation != null) {
+			drawMyself = mAnimation.applyAnimation(gl);
+		    }
+		}
+
+		if (drawMyself) {
+		    mGLView.drawGLView(gl);
+		}
+		gl.glColor4f(1f, 1f, 1f, 1f);
+	    }
+
+	    if (mHasChildren) {
+		GLObject obj;
+		for (int i = 0; i < mChildren.size(); i++) {
+		    obj = mChildren.get(i);
+
+		    gl.glPushMatrix();
+		    gl.glRotatef(90f, 1f, 0f, 0f);
+		    obj.draw(gl);
+		    gl.glPopMatrix();
+		}
+	    }
+	    return;
+	}
+    }
 }
 
