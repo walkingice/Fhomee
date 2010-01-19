@@ -296,5 +296,8 @@ public class GLObject {
 
 	return;
     }
+
+    public void onClick() {
+    }
 }
 
