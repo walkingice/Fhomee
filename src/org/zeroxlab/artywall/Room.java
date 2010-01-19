@@ -90,10 +90,6 @@ public class Room extends GLObject {
 	gl.glPopMatrix();
     }
 
-    public void addElf(GLObject elf) {
-	mGround.addElf(elf);
-    }
-
     public void addItem(GLObject obj, float x, float y, float angle) {
 	mWall.addItem(obj, x, y , angle);
     }
