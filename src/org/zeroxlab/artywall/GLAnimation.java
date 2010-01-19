@@ -28,7 +28,6 @@ import javax.microedition.khronos.opengles.GL10;
 public class GLAnimation {
 
     final static String TAG="GLAnimation";
-    public final static int CONTINUOUS = -1;
     protected static long mNow = 0;
 
     private GLAnimationListener mListener;
