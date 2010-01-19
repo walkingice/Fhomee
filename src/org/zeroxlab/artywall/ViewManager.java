@@ -135,6 +135,7 @@ public class ViewManager {
 	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
 	    obj.setAnimation(fade);
 	    mTimeline.addAnimation(fade);
+	    obj.onClick();
 	} else if (id == 1){
 	    GLTransition trans = elf1.getTransition();
 	    GLTransAni tr = new GLTransAni(trans);
