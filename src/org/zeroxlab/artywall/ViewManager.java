@@ -59,6 +59,7 @@ public class ViewManager {
     public static float PROJ_WIDTH  = Math.abs(PROJ_RIGHT - PROJ_LEFT);
     public static float PROJ_HEIGHT = Math.abs(PROJ_TOP - PROJ_BOTTOM);
 
+    public static float LEVEL_0     = 4f;  // TouchSurface
     public static float LEVEL_1     = 20f; // elf
     public static float LEVEL_2     = 28f; // poster
     public static float LEVEL_3     = 30f; // wall
@@ -78,6 +79,7 @@ public class ViewManager {
      * NEAR - the Z location at NEAR surface
      * Z    - the Z location at destination surface
      */
+    public static float ZN_LEVEL_0  = LEVEL_0 / PROJ_NEAR;
     public static float ZN_LEVEL_1  = LEVEL_1 / PROJ_NEAR;
     public static float ZN_LEVEL_2  = LEVEL_2 / PROJ_NEAR;
     public static float ZN_LEVEL_3  = LEVEL_3 / PROJ_NEAR;
@@ -94,6 +96,7 @@ public class ViewManager {
     private ResourcesManager mResourceManager;
     private TextureManager   mTextureManager;
 
+    private TouchSurface mTouchSurface;
     private LinkedList<Room> mRooms;
     private World world;
     private Room room, room2, room3, room4, room5;
@@ -129,6 +132,8 @@ public class ViewManager {
 	int id = world.pointerAt(nearX, nearY);
 	Log.i(TAG,"Click on GLObject id = "+id);
 
+	mTouchSurface.clickAt(nearX, nearY);
+
 	if (id > 1) {
 	    GLObject obj = ObjectManager.getInstance().getGLObjectById(id);
 
@@ -145,7 +150,9 @@ public class ViewManager {
     }
 
     public static float convertToLevel(int level, float from) {
-	if (level == 1) {
+	if (level == 0) {
+	    return from * ZN_LEVEL_0;
+	} else if (level == 1) {
 	    return from * ZN_LEVEL_1;
 	} else if (level == 2) {
 	    return from * ZN_LEVEL_2;
@@ -239,9 +246,15 @@ public class ViewManager {
 	for (int i = 0; i< mRooms.size(); i++) {
 	    world.addRoom(mRooms.get(i));
 	}
+
+	mTouchSurface = new TouchSurface();
     }
 
     public void generateTextures(GL10 gl) {
+	mTouchSurface.generateTextures(gl
+		, mResourceManager
+		, mTextureManager);
+
 	mBar.generateTextures(gl
 		, mResourceManager
 		, mTextureManager);
@@ -292,6 +305,17 @@ public class ViewManager {
 	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
 
 	mBar.draw(gl);
+	gl.glPopMatrix();
+
+	/* Draw the TouchSurface */
+	gl.glPushMatrix();
+	gl.glTranslatef(
+		convertToLevel(0, PROJ_LEFT)
+		, convertToLevel(0, PROJ_BOTTOM )
+		, 0f);// move to Left-Top
+	gl.glTranslatef(0f, 0f, LEVEL_0);   // after rotating, the Z-axis upside down
+
+	mTouchSurface.draw(gl);
 	gl.glPopMatrix();
     }
 
