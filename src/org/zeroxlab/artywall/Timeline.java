@@ -69,10 +69,11 @@ public class Timeline {
 	animation.setStart(SystemClock.uptimeMillis());
 	synchronized(mLocker) {
 	    mUpdateTime.add(animation);
-	    int position = linearSearchEndTime(animation.getEndTime());
+	    int position = linearSearchByEndTime(animation.getEndTime());
 	    mAnimations.add(position, animation);
-	    updateFrequency(animation.getUpdateTime());
 	}
+
+	updateFrequency();
     }
 
     public void monitor(GLSurfaceView surface) {
@@ -89,7 +90,7 @@ public class Timeline {
     }
 
     /* Find out the position for new Animation by EndTime*/
-    private int linearSearchEndTime(long endTime) {
+    private int linearSearchByEndTime(long endTime) {
 	long end;
 	int counter = 0;
 	for (counter = mAnimations.size() - 1; counter >= 0;counter--) {
@@ -118,12 +119,13 @@ public class Timeline {
 		synchronized(mLocker) {
 		    mAnimations.remove(ani);
 		    mUpdateTime.remove(ani);
-		    updateFrequency(ani.getUpdateTime());
 		}
 
 		if(mAnimations.isEmpty()) {
 		    keepWalking = false;
 		}
+
+		updateFrequency();
 	    } else {
 		keepWalking = false;
 	    }
@@ -132,33 +134,23 @@ public class Timeline {
 	return redraw;
     }
 
-    private void updateFrequency(long oldFrequency) {
-	/*
-	if (oldFrequency == mUpdate) {
-	    mUpdate = minimalFrequency();
-	} else if (oldFrequency < mUpdate) {
-	    mUpdate = newFrequency;
-	} else {
-	    mUpdate = DEFAULT_UPDATE;
-	}
-	*/
-
+    private void updateFrequency() {
 	mUpdate = minimalFrequency();
 	return;
     }
 
     private long minimalFrequency() {
 	long minimal = DEFAULT_UPDATE;
-	Iterator<GLAnimation> iterator = mUpdateTime.iterator();
-	while (iterator.hasNext()) {
-	    GLAnimation ani = iterator.next();
-	    long update = ani.getUpdateTime();
+	synchronized(mLocker) {
+	    for (int i = 0; i < mUpdateTime.size(); i++) {
+		GLAnimation ani = mUpdateTime.get(i);
+		long update = ani.getUpdateTime();
 
-	    if(update < minimal) {
-		minimal = update;
+		if(update < minimal) {
+		    minimal = update;
+		}
 	    }
 	}
-
 	return minimal;
     }
 
@@ -216,32 +208,32 @@ public class Timeline {
 	}
     }
 
-    private class AnimationComparator implements Comparator<GLAnimation> {
-	private final int GREATER = 1;
-	private final int EQUAL   = 0;
-	private final int LESS    = -1;
-
-	public int compare(GLAnimation ani1, GLAnimation ani2) {
-	    long end1 = ani1.getEndTime();
-	    long end2 = ani2.getEndTime();
-	    if(ani1.equals(ani2)) {
-		return EQUAL;
-	    }
-	    if(end1 >= end2) {
-		return GREATER;
-	    } else if (end1 < end2) {
-		return LESS;
-	    } else {
-		return EQUAL;
-	    }
-	}
-
-	public boolean equals(Object obj) {
-	    // FIXME: why do I need this?
-	    return false;
-	}
-    }
-
+//    private class AnimationComparator implements Comparator<GLAnimation> {
+//	private final int GREATER = 1;
+//	private final int EQUAL   = 0;
+//	private final int LESS    = -1;
+//
+//	public int compare(GLAnimation ani1, GLAnimation ani2) {
+//	    long end1 = ani1.getEndTime();
+//	    long end2 = ani2.getEndTime();
+//	    if(ani1.equals(ani2)) {
+//		return EQUAL;
+//	    }
+//	    if(end1 >= end2) {
+//		return GREATER;
+//	    } else if (end1 < end2) {
+//		return LESS;
+//	    } else {
+//		return EQUAL;
+//	    }
+//	}
+//
+//	public boolean equals(Object obj) {
+//	    // FIXME: why do I need this?
+//	    return false;
+//	}
+//    }
+//
 // Maybe we need it in the future
 //
 //    private class UpdateComparator implements Comparator<GLAnimation> {
