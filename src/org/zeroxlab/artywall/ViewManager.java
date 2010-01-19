@@ -48,7 +48,7 @@ import java.nio.*;
 
 public class ViewManager {
 
-    public static boolean USE_ORTHO = false;
+    public static boolean USE_ORTHO = false; // use Ortho or Frustum?
     public static float PROJ_LEFT   = -16f;
     public static float PROJ_RIGHT  = 16f;
     public static float PROJ_BOTTOM = -23f;
@@ -62,7 +62,15 @@ public class ViewManager {
     public static float LEVEL_1     = 20f; // elf
     public static float LEVEL_2     = 28f; // poster
     public static float LEVEL_3     = 30f; // wall
-    /* X' : X = Z : NEAR
+    /*     Z +------ X'
+     *       |     /
+     *       |    /
+     *  NEAR +---/ X
+     *       |  /
+     *       | /
+     *       |/
+     *
+     * X' : X = Z : NEAR
      * X' = X * Z / NEAR
      *
      * X' - the X location we destination surface
@@ -258,8 +266,11 @@ public class ViewManager {
 	 */
 	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
 					//         +y is heading for bottom
+
+	// Scaling the world, makes it looks smaller
 	gl.glTranslatef(0f, 0f, 30f*(1-ratio));
 
+	/* Draw Level 3, the Rooms of World */
 	gl.glPushMatrix();
 	gl.glTranslatef(
 		convertToLevel(3, PROJ_LEFT)
@@ -270,6 +281,7 @@ public class ViewManager {
 	world.draw(gl);
 	gl.glPopMatrix();
 
+	/* Draw Level 1, the Bar and Elfs */
 	gl.glPushMatrix();
 	gl.glTranslatef(
 		convertToLevel(1, PROJ_LEFT)
