@@ -85,7 +85,7 @@ public class Launcher extends Activity {
 	public boolean onTouchEvent(MotionEvent event) {
 	    int result = mInterpreter.processMotionEvent(event);
 	    if (result == GestureInterpreter.SCALING) {
-		mViewManager.updateRatio(event.getX(), event.getY());
+		mViewManager.pushWorld(event.getX(), event.getY());
 	    } else if (result == GestureInterpreter.MOVE_NEXT) {
 		mViewManager.moveToNextRoom();
 	    } else if (result == GestureInterpreter.MOVE_PREV) {
@@ -99,7 +99,7 @@ public class Launcher extends Activity {
 		mViewManager.shiftWorldXY(
 			mInterpreter.mNowX - mInterpreter.mPressX, 0);
 	    } else if (result == GestureInterpreter.NOTHING) {
-		mViewManager.updateRatio(0, 0);
+		mViewManager.pushWorld(0, 0);
 	    } else if (result == GestureInterpreter.SHIFTING) {
 		mViewManager.jumpToRoomByX((int)event.getX());
 	    }
