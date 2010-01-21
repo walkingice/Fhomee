@@ -101,6 +101,9 @@ public class ViewManager {
     private World world;
     private Room room, room2, room3, room4, room5;
 
+    public final float FAREST_PUSHING_DEPTH = 10f;
+    private float mDrawingDepth;
+
     GLObject wanted1;
     GLObject wanted2;
     GLObject wanted3;
@@ -115,12 +118,9 @@ public class ViewManager {
     GLObject elf3;
     GLObject elf4;
 
-    private float ratio = 1.0f;
-    public void updateRatio(float x, float y) {
-	float temp = (1000 - y) / 1000;
-	temp = Math.max(0.5f, temp);
-	temp = Math.min(1.0f, temp);
-	ratio = temp;
+    public void pushWorld(float eventX, float eventY) {
+	float ratio = eventY / mScreenHeight;
+	mDrawingDepth = FAREST_PUSHING_DEPTH * ratio;
     }
 
     private boolean test = true;
@@ -273,7 +273,6 @@ public class ViewManager {
 	gl.glMatrixMode(gl.GL_MODELVIEW);
 
 	gl.glLoadIdentity();
-	gl.glScalef(ratio, ratio, ratio);
 
 	/* the coordinate of OpenGL is different from normal computer system
 	 * We may rotate the coordinate so we don't have to worry about that.
@@ -281,8 +280,8 @@ public class ViewManager {
 	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
 					//         +y is heading for bottom
 
-	// Scaling the world, makes it looks smaller
-	gl.glTranslatef(0f, 0f, 30f*(1-ratio));
+	// mDrawingDepth control the looking size of World
+	gl.glTranslatef(0f, 0f, mDrawingDepth);
 
 	/* Draw Level 3, the Rooms of World */
 	gl.glPushMatrix();
