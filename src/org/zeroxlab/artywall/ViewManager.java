@@ -98,7 +98,7 @@ public class ViewManager {
 
     private TouchSurface mTouchSurface;
     private LinkedList<Room> mRooms;
-    private World world;
+    private World mWorld;
     private Room room, room2, room3, room4, room5;
 
     public final float FAREST_PUSHING_DEPTH = 10f;
@@ -129,7 +129,7 @@ public class ViewManager {
 	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 	Log.i(TAG,"near x="+nearX+" y="+nearY);
-	int id = world.pointerAt(nearX, nearY);
+	int id = mWorld.pointerAt(nearX, nearY);
 	Log.i(TAG,"Click on GLObject id = "+id);
 
 	mTouchSurface.clickAt(nearX, nearY);
@@ -242,9 +242,9 @@ public class ViewManager {
 	mRooms.add(room4);
 	mRooms.add(room5);
 
-	world = new World();
+	mWorld = new World();
 	for (int i = 0; i< mRooms.size(); i++) {
-	    world.addRoom(mRooms.get(i));
+	    mWorld.addRoom(mRooms.get(i));
 	}
 
 	mTouchSurface = new TouchSurface();
@@ -291,7 +291,7 @@ public class ViewManager {
 		, 0f);// move to Left-Top
 
 	gl.glTranslatef(0f, 0f, LEVEL_3);   // after rotating, the Z-axis upside down
-	world.draw(gl);
+	mWorld.draw(gl);
 	gl.glPopMatrix();
 
 	/* Draw Level 1, the Bar and Elfs */
@@ -319,37 +319,37 @@ public class ViewManager {
     }
 
     public void jumpToRoomByX(int x) {
-	int rooms = world.getRoomNumber();
+	int rooms = mWorld.getRoomNumber();
 	int dest = (int)((rooms * x / Launcher.mDefaultWidth ) );
-	if (dest != world.getCurrentRoom()) {
+	if (dest != mWorld.getCurrentRoom()) {
 	    Log.i(TAG,"Jump to "+dest);
-	    world.moveToRoom(dest);
+	    mWorld.moveToRoom(dest);
 	}
     }
 
     public void shiftWorldXY(int dx, int dy) {
-	int current = world.getCurrentRoom();
+	int current = mWorld.getCurrentRoom();
 	float screenX = 3 * dx / PROJ_WIDTH;
 	screenX = convertToLevel(3, screenX);
 	float endX = -1 * current * Room.WIDTH + screenX;
 	float endY = 0;
-	world.setXY(endX, endY);
+	mWorld.setXY(endX, endY);
     }
 
     public void moveToOrigRoom() {
-	this.moveToRoom(world.getCurrentRoom());
+	this.moveToRoom(mWorld.getCurrentRoom());
     }
 
     public void moveToNextRoom() {
-	this.moveToRoom(world.getCurrentRoom() + 1);
+	this.moveToRoom(mWorld.getCurrentRoom() + 1);
     }
 
     public void moveToPrevRoom() {
-	this.moveToRoom(world.getCurrentRoom() - 1);
+	this.moveToRoom(mWorld.getCurrentRoom() - 1);
     }
 
     public void moveToRoom(int next) {
-	world.moveToRoom(next);
+	mWorld.moveToRoom(next);
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
