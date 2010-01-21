@@ -216,12 +216,32 @@ public class GLObject {
 	mTextureName = name;
     }
 
+    /**
+     * Add a GLObject as a child to tail of the list
+     *
+     * @param obj The child
+     */
     public void addChild(GLObject obj) {
+	this.addChild(-1, obj);
+    }
+
+    /**
+     * Add a GLObject as a child to specified position
+     *
+     * @param location The specified position
+     * @param obj The child
+     */
+    public void addChild(int location, GLObject obj) {
+	int position = location;
 	if (mChildren == null) {
 	    mChildren = new LinkedList<GLObject>();
 	}
 
-	mChildren.add(obj);
+	if (position < 0 || position > mChildren.size()) {
+	    position = mChildren.size(); // add to tail
+	}
+
+	mChildren.add(position, obj);
 	mHasChildren = true;
     }
 
