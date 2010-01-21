@@ -30,7 +30,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class World extends GLObject {
 
     final String TAG = "World";
-    private LinkedList<Room> mRooms;
+
     private int mCurrentRoom = 0;
 
     public final static float ROOM_WIDTH  = ViewManager.convertToLevel(3, ViewManager.PROJ_WIDTH);
@@ -42,7 +42,7 @@ public class World extends GLObject {
 
     public World(int id) {
 	super(id, 0, 0, 0, 0);
-	mRooms = new LinkedList<Room>();
+	mChildren = new LinkedList<GLObject>();
     }
 
     public void addRoom(Room room) {
@@ -50,18 +50,13 @@ public class World extends GLObject {
     }
 
     public void addRoom(int position, Room room) {
-	int pos = position;
-	if (pos < 0 || pos > mRooms.size()) {
-	    pos = mRooms.size(); // add to tail
-	}
-
-	mRooms.add(pos, room);
+	super.addChild(position, room);
 	resetRoomPosition();
     }
 
     private void resetRoomPosition() {
-	for (int i = 0; i < mRooms.size(); i++) {
-	    Room room = mRooms.get(i);
+	for (int i = 0; i < mChildren.size(); i++) {
+	    Room room = (Room)mChildren.get(i);
 	    room.setXY(i * ROOM_WIDTH, 0f);
 	}
     }
@@ -69,7 +64,7 @@ public class World extends GLObject {
     @Override
     public int pointerAt(float nearX, float nearY) {
 	int current = getCurrentRoom();
-	Room room = mRooms.get(current);
+	Room room = (Room)mChildren.get(current);
 	// Rooms locate at Level 3 layer
 	float levelX = ViewManager.convertToLevel(3, nearX);
 	float levelY = ViewManager.convertToLevel(3, nearY);
@@ -84,8 +79,8 @@ public class World extends GLObject {
 		mAnimation.applyAnimation(gl);
 	    }
 	}
-	for (int i = 0; i < mRooms.size(); i++) {
-	    room = mRooms.get(i);
+	for (int i = 0; i < mChildren.size(); i++) {
+	    room = (Room)mChildren.get(i);
 	    gl.glPushMatrix();
 	    room.draw(gl);
 	    gl.glPopMatrix();
@@ -93,7 +88,7 @@ public class World extends GLObject {
     }
 
     public int getRoomNumber() {
-	return mRooms.size();
+	return mChildren.size();
     }
 
     public int getCurrentRoom() {
@@ -112,8 +107,8 @@ public class World extends GLObject {
 	int nextRoom = newRoom;
 	long time = 100;
 
-	if (nextRoom >= mRooms.size()) {
-	    nextRoom = mRooms.size() -1;
+	if (nextRoom >= mChildren.size()) {
+	    nextRoom = mChildren.size() -1;
 	} else if (nextRoom < 0) {
 	    nextRoom = 0;
 	}
