@@ -97,7 +97,6 @@ public class ViewManager {
     private TextureManager   mTextureManager;
 
     private TouchSurface mTouchSurface;
-    private LinkedList<Room> mRooms;
     private World mWorld;
     private Room room, room2, room3, room4, room5;
 
@@ -176,7 +175,6 @@ public class ViewManager {
 	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
 
-	mRooms = new LinkedList<Room>();
 	initGLViews();
     }
 
@@ -236,16 +234,12 @@ public class ViewManager {
 	room2.addItem(wanted6, 220f, 150f, 180f);
 	room3.addItem(wanted7, 130f, 30f, 30f);
 
-	mRooms.add(room);
-	mRooms.add(room2);
-	mRooms.add(room3);
-	mRooms.add(room4);
-	mRooms.add(room5);
-
 	mWorld = new World();
-	for (int i = 0; i< mRooms.size(); i++) {
-	    mWorld.addRoom(mRooms.get(i));
-	}
+	mWorld.addRoom(room);
+	mWorld.addRoom(room2);
+	mWorld.addRoom(room3);
+	mWorld.addRoom(room4);
+	mWorld.addRoom(room5);
 
 	mTouchSurface = new TouchSurface();
     }
@@ -259,11 +253,9 @@ public class ViewManager {
 		, mResourceManager
 		, mTextureManager);
 
-	for (int i = 0; i< mRooms.size(); i++) {
-	    mRooms.get(i).generateTextures(gl
-		    , mResourceManager
-		    , mTextureManager);
-	}
+	mWorld.generateTextures(gl
+		, mResourceManager
+		, mTextureManager);
     }
 
     public void drawGLViews(GL10 gl) {
