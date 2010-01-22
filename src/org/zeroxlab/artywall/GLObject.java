@@ -264,17 +264,17 @@ public class GLObject {
 	gl.glRotatef(mAngle, 0, 0, 1f);
     }
 
-    public void generateTextures(GL10 gl, ResourcesManager resM, TextureManager texM) {
+    public void generateTextures(ResourcesManager resM, TextureManager texM) {
 	if (mGLView != null) {
 	    int    id;
 	    Bitmap bitmap;
 	    bitmap = resM.getBitmapByName(mTextureName);
-	    id     = texM.generateOneTexture(gl, bitmap, mTextureName);
+	    id     = texM.generateOneTexture(bitmap, mTextureName);
 	    mGLView.setTextureID(id);
 	    mDefaultTextureID = id;
 
 	    if (mTransition != null) {
-		mTransition.generateTextures(gl, resM, texM);
+		mTransition.generateTextures(resM, texM);
 	    }
 	}
 
@@ -282,7 +282,7 @@ public class GLObject {
 	    GLObject obj;
 	    for (int i = 0; i < mChildren.size(); i++) {
 		obj = mChildren.get(i);
-		obj.generateTextures(gl, resM, texM);
+		obj.generateTextures(resM, texM);
 	    }
 	}
     }
