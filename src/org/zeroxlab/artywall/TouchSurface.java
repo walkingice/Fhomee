@@ -55,16 +55,17 @@ public class TouchSurface extends GLObject {
 	mTimeline = Timeline.getInstance();
 
 	mSight = new GLObject(0f, 0f, mSightWidth, mSightHeight);
-	mSight.setTextureName("sight00");
+	mSight.setDefaultTextureName("sight00");
 
 	String name[] = new String[] {"sight01", "sight02", "sight03", "sight04"};
 	long time[] = new long[] {80, 50, 50, 50};
 	mNotify = new GLTransition(name, time);
     }
 
-    public void generateTextures(ResourcesManager resM, TextureManager texM) {
-	mSight.generateTextures(resM, texM);
-	mNotify.generateTextures(resM, texM);
+    @Override
+    public void generateTextures() {
+	mSight.generateTextures();
+	mNotify.generateTextures();
     }
 
     public void clickAt(float nearX, float nearY) {
