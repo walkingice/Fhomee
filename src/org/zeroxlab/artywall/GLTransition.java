@@ -30,6 +30,10 @@ public class GLTransition{
 
     final static String TAG="GLTransition";
     final static long DEFAULT_TIME = 500; // 500 ms
+
+    protected static ResourcesManager ResourcesMgr = ResourcesManager.getInstance();
+    protected static TextureManager   TextureMgr   = TextureManager.getInstance();
+
     protected static long Now = 0;
 
     protected long mStart  = 0;
@@ -95,11 +99,11 @@ public class GLTransition{
 	return mTextures[0];
     }
 
-    public void generateTextures(ResourcesManager resM, TextureManager texM) {
+    public void generateTextures() {
 	Bitmap bitmap;
 	for (int i = 0; i < mName.length; i++) {
-	    bitmap = resM.getBitmapByName(mName[i]);
-	    mTextures[i] = texM.generateOneTexture(bitmap, mName[i]);
+	    bitmap = ResourcesMgr.getBitmapByName(mName[i]);
+	    mTextures[i] = TextureMgr.generateOneTexture(bitmap, mName[i]);
 	}
     }
 
