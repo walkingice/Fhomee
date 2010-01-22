@@ -83,20 +83,29 @@ public class GLTransition{
 	return rate;
     }
 
+    /**
+     * Get a texture id which should being used now.
+     * GLTransition holds a series of Texture id.
+     * This method return one of them by elapsed time.
+     *
+     * @return the corresponding texture id
+     */
     public int getNowTextureID() {
 	if (mStart + mTotal < Now) {
 	    mStart = Now;
 	}
-	long period = Now - mStart;
-	for (int i = 0; i < mTime.length; i++) {
-	    period = period - mTime[i];
-	    if(period <= 0) {
+	long elapse = Now - mStart;
+	int  tail   = mTime.length;
+	for (int i = 0; i < tail; i++) {
+	    elapse = elapse - mTime[i];
+	    if(elapse <= 0) {
 		//  we are at mTime[i] < Now < mTime[i+1]
 		return mTextures[i];
 	    }
 	}
 
-	return mTextures[0];
+	/* If exceed, return last one */
+	return mTextures[tail];
     }
 
     public void generateTextures() {
