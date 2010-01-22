@@ -50,8 +50,8 @@ public class Room extends GLObject {
     private String mWallTexture   = "wall";
     private String mGroundTexture = "ground";
 
-    public Room(int id, String wall, String ground) {
-	super(id, 0, 0, WIDTH, HEIGHT);
+    public Room(String wall, String ground) {
+	super(0, 0, WIDTH, HEIGHT);
 	mWallTexture   = wall;
 	mGroundTexture = ground;
 
@@ -61,14 +61,14 @@ public class Room extends GLObject {
 	mWall.setXY(0f, 0f);
 	mGround.setXY(0f, 0f);
 
-	mGround.setTextureName(mGroundTexture);
+	mGround.setDefaultTextureName(mGroundTexture);
 
 	addChild(mWall);
 	addChild(mGround);
     }
 
-    public Room(int id, Wall wall, Ground ground) {
-	super(id, 0, 0, WIDTH, HEIGHT);
+    public Room(Wall wall, Ground ground) {
+	super(0, 0, WIDTH, HEIGHT);
 	mWall   = wall;
 	mGround = ground;
 
@@ -95,13 +95,10 @@ public class Room extends GLObject {
     }
 
     class Wall extends GLObject {
-	public Wall(float width, float height, String background) {
-	    this(-1, width, height, background);
-	}
 
-	public Wall(int id, float width, float height, String background) {
-	    super(id, 0, 0, width, height);
-	    setTextureName(background);
+	public Wall(float width, float height, String background) {
+	    super(0, 0, width, height);
+	    setDefaultTextureName(background);
 	}
 
 	public void addItem(GLObject obj, float x, float y, float angle) {
@@ -112,13 +109,10 @@ public class Room extends GLObject {
     }
 
     class Ground extends GLObject {
-	public Ground(float width, float height, String background) {
-	    this(-1, width, height, background);
-	}
 
-	public Ground(int id, float width, float height, String background) {
-	    super(id, 0, 0, width, height);
-	    setTextureName(background);
+	public Ground(float width, float height, String background) {
+	    super(0, 0, width, height);
+	    setDefaultTextureName(background);
 	}
 
 	public void draw(GL10 gl) {
