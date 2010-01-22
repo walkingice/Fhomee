@@ -45,6 +45,16 @@ public class World extends GLObject {
 	mChildren = new LinkedList<GLObject>();
     }
 
+    @Override
+    public void addChild(GLObject obj) {
+	Log.i(TAG, "class World only accept Room, use addRoom instead of this method");
+    }
+
+    @Override
+    public void addChild(int location, GLObject obj) {
+	Log.i(TAG, "class World only accept Room, use addRoom instead of this method");
+    }
+
     public void addRoom(Room room) {
 	this.addRoom(-1, room);
     }
