@@ -38,7 +38,7 @@ public class GLFade extends GLAnimation{
     }
 
     GLFade(long howlong, float r, float g, float b) {
-	super(howlong, 10, 1);
+	super(howlong, 10);
 	mR = r;
 	mG = g;
 	mB = b;
