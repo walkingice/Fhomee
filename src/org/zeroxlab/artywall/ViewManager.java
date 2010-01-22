@@ -103,6 +103,7 @@ public class ViewManager {
     public final float FAREST_PUSHING_DEPTH = 10f;
     private float mDrawingDepth;
 
+    GLTransition transition;
     GLObject wanted1;
     GLObject wanted2;
     GLObject wanted3;
@@ -141,8 +142,7 @@ public class ViewManager {
 	    mTimeline.addAnimation(fade);
 	    obj.onClick();
 	} else if (id == 1){
-	    GLTransition trans = elf1.getTransition();
-	    GLTransAni tr = new GLTransAni(trans);
+	    GLTransAni tr = new GLTransAni(transition);
 	    elf1.setAnimation(tr);
 	    mTimeline.addAnimation(tr);
 	}
@@ -179,29 +179,27 @@ public class ViewManager {
     }
 
     public void initGLViews() {
-	room = new Room(0, "wall", "ground");
-	room2 = new Room(1, "wall_2", "ground");
-	room3 = new Room(2, "wall_3", "ground");
-	room4 = new Room(3, "wall_4", "ground");
-	room5 = new Room(4, "wall_5", "ground");
+	room = new Room("wall", "ground");
+	room2 = new Room("wall_2", "ground");
+	room3 = new Room("wall_3", "ground");
+	room4 = new Room("wall_4", "ground");
+	room5 = new Room("wall_5", "ground");
+
+	String name[] = new String[] {"ani_1"
+	    , "ani_2", "ani_3", "ani_4", "ani_5"};
+	long time[] = new long[] {2000
+	    , 100, 100, 100, 100};
+	transition = new GLTransition(name, time);
 
 	elf1 = new GLObject(0, 0, 1, 1);
 	elf2 = new GLObject(0, 0, 1, 1);
 	elf3 = new GLObject(0, 0, 1, 1);
 	elf4 = new GLObject(0, 0, 1, 1);
 
-	elf1.setTextureName("zeroxdoll");
-	elf2.setTextureName("android");
-	elf3.setTextureName("beagle");
-	elf4.setTextureName("flower");
-
-	String name[] = new String[] {"ani_1"
-	    , "ani_2", "ani_3", "ani_4", "ani_5"};
-	long time[] = new long[] {2000
-	    , 100, 100, 100, 100};
-
-	GLTransition transition = new GLTransition(name, time);
-	elf1.setTransition(transition);
+	elf1.setDefaultTextureName("zeroxdoll");
+	elf2.setDefaultTextureName("android");
+	elf3.setDefaultTextureName("beagle");
+	elf4.setDefaultTextureName("flower");
 
 	float barWidth  = convertToLevel(1, PROJ_WIDTH);
 	float barHeight = convertToLevel(1, PROJ_HEIGHT * 0.15f);
@@ -219,13 +217,13 @@ public class ViewManager {
 	wanted5 = new GLObject(1, 1, 150, 100);
 	wanted6 = new GLObject(22, 15, 100, 100);
 	wanted7 = new GLObject(0, 0, 250, 250);
-	wanted1.setTextureName("luffy");
-	wanted2.setTextureName("nami");
-	wanted3.setTextureName("sanji");
-	wanted4.setTextureName("robin");
-	wanted5.setTextureName("buggy");
-	wanted6.setTextureName("zoro");
-	wanted7.setTextureName("bear");
+	wanted1.setDefaultTextureName("luffy");
+	wanted2.setDefaultTextureName("nami");
+	wanted3.setDefaultTextureName("sanji");
+	wanted4.setDefaultTextureName("robin");
+	wanted5.setDefaultTextureName("buggy");
+	wanted6.setDefaultTextureName("zoro");
+	wanted7.setDefaultTextureName("bear");
 	room.addItem(wanted1, 100f, 100f, 0f);
 	room.addItem(wanted2, 150f, 10f, 15f);
 	room.addItem(wanted3, 30f, 150f, 33f);
@@ -245,17 +243,10 @@ public class ViewManager {
     }
 
     public void generateTextures() {
-	mTouchSurface.generateTextures(
-		mResourceManager
-		, mTextureManager);
-
-	mBar.generateTextures(
-		mResourceManager
-		, mTextureManager);
-
-	mWorld.generateTextures(
-		mResourceManager
-		, mTextureManager);
+	transition.generateTextures();
+	mTouchSurface.generateTextures();
+	mBar.generateTextures();
+	mWorld.generateTextures();
     }
 
     public void drawGLViews(GL10 gl) {
