@@ -95,11 +95,11 @@ public class GLTransition{
 	return mTextures[0];
     }
 
-    public void generateTextures(GL10 gl, ResourcesManager resM, TextureManager texM) {
+    public void generateTextures(ResourcesManager resM, TextureManager texM) {
 	Bitmap bitmap;
 	for (int i = 0; i < mName.length; i++) {
 	    bitmap = resM.getBitmapByName(mName[i]);
-	    mTextures[i] = texM.generateOneTexture(gl, bitmap, mName[i]);
+	    mTextures[i] = texM.generateOneTexture(bitmap, mName[i]);
 	}
     }
 
