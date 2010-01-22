@@ -62,9 +62,9 @@ public class TouchSurface extends GLObject {
 	mNotify = new GLTransition(name, time);
     }
 
-    public void generateTextures(GL10 gl, ResourcesManager resM, TextureManager texM) {
-	mSight.generateTextures(gl, resM, texM);
-	mNotify.generateTextures(gl, resM, texM);
+    public void generateTextures(ResourcesManager resM, TextureManager texM) {
+	mSight.generateTextures(resM, texM);
+	mNotify.generateTextures(resM, texM);
     }
 
     public void clickAt(float nearX, float nearY) {
