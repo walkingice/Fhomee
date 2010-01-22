@@ -68,8 +68,24 @@ public class GLTransition{
 	}
     }
 
+    public static void setNow(long now) {
+	Now = now;
+    }
+
     public long getLife() {
 	return mTotal;
+    }
+
+    public void setStart(long start) {
+	mStart = start;
+    }
+
+    public void generateTextures() {
+	Bitmap bitmap;
+	for (int i = 0; i < mName.length; i++) {
+	    bitmap = ResourcesMgr.getBitmapByName(mName[i]);
+	    mTextures[i] = TextureMgr.generateOneTexture(bitmap, mName[i]);
+	}
     }
 
     /**
@@ -95,22 +111,6 @@ public class GLTransition{
 
 	/* If exceed, return last one */
 	return mTextures[tail];
-    }
-
-    public void generateTextures() {
-	Bitmap bitmap;
-	for (int i = 0; i < mName.length; i++) {
-	    bitmap = ResourcesMgr.getBitmapByName(mName[i]);
-	    mTextures[i] = TextureMgr.generateOneTexture(bitmap, mName[i]);
-	}
-    }
-
-    public static void setNow(long now) {
-	Now = now;
-    }
-
-    public void setStart(long start) {
-	mStart = start;
     }
 }
 
