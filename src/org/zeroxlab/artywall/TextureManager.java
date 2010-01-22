@@ -41,6 +41,9 @@ public class TextureManager {
 
     private static TextureManager manager = new TextureManager();
     final String TAG="TextureManager";
+
+    private GL10 mGLContext;
+
     private HashMap mTextureMap;
     private TextureManager() {
 	mTextureMap = new HashMap();
@@ -54,29 +57,34 @@ public class TextureManager {
 	return manager;
     }
 
+    public void setGLContext(GL10 gl) {
+	mGLContext = gl;
+	clearAll();
+    }
+
     public void clearAll() {
 	mTextureMap.clear();
     }
 
-    public int generateOneTexture(GL10 gl, Bitmap bitmap, String name) {
+    public int generateOneTexture(Bitmap bitmap, String name) {
 
 	Integer textureId = (Integer)mTextureMap.get(name);
 
 	if(textureId == null) {
 	    int[] textures = new int[1];
 
-	    gl.glGenTextures(1, textures, 0);
-	    gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
-	    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+	    mGLContext.glGenTextures(1, textures, 0);
+	    mGLContext.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
+	    mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
 		    GL10.GL_NEAREST);
-	    gl.glTexParameterf(GL10.GL_TEXTURE_2D,
+	    mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D,
 		    GL10.GL_TEXTURE_MAG_FILTER,
 		    GL10.GL_LINEAR);
-	    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
+	    mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
 		    GL10.GL_CLAMP_TO_EDGE);
-	    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
+	    mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
 		    GL10.GL_CLAMP_TO_EDGE);
-	    gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
+	    mGLContext.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
 		    GL10.GL_REPLACE);
 
 	    GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
