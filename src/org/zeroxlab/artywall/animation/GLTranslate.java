@@ -37,7 +37,7 @@ public class GLTranslate extends GLAnimation{
     private float mGapY = 0f;
 
     GLTranslate(long howlong, float endX, float endY) {
-	super(howlong, 10, 1);
+	super(howlong, 10);
 	mEndX = endX;
 	mEndY = endY;
     }
