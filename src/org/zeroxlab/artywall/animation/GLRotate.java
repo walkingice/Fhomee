@@ -37,7 +37,7 @@ public class GLRotate extends GLAnimation{
     private float mGapAngle   = 0f;
 
     GLRotate(long howlong, float endAngle, int direction) {
-	super(howlong, 10, 1);
+	super(howlong, 10);
 	if (direction == CLOCKWISE) {
 	    mEndAngle = endAngle;
 	} else {
