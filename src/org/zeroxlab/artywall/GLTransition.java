@@ -72,17 +72,6 @@ public class GLTransition{
 	return mTotal;
     }
 
-    public long getUpdateRate() {
-	long rate = mTime[0];
-	for (int i = 0; i < mTime.length; i++) {
-	    if (rate > mTime[i]) {
-		rate = mTime[i];
-	    }
-	}
-
-	return rate;
-    }
-
     /**
      * Get a texture id which should being used now.
      * GLTransition holds a series of Texture id.
