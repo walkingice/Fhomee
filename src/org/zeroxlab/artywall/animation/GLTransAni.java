@@ -28,11 +28,13 @@ import javax.microedition.khronos.opengles.GL10;
 public class GLTransAni extends GLAnimation {
 
     final static String TAG="GLTransAni";
+    final static public long TRANSITION_UPDATE = 300;
+
     protected GLTransition mTransition;
 
     GLTransAni(GLTransition transition) {
-	super(transition.getLife()
-		, transition.getUpdateRate(), 1);
+	super(transition.getLife());
+	super.setUpdateTime(TRANSITION_UPDATE);
 	mTransition = transition;
 	mTransition.setStart(GLTransition.Now);
     }
