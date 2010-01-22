@@ -39,11 +39,7 @@ public class BottomBar extends GLObject {
     private int mStatus = STANDING;
 
     public BottomBar(float width, float height) {
-	this(-1, width, height);
-    }
-
-    public BottomBar(int id, float width, float height) {
-	super(id, 0, 0, width, height);
+	super(0, 0, width, height);
     }
 
     public void standing() {
