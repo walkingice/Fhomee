@@ -169,8 +169,8 @@ public class ViewManager {
 	mSurfaceView.setEGLConfigChooser(false);
 	mSurfaceView.setRenderer(mRenderer);
 
-	mResourceManager = ResourcesManager.getInstance(mContext);
-
+	ResourcesManager.setContext(mContext);
+	mResourceManager = ResourcesManager.getInstance();
 	mTextureManager  = TextureManager.getInstance();
 	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
