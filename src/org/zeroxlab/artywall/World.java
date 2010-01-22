@@ -37,11 +37,7 @@ public class World extends GLObject {
     public final static float ROOM_HEIGHT = ViewManager.convertToLevel(3, ViewManager.PROJ_HEIGHT);
 
     public World() {
-	this(-1);
-    }
-
-    public World(int id) {
-	super(id, 0, 0, 0, 0);
+	super(0, 0, 0, 0);
 	mChildren = new LinkedList<GLObject>();
     }
 
