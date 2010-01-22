@@ -41,6 +41,9 @@ public class GLObject {
 
     final String TAG = "GLObject";
 
+    protected static ResourcesManager ResourcesMgr = ResourcesManager.getInstance();
+    protected static TextureManager   TextureMgr   = TextureManager.getInstance();
+
     protected float mDepth = 0f;
 
     GLView mGLView;
@@ -48,25 +51,22 @@ public class GLObject {
     RectF  mRect;
     float  mAngle = 0f;
 
+    protected boolean mVisible = false;
+
     Matrix mInvert;
     float mPts[];
 
-    protected int mDefaultTextureID = -1;
-    String mTextureName = "zeroxdoll"; //default
+    protected int    mDefaultTextureID = -1;
+    protected String mDefaultTextureName;
 
     private int mID = -1;
     protected boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
     protected GLAnimation mAnimation;
-    protected GLTransition mTransition;
     protected Object mAnimationLock;
 
     GLObject(float x, float y, float width, float height) {
-	this(-1, x, y, width, height);
-    }
-
-    GLObject(int id, float x, float y, float width, float height) {
 	mRect = new RectF(0, 0, width, height);
 	mPosition = new PointF(x, y);
 	mAnimationLock = new Object();
@@ -169,18 +169,6 @@ public class GLObject {
 	resetInvertMatrix();
     }
 
-    public void setTransition(GLTransition transition) {
-	mTransition = transition;
-    }
-
-    public GLTransition getTransition() {
-	return mTransition;
-    }
-
-    public void clearTransition() {
-	setTransition(null);
-    }
-
     public void setAnimation(GLAnimation animation) {
 	if (mAnimation != null) {
 	    clearAnimation();
@@ -198,22 +186,52 @@ public class GLObject {
 	}
     }
 
+    /**
+     * Set a texture id to this GLObject.
+     * The GLObject will draw itself with this texture.
+     * But this method NEVER change the Default Texture ID
+     *
+     * @param id The id of texture which will be drawed.
+     */
+    public void setTextureID(int id) {
+	if (mVisible != true) {
+	    createGLView();
+	}
+
+	mGLView.setTextureID(id);
+    }
+
     public int getDefaultTextureID() {
 	return mDefaultTextureID;
     }
 
-    public void setTextureID(int id) {
-	mGLView.setTextureID(id);
+    /**
+     * Reset the Default Texture name *ONLY*.
+     * This method does not change the default texture id.
+     * The id will be detected at method generateTextures().
+     * Because the GL Context of TextureManager might changed.
+     *
+     * @param name The Default texture name.
+     */
+    public void setDefaultTextureName(String name) {
+	mDefaultTextureID = -1;
+	mDefaultTextureName = name;
+	createGLView();
     }
 
-    public void setTextureName(String name) {
+    private void createGLView() {
 	/* This GLObjew is visible and has texture, create a GLView */
 	if (mGLView == null) {
 	    mGLView = new GLView();
 	    mGLView.setSize(mRect);
 	}
 
-	mTextureName = name;
+	mVisible = true;
+    }
+
+    private void destroyGLView() {
+	mGLView  = null;
+	mVisible = false;
     }
 
     /**
@@ -259,37 +277,35 @@ public class GLObject {
 	mDepth = depth;
     }
 
-    protected void moveModelViewToPosition(GL10 gl) {
-	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
-	gl.glRotatef(mAngle, 0, 0, 1f);
-    }
-
-    public void generateTextures(ResourcesManager resM, TextureManager texM) {
-	if (mGLView != null) {
+    public void generateTextures() {
+	if (mVisible) {
 	    int    id;
 	    Bitmap bitmap;
-	    bitmap = resM.getBitmapByName(mTextureName);
-	    id     = texM.generateOneTexture(bitmap, mTextureName);
+	    bitmap = ResourcesMgr.getBitmapByName(mDefaultTextureName);
+	    id     = TextureMgr.generateOneTexture(bitmap, mDefaultTextureName);
 	    mGLView.setTextureID(id);
 	    mDefaultTextureID = id;
-
-	    if (mTransition != null) {
-		mTransition.generateTextures(resM, texM);
-	    }
 	}
 
 	if (mHasChildren) {
 	    GLObject obj;
 	    for (int i = 0; i < mChildren.size(); i++) {
 		obj = mChildren.get(i);
-		obj.generateTextures(resM, texM);
+		obj.generateTextures();
 	    }
 	}
     }
 
+    /* This GLObject locate at a position which relate to its parent
+       Move the ModelView Matrix to the position */
+    protected void moveModelViewToPosition(GL10 gl) {
+	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
+	gl.glRotatef(mAngle, 0, 0, 1f);
+    }
+
     public void draw(GL10 gl) {
 	moveModelViewToPosition(gl);
-	if (mGLView != null) {
+	if (mVisible) {
 	    boolean drawMyself = true;
 	    synchronized (mAnimationLock) {
 		if (mAnimation != null) {
@@ -300,6 +316,8 @@ public class GLObject {
 	    if (drawMyself) {
 		mGLView.drawGLView(gl);
 	    }
+
+	    /* Animation might change drawing color, reset it. */
 	    gl.glColor4f(1f, 1f, 1f, 1f);
 	}
 
