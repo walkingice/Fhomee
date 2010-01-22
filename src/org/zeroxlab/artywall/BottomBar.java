@@ -34,12 +34,24 @@ public class BottomBar extends GLObject {
     final String TAG = "BottomBar";
     final int mElfMax = 4;
 
+    final public static int STANDING = 0;
+    final public static int WALKING  = 1;
+    private int mStatus = STANDING;
+
     public BottomBar(float width, float height) {
 	this(-1, width, height);
     }
 
     public BottomBar(int id, float width, float height) {
 	super(id, 0, 0, width, height);
+    }
+
+    public void standing() {
+	mStatus = STANDING;
+    }
+
+    public void walking() {
+	mStatus = WALKING;
     }
 
     public void addElf(GLObject elf) {
