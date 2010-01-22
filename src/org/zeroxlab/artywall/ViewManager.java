@@ -244,17 +244,17 @@ public class ViewManager {
 	mTouchSurface = new TouchSurface();
     }
 
-    public void generateTextures(GL10 gl) {
-	mTouchSurface.generateTextures(gl
-		, mResourceManager
+    public void generateTextures() {
+	mTouchSurface.generateTextures(
+		mResourceManager
 		, mTextureManager);
 
-	mBar.generateTextures(gl
-		, mResourceManager
+	mBar.generateTextures(
+		mResourceManager
 		, mTextureManager);
 
-	mWorld.generateTextures(gl
-		, mResourceManager
+	mWorld.generateTextures(
+		mResourceManager
 		, mTextureManager);
     }
 
@@ -353,7 +353,7 @@ public class ViewManager {
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
-	    mTextureManager.clearAll();
+	    mTextureManager.setGLContext(gl);
 
 	    gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
 		    GL10.GL_FASTEST);
@@ -368,7 +368,7 @@ public class ViewManager {
 	    gl.glEnable(gl.GL_BLEND);
 	    gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
 
-	    mManager.generateTextures(gl);
+	    mManager.generateTextures();
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
