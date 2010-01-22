@@ -28,6 +28,8 @@ import javax.microedition.khronos.opengles.GL10;
 public class GLAnimation {
 
     final static String TAG="GLAnimation";
+    final public static long DEFAULT_UPDATE = 500;
+
     protected static long mNow = 0;
 
     private GLAnimationListener mListener;
@@ -35,18 +37,16 @@ public class GLAnimation {
     protected long mEnd    = 0;
     protected long mLife   = 0;
     protected long mUpdate = 0;
-    protected int  mRepeat = 1;
 
     protected GLObject mObject;
 
     GLAnimation(long howLong) {
-	this(howLong,500, 1);
+	this(howLong, DEFAULT_UPDATE);
     }
 
-    GLAnimation(long howLong,long update, int repeatTimes) {
+    GLAnimation(long howLong,long update) {
 	mLife   = howLong;
 	mUpdate = update;
-	mRepeat = repeatTimes;
     }
 
     public static void setNow(long now) {
@@ -60,6 +60,10 @@ public class GLAnimation {
     public void setStart(long start) {
 	mStart = start;
 	mEnd   = mStart + mLife;
+    }
+
+    public void setUpdateTime(long update) {
+	mUpdate = update;
     }
 
     public long getUpdateTime() {
