@@ -50,16 +50,18 @@ public class ResourcesManager {
     private ResourcesManager() {
     }
 
-    synchronized static public ResourcesManager getInstance(Context context) {
+    synchronized static public ResourcesManager getInstance() {
+	if (mContext == null) {
+	    Log.i(TAG, "OOOOps..you should setContext before getInstance");
+	}
 	if(mResourcesManager == null) {
 	    mResourcesManager = new ResourcesManager();
 	}
 
-	setContext(context);
 	return mResourcesManager;
     }
 
-    private static void setContext(Context context) {
+    public static void setContext(Context context) {
 	mContext = context;
 	updatePackageName();
 	updateResources();
