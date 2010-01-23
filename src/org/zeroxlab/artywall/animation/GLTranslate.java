@@ -38,14 +38,19 @@ public class GLTranslate extends GLAnimation{
 
     GLTranslate(long howlong, float endX, float endY) {
 	super(howlong, 10);
-	mEndX = endX;
-	mEndY = endY;
+	setDestination(endX, endY);
     }
 
     public void bindGLObject(GLObject object) {
 	super.bindGLObject(object);
 	mStartX = mObject.getX();
 	mStartY = mObject.getY();
+	setDestination(mEndX, mEndY);
+    }
+
+    public void setDestination(float destX, float destY) {
+	mEndX = destX;
+	mEndY = destY;
 	mGapX = mEndX - mStartX;
 	mGapY = mEndY - mStartY;
     }
