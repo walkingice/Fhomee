@@ -273,6 +273,10 @@ public class GLObject {
 	return obj;
     }
 
+    public int getChildrenCount() {
+	return mChildren.size();
+    }
+
     public void setDepth(float depth) {
 	mDepth = depth;
     }
