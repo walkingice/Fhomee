@@ -38,8 +38,11 @@ public class BottomBar extends GLObject {
     final public static int WALKING  = 1;
     private int mStatus = STANDING;
 
+    private GLTranslate mShiftAnimation;
+
     public BottomBar(float width, float height) {
 	super(0, 0, width, height);
+	mShiftAnimation = new GLTranslate(100, 0, 0);
     }
 
     public void standing() {
@@ -48,6 +51,14 @@ public class BottomBar extends GLObject {
 
     public void walking() {
 	mStatus = WALKING;
+    }
+
+    public void backToCenter() {
+	float x = 0;
+	float y = super.getY();
+	mShiftAnimation.setDestination(x, y);
+	this.setAnimation(mShiftAnimation);
+	Timeline.getInstance().addAnimation(mShiftAnimation);
     }
 
     public void addElf(GLObject elf) {
