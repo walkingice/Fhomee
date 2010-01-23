@@ -313,10 +313,19 @@ public class ViewManager {
     public void shiftWorldXY(int dx, int dy) {
 	int current = mWorld.getCurrentRoom();
 	float screenX = 3 * dx / PROJ_WIDTH;
-	screenX = convertToLevel(3, screenX);
-	float endX = -1 * current * Room.WIDTH + screenX;
+	float level3X = convertToLevel(3, screenX);
+	float endX = -1 * current * Room.WIDTH + level3X;
 	float endY = 0;
 	mWorld.setXY(endX, endY);
+
+	int rooms = mWorld.getChildrenCount();
+	float totalRoomWidth = Room.WIDTH * (rooms - 1);
+	if (endX > 0 ||
+		endX < -1 * totalRoomWidth) {
+	    float barY = mBar.getY();
+	    float level1X = convertToLevel(1, screenX);
+	    mBar.setXY(level1X, barY);
+	}
     }
 
     public void moveToOrigRoom() {
@@ -333,6 +342,7 @@ public class ViewManager {
 
     public void moveToRoom(int next) {
 	mWorld.moveToRoom(next);
+	mBar.backToCenter();
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
