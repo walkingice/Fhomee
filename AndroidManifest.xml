@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest  xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.zeroxlab.artywall">
+	package="org.zeroxlab.Fhome">
     <application
 	android:debuggable="true"
     >
 	<activity
 	android:name="Launcher"
-	android:label="ArtyWall"
-        android:icon="@drawable/hello"
+	android:label="Fhome"
+        android:icon="@drawable/zeroxdoll"
 	>
 	<intent-filter>
 	<action android:name="android.intent.action.MAIN" />
