@@ -61,7 +61,7 @@ public class BottomBar extends GLObject {
 	Timeline.getInstance().addAnimation(mShiftAnimation);
     }
 
-    public void addElf(GLObject elf) {
+    public void addElf(Elf elf) {
 	float elfSpace = mRect.width() / mElfMax;
 	float finalWidth = elfSpace * 0.8f; // 80%
 	float ratio = finalWidth / elf.width();
@@ -77,7 +77,7 @@ public class BottomBar extends GLObject {
 	float gapX = elfSpace * 0.1f; // 10%
 	float x = count * elfSpace + gapX;
 
-	elf.setXY(x, 0);
+	elf.setPosition(x, 0);
 	addChild(elf);
     }
 
