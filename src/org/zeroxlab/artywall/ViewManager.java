@@ -184,12 +184,12 @@ public class ViewManager {
     }
 
     public void initGLViews() {
-	room = new Room("wall", "ground");
+	room = new Room("wall_6", "ground_2");
 	room2 = new Room("wall_2", "ground");
 	room3 = new Room("wall_3", "ground");
 	room4 = new Room("wall_4", "ground");
 	room5 = new Room("wall_5", "ground");
-	room6 = new Room("wall_6", "ground_2");
+	room6 = new Room("wall", "ground");
 
 	String name[] = new String[] {"ani_1"
 	    , "ani_2", "ani_3", "ani_4", "ani_5"};
@@ -230,10 +230,10 @@ public class ViewManager {
 	wanted5.setDefaultTextureName("buggy");
 	wanted6.setDefaultTextureName("zoro");
 	wanted7.setDefaultTextureName("bear");
-	room.addItem(wanted1, 100f, 100f, 0f);
-	room.addItem(wanted2, 150f, 10f, 15f);
-	room.addItem(wanted3, 30f, 150f, 33f);
-	room.addItem(wanted4, 150f, 210f, 3f);
+	room4.addItem(wanted1, 100f, 100f, 0f);
+	room4.addItem(wanted2, 150f, 10f, 15f);
+	room4.addItem(wanted3, 30f, 150f, 33f);
+	room5.addItem(wanted4, 150f, 210f, 3f);
 	room2.addItem(wanted5, 10f, 10f, 20f);
 	room2.addItem(wanted6, 220f, 150f, 180f);
 	room3.addItem(wanted7, 130f, 30f, 30f);
