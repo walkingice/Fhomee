@@ -98,7 +98,7 @@ public class ViewManager {
 
     private TouchSurface mTouchSurface;
     private World mWorld;
-    private Room room, room2, room3, room4, room5;
+    private Room room, room2, room3, room4, room5, room6;
 
     public final float FAREST_PUSHING_DEPTH = 10f;
     private float mDrawingDepth;
@@ -113,10 +113,10 @@ public class ViewManager {
     GLObject wanted7;
 
     BottomBar mBar;
-    GLObject elf1;
-    GLObject elf2;
-    GLObject elf3;
-    GLObject elf4;
+    Elf elf1;
+    Elf elf2;
+    Elf elf3;
+    Elf elf4;
 
     public void pushWorld(float eventX, float eventY) {
 	float ratio = eventY / mScreenHeight;
@@ -184,6 +184,7 @@ public class ViewManager {
 	room3 = new Room("wall_3", "ground");
 	room4 = new Room("wall_4", "ground");
 	room5 = new Room("wall_5", "ground");
+	room6 = new Room("wall_6", "ground_2");
 
 	String name[] = new String[] {"ani_1"
 	    , "ani_2", "ani_3", "ani_4", "ani_5"};
@@ -191,15 +192,15 @@ public class ViewManager {
 	    , 100, 100, 100, 100};
 	transition = new GLTransition(name, time);
 
-	elf1 = new GLObject(0, 0, 1, 1);
-	elf2 = new GLObject(0, 0, 1, 1);
-	elf3 = new GLObject(0, 0, 1, 1);
-	elf4 = new GLObject(0, 0, 1, 1);
+	elf1 = new Elf();
+	elf2 = new Elf();
+	elf3 = new Elf();
+	elf4 = new Elf();
 
-	elf1.setDefaultTextureName("zeroxdoll");
-	elf2.setDefaultTextureName("android");
-	elf3.setDefaultTextureName("beagle");
-	elf4.setDefaultTextureName("flower");
+	elf1.setDefaultTextureName("mario");
+	elf2.setDefaultTextureName("luigi");
+	elf3.setDefaultTextureName("peach");
+	elf4.setDefaultTextureName("toad");
 
 	float barWidth  = convertToLevel(1, PROJ_WIDTH);
 	float barHeight = convertToLevel(1, PROJ_HEIGHT * 0.15f);
@@ -238,6 +239,7 @@ public class ViewManager {
 	mWorld.addRoom(room3);
 	mWorld.addRoom(room4);
 	mWorld.addRoom(room5);
+	mWorld.addRoom(room6);
 
 	mTouchSurface = new TouchSurface();
     }
