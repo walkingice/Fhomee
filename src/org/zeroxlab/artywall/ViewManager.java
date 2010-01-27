@@ -129,7 +129,12 @@ public class ViewManager {
 	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 	Log.i(TAG,"near x="+nearX+" y="+nearY);
-	int id = mWorld.pointerAt(nearX, nearY);
+	int id = mBar.pointerAt(convertToLevel(1, nearX)
+		, convertToLevel(1, nearY));
+	if (id == -1) {
+	    id = mWorld.pointerAt(nearX, nearY);
+	}
+
 	Log.i(TAG,"Click on GLObject id = "+id);
 
 	mTouchSurface.clickAt(nearX, nearY);
