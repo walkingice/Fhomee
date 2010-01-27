@@ -143,7 +143,9 @@ public class GLObject {
 
     public void setSize(float width, float height) {
 	mRect.set(0, 0, width, height);
-	mGLView.setSize(mRect);
+	if (mGLView != null) {
+	    mGLView.setSize(mRect);
+	}
     }
 
     public void setAngle(float angle) {
