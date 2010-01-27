@@ -123,7 +123,7 @@ public class GLView {
 	 *  +------+
 	 *  3      2
 	 */
-	mArea = rect;
+	mArea = new RectF(rect);
 	float height = mArea.height();
 	float width  = mArea.width();
 
