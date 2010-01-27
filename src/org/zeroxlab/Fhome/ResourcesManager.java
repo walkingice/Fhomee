@@ -16,7 +16,7 @@
  * -------------------------------------------------------------------
  */
 
-package org.zeroxlab.artywall;
+package org.zeroxlab.Fhome;
 
 import android.util.Log;
 
@@ -37,14 +37,14 @@ import android.os.Bundle;
 public class ResourcesManager {
 
     static final String TAG="ResourcesManager";
-    static final String DEFAULT_THEME  = "org.zeroxlab.artywall"; // hard code to itself
+    static final String DEFAULT_THEME  = "org.zeroxlab.Fhome"; // hard code to itself
     static final String DEFAULT_VALUE  = "Default";
     static final String LAUNCHER_THEME = "LAUNCHER_THEME";
     private static ResourcesManager mResourcesManager = new ResourcesManager();
     private static Context   mContext;
     private static Resources mDefaultResources;
     private static Resources mOuterResources;
-    private static String    mDefaultPackageName = "org.zeroxlab.artywall";
+    private static String    mDefaultPackageName = "org.zeroxlab.Fhome";
     private static String    mOuterPackageName;
 
     private ResourcesManager() {
