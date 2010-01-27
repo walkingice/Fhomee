@@ -37,6 +37,10 @@ public class Elf extends GLObject{
 
     final String TAG = "Elf";
 
+    protected float mPositionX;
+    protected float mPositionY;
+    protected Jump mJumpAni;
+
     protected int mBorderID;
     protected String mBorderName = "elf_border";
     protected int mStandID;
@@ -71,6 +75,8 @@ public class Elf extends GLObject{
 
 	mBorder = new GLView();
 	mFoot   = new GLView();
+
+	mJumpAni = new Jump(1000, mPositionX, mPositionY);
     }
 
     @Override
@@ -86,6 +92,12 @@ public class Elf extends GLObject{
 
 	mBorder.setSize(mBorderRect);
 	mFoot.setSize(mFootRect);
+    }
+
+    public void setPosition(float x, float y) {
+	mPositionX = x;
+	mPositionY = y;
+	super.setXY(x, y);
     }
 
     public void generateTextures() {
@@ -127,6 +139,38 @@ public class Elf extends GLObject{
 
 	    /* Animation might change drawing color, reset it. */
 	    gl.glColor4f(1f, 1f, 1f, 1f);
+	}
+    }
+
+    @Override
+    public void onClick() {
+	mJumpAni.setDestination(mPositionX, mPositionY);
+	setAnimation(mJumpAni);
+	Timeline.getInstance().addAnimation(mJumpAni);
+    }
+
+    class Jump extends GLTranslate{
+	int mTimes = 4;
+	float mHeight = -30; // negative means up
+	long mRoutine;
+
+	Jump(long howlong, float endX, float endY) {
+	    super(howlong, endX, endY);
+
+	    int circle   = (int) mTimes / 2;
+	    mRoutine = mLife / circle; //   time/per-circle
+	}
+
+	@Override
+	public boolean applyAnimation(GL10 gl) {
+	    boolean glObjectDrawItself = true;
+	    float elapse = GLAnimation.mNow - mStart;
+	    float percentOfTick = (float)(elapse % mRoutine) / mRoutine;
+	    float percentOfAll  = (float)(elapse / mLife);
+	    double radians = Math.toRadians(360 * percentOfTick);
+	    float offset = (float) Math.abs(Math.sin(radians)) * mHeight * (1 - percentOfAll);
+	    mObject.setXY(mObject.getX(), offset);
+	    return glObjectDrawItself;
 	}
     }
 }
