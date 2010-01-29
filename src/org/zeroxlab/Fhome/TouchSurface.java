@@ -68,9 +68,7 @@ public class TouchSurface extends GLObject {
 	mNotify.generateTextures();
     }
 
-    public void clickAt(float nearX, float nearY) {
-	float x = ViewManager.convertToLevel(0, nearX);
-	float y = ViewManager.convertToLevel(0, nearY);
+    public void clickAt(float x, float y) {
 	x = x - mSightWidth / 2;
 	y = y - mSightHeight / 2;
 	GLTransAni notify = new GLTransAni(mNotify);
