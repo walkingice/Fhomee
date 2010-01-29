@@ -59,6 +59,11 @@ public class ViewManager {
     public static float PROJ_WIDTH  = Math.abs(PROJ_RIGHT - PROJ_LEFT);
     public static float PROJ_HEIGHT = Math.abs(PROJ_TOP - PROJ_BOTTOM);
 
+    public final static int LEVEL_TOUCH  = 0;
+    public final static int LEVEL_BAR    = 1;
+    public final static int LEVEL_POSTER = 2;
+    public final static int LEVEL_WORLD  = 3;
+
     public static float LEVEL_0     = 4f;  // TouchSurface
     public static float LEVEL_1     = 20f; // elf
     public static float LEVEL_2     = 28f; // poster
@@ -131,18 +136,18 @@ public class ViewManager {
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 	Log.i(TAG,"near x="+nearX+" y="+nearY);
 
-	int id = mBar.pointerAt(convertToLevel(1, nearX)
-		, convertToLevel(1, nearY));
+	int id = mBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
+		, convertToLevel(LEVEL_BAR, nearY));
 	if (id == -1) {
-	    float worldX = convertToLevel(3, nearX);
-	    float worldY = convertToLevel(3, nearY);
+	    float worldX = convertToLevel(LEVEL_WORLD, nearX);
+	    float worldY = convertToLevel(LEVEL_WORLD, nearY);
 	    id = mWorld.pointerAt(worldX, worldY);
 	}
 
 	Log.i(TAG,"Click on GLObject id = "+id);
 
-	float touchX = convertToLevel(0, nearX);
-	float touchY = convertToLevel(0, nearY);
+	float touchX = convertToLevel(LEVEL_TOUCH, nearX);
+	float touchY = convertToLevel(LEVEL_TOUCH, nearY);
 	mTouchSurface.clickAt(touchX, touchY);
 
 	if (id > 1) {
@@ -213,10 +218,10 @@ public class ViewManager {
 	elf3.setDefaultTextureName("peach");
 	elf4.setDefaultTextureName("toad");
 
-	float barWidth  = convertToLevel(1, PROJ_WIDTH);
-	float barHeight = convertToLevel(1, PROJ_HEIGHT * 0.15f);
+	float barWidth  = convertToLevel(LEVEL_BAR, PROJ_WIDTH);
+	float barHeight = convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.15f);
 	mBar = new BottomBar(barWidth, barHeight);
-	mBar.setXY(0, convertToLevel(1, PROJ_HEIGHT * 0.85f));
+	mBar.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
 	mBar.addElf(elf1);
 	mBar.addElf(elf2);
 	mBar.addElf(elf3);
@@ -282,8 +287,8 @@ public class ViewManager {
 	/* Draw Level 3, the Rooms of World */
 	gl.glPushMatrix();
 	gl.glTranslatef(
-		convertToLevel(3, PROJ_LEFT)
-		, convertToLevel(3, PROJ_BOTTOM )
+		convertToLevel(LEVEL_WORLD, PROJ_LEFT)
+		, convertToLevel(LEVEL_WORLD, PROJ_BOTTOM )
 		, 0f);// move to Left-Top
 
 	gl.glTranslatef(0f, 0f, LEVEL_3);   // after rotating, the Z-axis upside down
@@ -293,8 +298,8 @@ public class ViewManager {
 	/* Draw Level 1, the Bar and Elfs */
 	gl.glPushMatrix();
 	gl.glTranslatef(
-		convertToLevel(1, PROJ_LEFT)
-		, convertToLevel(1, PROJ_BOTTOM )
+		convertToLevel(LEVEL_BAR, PROJ_LEFT)
+		, convertToLevel(LEVEL_BAR, PROJ_BOTTOM )
 		, 0f);// move to Left-Top
 
 	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
@@ -305,8 +310,8 @@ public class ViewManager {
 	/* Draw the TouchSurface */
 	gl.glPushMatrix();
 	gl.glTranslatef(
-		convertToLevel(0, PROJ_LEFT)
-		, convertToLevel(0, PROJ_BOTTOM )
+		convertToLevel(LEVEL_TOUCH, PROJ_LEFT)
+		, convertToLevel(LEVEL_TOUCH, PROJ_BOTTOM )
 		, 0f);// move to Left-Top
 	gl.glTranslatef(0f, 0f, LEVEL_0);   // after rotating, the Z-axis upside down
 
@@ -326,7 +331,7 @@ public class ViewManager {
     public void shiftWorldXY(int dx, int dy) {
 	int current = mWorld.getCurrentRoom();
 	float screenX = 3 * dx / PROJ_WIDTH;
-	float level3X = convertToLevel(3, screenX);
+	float level3X = convertToLevel(LEVEL_WORLD, screenX);
 	float endX = -1 * current * Room.WIDTH + level3X;
 	float endY = 0;
 	mWorld.setXY(endX, endY);
@@ -336,7 +341,7 @@ public class ViewManager {
 	if (endX > 0 ||
 		endX < -1 * totalRoomWidth) {
 	    float barY = mBar.getY();
-	    float level1X = convertToLevel(1, screenX);
+	    float level1X = convertToLevel(LEVEL_BAR, screenX);
 	    mBar.setXY(level1X, barY);
 	}
     }
