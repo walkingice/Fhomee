@@ -46,10 +46,6 @@ public class Elf extends GLObject{
     protected int mStandID;
     protected String mStandName  = "elf_stand";
 
-    /*I want to draw a Square Body but a Elf has foot.
-      If we scale the size of body, we get gap */
-    protected float mGapX = 0f;
-    protected float mGapY = 0f;
     protected GLView mBorder;
     protected GLView mFoot;
     protected RectF mBorderRect;
@@ -85,8 +81,6 @@ public class Elf extends GLObject{
 
 	super.setSize(bodyH, bodyH);
 
-	mGapX = (width - bodyH) / 2;
-	mGapY = 0;
 	mBorderRect.set(0, 0, bodyH, bodyH);
 	mFootRect.set(0, 0, bodyH, height - bodyH);
 
@@ -129,7 +123,6 @@ public class Elf extends GLObject{
 	    }   
 
 	    if (drawMyself) {
-		gl.glTranslatef(mGapX, 0f, 0f);
 		mGLView.drawGLView(gl);
 		mBorder.drawGLView(gl);
 		//mGLView.drawGLView(gl);
