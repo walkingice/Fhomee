@@ -66,15 +66,20 @@ public class GLObject {
     protected GLAnimation mAnimation;
     protected Object mAnimationLock;
 
+    GLObject(float width, float height) {
+	this(0f, 0f, width, height);
+    }
+
     GLObject(float x, float y, float width, float height) {
 	mRect = new RectF(0, 0, width, height);
-	mPosition = new PointF(x, y);
+	mPosition = new PointF();
 	mAnimationLock = new Object();
 
 	mID = ObjectManager.getInstance().register(this);
 
 	mInvert = new Matrix();
 	mPts    = new float[2];
+	setXY(x, y);
 	resetInvertMatrix();
     }
 
