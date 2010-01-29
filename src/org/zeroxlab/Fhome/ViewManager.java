@@ -126,18 +126,24 @@ public class ViewManager {
     private boolean test = true;
     public void performClick(float screenX, float screenY) {
 	Log.i(TAG,"click on screen x="+screenX+" y="+screenY);
+
 	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 	Log.i(TAG,"near x="+nearX+" y="+nearY);
+
 	int id = mBar.pointerAt(convertToLevel(1, nearX)
 		, convertToLevel(1, nearY));
 	if (id == -1) {
-	    id = mWorld.pointerAt(nearX, nearY);
+	    float worldX = convertToLevel(3, nearX);
+	    float worldY = convertToLevel(3, nearY);
+	    id = mWorld.pointerAt(worldX, worldY);
 	}
 
 	Log.i(TAG,"Click on GLObject id = "+id);
 
-	mTouchSurface.clickAt(nearX, nearY);
+	float touchX = convertToLevel(0, nearX);
+	float touchY = convertToLevel(0, nearY);
+	mTouchSurface.clickAt(touchX, touchY);
 
 	if (id > 1) {
 	    GLObject obj = ObjectManager.getInstance().getGLObjectById(id);
