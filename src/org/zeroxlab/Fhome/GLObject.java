@@ -90,22 +90,23 @@ public class GLObject {
 	mPts[1] = y;
 	mInvert.mapPoints(mPts); // apply reverse matrix
 
-	if (mRect.contains(mPts[0], mPts[1])) {
-	    if (mHasChildren) {
-		GLObject obj;
-		for (int i = 0; i < mChildren.size(); i++) {
-		    obj = mChildren.get(i);
-		    id  = obj.pointerAt(mPts[0], mPts[1]);
-		    if (id != -1) {
-			i = mChildren.size(); // break the loop
-		    }
+	if (mHasChildren) {
+	    GLObject obj;
+	    for (int i = 0; i < mChildren.size(); i++) {
+		obj = mChildren.get(i);
+		id  = obj.pointerAt(mPts[0], mPts[1]);
+		if (id != -1) {
+		    i = mChildren.size(); // break the loop
 		}
 	    }
-	    if (id == -1) {
-		id = mID;
-	    }
-	} else {
-	    id = -1;
+	}
+
+	if (id == -1 && mRect.contains(mPts[0], mPts[1])) {
+	    id = mID;
+	}
+
+	if (id != -1) {
+	    Log.i(TAG,"Pointer at "+ id);
 	}
 
 	return id;
