@@ -34,8 +34,18 @@ import android.widget.LinearLayout;
 public class GestureInterpreter {
 
     final String TAG="GestureInterpreter";
+    private static GestureInterpreter mGI = new GestureInterpreter();
+    private final static int DEFAULT_WIDTH  = 320;
+    private final static int DEFAULT_HEIGHT = 480;
     private int mScreenWidth;
     private int mScreenHeight;
+
+    public final static int DRAG_THRESHOLD = 15; // 5px
+    public boolean mIsDragging = false;
+    public boolean mIsHDrag    = false;
+
+    public final static long LONGCLICK_THRESHOLD = 1000;
+    public boolean mIsLongClick = false;
 
     final private float triggerHorizontal = 0.25f;
     final private float triggerVertical   = 0.75f;
@@ -51,13 +61,20 @@ public class GestureInterpreter {
     final static private int TOPLEVEL = 0;
 
     private int mNow;
-    final static int NOTHING       = 0;
     final static int NORMAL        = 1;
     final static int SCALING       = 2;
     final static int SHIFTING      = 4;
     final static int MOVE_NEXT     = 5;
     final static int MOVE_PREV     = 6;
     final static int MOVE_ORIG     = 7;
+
+    /* 只解釋 User 的動作，是否有 click 則由 ViewManager 決定 */
+    public final static int PRESS        = 9; // 剛按下去
+    public final static int PRESSING     = 10; // 持續按著
+    public final static int HDRAGGING    = 11; // 橫向 drag
+    public final static int DRAGGING     = 12; // 所有非橫向的 drag
+    public final static int LONGPRESSING = 13;
+    public final static int RELEASE      = 14; // 其實就當成 NOTHING 可以嗎？
 
     public int mNowX = -1;
     public int mNowY = -1;
@@ -69,19 +86,36 @@ public class GestureInterpreter {
     public long mPressTime   = 0;
     public long mReleaseTime = 0;
 
-    GestureInterpreter(int width, int height) {
-	updateScreenSize(width, height);
+    private GestureInterpreter() {
+	updateScreenSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	mWhere = TOPLEVEL;
+    }
+
+    synchronized static public GestureInterpreter getInstance() {
+	if (mGI == null) {
+	    mGI = new GestureInterpreter();
+	}
+
+	return mGI;
     }
 
     public int processMotionEvent(MotionEvent event) {
 	if(mWhere == TOPLEVEL) {
 	    mNow = eventAtToplevel(event);
 	} else {
-	    return NOTHING;
+	    return RELEASE;
 	}
 
+	Log.i(TAG,"Now is:"+mNow+"\tDrag:"+mIsDragging+"\tHorizontal:"+mIsHDrag+"\tLong:"+mIsLongClick);
 	return mNow;
+    }
+
+    public int getDeltaX() {
+	return mNowX - mPressX;
+    }
+
+    public int getDeltaY() {
+	return mNowY - mPressY;
     }
 
     public long pressTime() {
@@ -98,32 +132,17 @@ public class GestureInterpreter {
 
 	switch (action) {
 	    case MotionEvent.ACTION_UP:
+		mReleaseTime = SystemClock.uptimeMillis();
 		mReleaseX = x;
 		mReleaseY = y;
-		mReleaseTime = SystemClock.uptimeMillis();
+		mPressX   = -1;
+		mPressY   = -1;
 
-		if (now == NORMAL) {
-		    int deltaX = mPressX - mReleaseX;
-		    int delteY = mPressY - mReleaseY;
-		    int threshold = (int) (mScreenWidth / 2);
-		    if (Math.abs(deltaX) > threshold) {
-			if (deltaX > 0) {
-			    Log.i(TAG, "Move to next room");
-			    now = MOVE_NEXT;
-			} else {
-			    Log.i(TAG, "Move to previous room");
-			    now = MOVE_PREV;
-			}
-		    } else {
-			Log.i(TAG, "back to original room");
-			now = MOVE_ORIG;
-		    }
-		} else {
-		    now = NOTHING;
-		}
+		/* Reset flag */
+		mIsDragging = false;
+		mIsLongClick = false;
 
-		mPressX = -1;
-		mPressY = -1;
+		now = RELEASE;
 		break;
 	    case MotionEvent.ACTION_DOWN:
 		mPressTime = SystemClock.uptimeMillis();
@@ -131,34 +150,38 @@ public class GestureInterpreter {
 		mPressY = y;
 		mReleaseX = -1;
 		mReleaseY = -1;
-		if (triggerArea.contains(x,y)) {
-		    now = SCALING;
-		} else {
-		    now = NORMAL;
-		}
+		now = PRESS;
+
 		break;
 	    case MotionEvent.ACTION_MOVE:
-		if (now == SCALING && shiftArea.contains(x,y)) {
-		    now = SHIFTING;
-		} else if (now == SHIFTING && shiftArea.contains(x,y)) {
-		    now = SHIFTING;
-		} else if (now == SHIFTING || now == SCALING) {
-		    // back to Scaling
-		    now = SCALING;
-		} else if (now == NORMAL) {
-		    // Normal dragging
-		} else {
-		    now = NOTHING;
+		// 依序決定，首先是 Dragging, 然後是 Sliding, Longpressing
+		long time = SystemClock.uptimeMillis();
+		now = PRESSING;
+		if (time - mPressTime > LONGCLICK_THRESHOLD) {
+		    mIsLongClick = true;
+		    now = LONGPRESSING;
+		}
+
+		if (!mIsDragging) {
+		    if (Math.abs(y - mPressY) > DRAG_THRESHOLD) {
+			mIsDragging = true;
+			mIsHDrag    = false;
+			now = DRAGGING;
+		    } else if (Math.abs(x - mPressX) > DRAG_THRESHOLD) {
+			mIsDragging = true;
+			mIsHDrag    = true;
+			now = HDRAGGING;
+		    }
 		}
 		break;
 	    default:
-		now = NOTHING;
+		now = RELEASE;
 	}
 
 	return now;
     }
 
-    private void updateScreenSize(int width, int height) {
+    public void updateScreenSize(int width, int height) {
 	mScreenWidth  = width;
 	mScreenHeight = height;
 	triggerEnableLeft = 0;
