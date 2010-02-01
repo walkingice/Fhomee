@@ -60,21 +60,15 @@ public class GestureInterpreter {
     private int mWhere;
     final static private int TOPLEVEL = 0;
 
-    private int mNow;
-    final static int NORMAL        = 1;
-    final static int SCALING       = 2;
-    final static int SHIFTING      = 4;
-    final static int MOVE_NEXT     = 5;
-    final static int MOVE_PREV     = 6;
-    final static int MOVE_ORIG     = 7;
 
-    /* 只解釋 User 的動作，是否有 click 則由 ViewManager 決定 */
-    public final static int PRESS        = 9; // 剛按下去
-    public final static int PRESSING     = 10; // 持續按著
-    public final static int HDRAGGING    = 11; // 橫向 drag
-    public final static int DRAGGING     = 12; // 所有非橫向的 drag
-    public final static int LONGPRESSING = 13;
-    public final static int RELEASE      = 14; // 其實就當成 NOTHING 可以嗎？
+    /* Only interpret the gesture  */
+    private int mNow;
+    public final static int RELEASE      = 1;  // Normal state
+    public final static int PRESS        = 2;  // Start pressing
+    public final static int PRESSING     = 3; // Keep pressing
+    public final static int LONGPRESSING = 4; // Press for a while
+    public final static int HDRAGGING    = 5; // Horizontal dragging
+    public final static int DRAGGING     = 6; // Dragging except horizontal
 
     public int mNowX = -1;
     public int mNowY = -1;
@@ -154,7 +148,8 @@ public class GestureInterpreter {
 
 		break;
 	    case MotionEvent.ACTION_MOVE:
-		// 依序決定，首先是 Dragging, 然後是 Sliding, Longpressing
+		// Decide the state with priority
+		// Dragging is the first, and then is HDragging, Long pressing
 		long time = SystemClock.uptimeMillis();
 		now = PRESSING;
 		if (time - mPressTime > LONGCLICK_THRESHOLD) {
