@@ -92,6 +92,9 @@ public class ViewManager {
     public static int mScreenWidth;
     public static int mScreenHeight;
 
+    private int mDownId;
+    private int mUpId;
+
     final String TAG="ViewManager";
     private Context mContext;
     private Rect mViewPort;
@@ -162,6 +165,46 @@ public class ViewManager {
 	    elf1.setAnimation(tr);
 	    mTimeline.addAnimation(tr);
 	}
+    }
+
+    public void press(int screenX, int screenY) {
+	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
+	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
+
+	int id = mBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
+		, convertToLevel(LEVEL_BAR, nearY));
+	if (id == -1) {
+	    float worldX = convertToLevel(LEVEL_WORLD, nearX);
+	    float worldY = convertToLevel(LEVEL_WORLD, nearY);
+	    id = mWorld.pointerAt(worldX, worldY);
+	}
+
+	mDownId = id;
+    }
+
+    public void release(int screenX, int screenY) {
+	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
+	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
+
+	int id = mBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
+		, convertToLevel(LEVEL_BAR, nearY));
+	if (id == -1) {
+	    float worldX = convertToLevel(LEVEL_WORLD, nearX);
+	    float worldY = convertToLevel(LEVEL_WORLD, nearY);
+	    id = mWorld.pointerAt(worldX, worldY);
+	}
+
+	mUpId = id;
+	if (mDownId == mUpId && mUpId != -1) {
+	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mUpId);
+	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
+	    obj.setAnimation(fade);
+	    mTimeline.addAnimation(fade);
+	    obj.onClick();
+	}
+    }
+
+    public void slide(int deltaX, int deltaY) {
     }
 
     public static float convertToLevel(int level, float from) {
@@ -268,7 +311,6 @@ public class ViewManager {
     }
 
     public void drawGLViews(GL10 gl) {
-	Log.i(TAG,"Redraw!!");
 	GLObject obj;
 
 	gl.glMatrixMode(gl.GL_MODELVIEW);
