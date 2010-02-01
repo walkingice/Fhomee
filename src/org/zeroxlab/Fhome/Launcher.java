@@ -48,7 +48,7 @@ public class Launcher extends Activity {
 	LinearLayout layout = new LinearLayout(this);
 	mScreen = new TotalScreen(this);
 	mScreen.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-	mInterpreter = new GestureInterpreter(mDefaultWidth, mDefaultHeight);
+	mInterpreter = GestureInterpreter.getInstance();
 	layout.addView(mScreen);
 	setContentView(layout);
     }
@@ -84,24 +84,19 @@ public class Launcher extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 	    int result = mInterpreter.processMotionEvent(event);
-	    if (result == GestureInterpreter.SCALING) {
-		mViewManager.pushWorld(event.getX(), event.getY());
-	    } else if (result == GestureInterpreter.MOVE_NEXT) {
-		mViewManager.moveToNextRoom();
-	    } else if (result == GestureInterpreter.MOVE_PREV) {
-		mViewManager.moveToPrevRoom();
-	    } else if (result == GestureInterpreter.MOVE_ORIG) {
-		mViewManager.moveToOrigRoom();
-		if (mInterpreter.pressTime() < 100) {
-		    mViewManager.performClick(event.getX(), event.getY());
+	    int x = mInterpreter.mNowX;
+	    int y = mInterpreter.mNowY;
+	    if (result == GestureInterpreter.PRESS){
+		mViewManager.press(x, y);
+	    } else if (result == GestureInterpreter.HDRAGGING) {
+		mViewManager.slide(mInterpreter.getDeltaX(), 0);
+	    } else if (result == GestureInterpreter.DRAGGING) {
+	    } else if (result == GestureInterpreter.LONGPRESSING) {
+	    } else if (result == GestureInterpreter.RELEASE) {
+		if (mInterpreter.mIsHDrag) {
+		} else {
+		    mViewManager.release(x, y);
 		}
-	    } else if (result == GestureInterpreter.NORMAL) {
-		mViewManager.shiftWorldXY(
-			mInterpreter.mNowX - mInterpreter.mPressX, 0);
-	    } else if (result == GestureInterpreter.NOTHING) {
-		mViewManager.pushWorld(0, 0);
-	    } else if (result == GestureInterpreter.SHIFTING) {
-		mViewManager.jumpToRoomByX((int)event.getX());
 	    }
 	    mScreen.requestRender();
 	    return true;
