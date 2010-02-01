@@ -40,7 +40,8 @@ public class GestureInterpreter {
     private int mScreenWidth;
     private int mScreenHeight;
 
-    public final static int DRAG_THRESHOLD = 15; // 5px
+    public final static int DRAG_H_THRESHOLD = 15; // 15px
+    public final static int DRAG_V_THRESHOLD = 20; // 20px
     public boolean mIsDragging = false;
     public boolean mIsHDrag    = false;
 
@@ -132,10 +133,6 @@ public class GestureInterpreter {
 		mPressX   = -1;
 		mPressY   = -1;
 
-		/* Reset flag */
-		mIsDragging = false;
-		mIsLongClick = false;
-
 		now = RELEASE;
 		break;
 	    case MotionEvent.ACTION_DOWN:
@@ -144,8 +141,12 @@ public class GestureInterpreter {
 		mPressY = y;
 		mReleaseX = -1;
 		mReleaseY = -1;
-		now = PRESS;
 
+		/* Reset flag */
+		mIsDragging = false;
+		mIsLongClick = false;
+
+		now = PRESS;
 		break;
 	    case MotionEvent.ACTION_MOVE:
 		// Decide the state with priority
@@ -158,11 +159,11 @@ public class GestureInterpreter {
 		}
 
 		if (!mIsDragging) {
-		    if (Math.abs(y - mPressY) > DRAG_THRESHOLD) {
+		    if (Math.abs(y - mPressY) > DRAG_V_THRESHOLD) {
 			mIsDragging = true;
 			mIsHDrag    = false;
 			now = DRAGGING;
-		    } else if (Math.abs(x - mPressX) > DRAG_THRESHOLD) {
+		    } else if (Math.abs(x - mPressX) > DRAG_H_THRESHOLD) {
 			mIsDragging = true;
 			mIsHDrag    = true;
 			now = HDRAGGING;
