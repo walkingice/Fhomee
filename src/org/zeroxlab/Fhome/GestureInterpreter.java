@@ -48,6 +48,9 @@ public class GestureInterpreter {
     public final static long LONGCLICK_THRESHOLD = 1000;
     public boolean mIsLongClick = false;
 
+    public boolean mSnapToNext = false;
+    public boolean mSnapToPrev = false;
+
     final private float triggerHorizontal = 0.25f;
     final private float triggerVertical   = 0.75f;
     private float triggerEnableLeft  = 0;
@@ -117,6 +120,21 @@ public class GestureInterpreter {
 	return mReleaseTime - mPressTime;
     }
 
+    private void updateSnappingState() {
+	int deltaX = getDeltaX();
+	int threshold = (int) (mScreenWidth / 2);
+	if (Math.abs(deltaX) < threshold) {
+	    mSnapToNext = false;
+	    mSnapToPrev = false;
+	} else if (deltaX > 0) {
+	    mSnapToNext = false;
+	    mSnapToPrev = true;
+	} else {
+	    mSnapToNext = true;
+	    mSnapToPrev = false;
+	}
+    }
+
     private int eventAtToplevel(MotionEvent event) {
 	int action = event.getAction();
 	int x = (int) event.getX();
@@ -130,8 +148,7 @@ public class GestureInterpreter {
 		mReleaseTime = SystemClock.uptimeMillis();
 		mReleaseX = x;
 		mReleaseY = y;
-		mPressX   = -1;
-		mPressY   = -1;
+		updateSnappingState();
 
 		now = RELEASE;
 		break;
