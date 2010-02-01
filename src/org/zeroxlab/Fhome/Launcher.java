@@ -93,7 +93,14 @@ public class Launcher extends Activity {
 	    } else if (result == GestureInterpreter.DRAGGING) {
 	    } else if (result == GestureInterpreter.LONGPRESSING) {
 	    } else if (result == GestureInterpreter.RELEASE) {
-		if (mInterpreter.mIsHDrag) {
+		if (mInterpreter.mIsDragging && mInterpreter.mIsHDrag) {
+		    if (mInterpreter.mSnapToNext) {
+			mViewManager.moveToNextRoom();
+		    } else if (mInterpreter.mSnapToPrev) {
+			mViewManager.moveToPrevRoom();
+		    } else {
+			mViewManager.moveToOrigRoom();
+		    }
 		} else {
 		    mViewManager.release(x, y);
 		}
