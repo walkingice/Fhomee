@@ -205,6 +205,16 @@ public class ViewManager {
 	}
     }
 
+    public void slideEnd() {
+	if (mGestureMgr.mSnapToNext) {
+	    moveToNextRoom();
+	} else if (mGestureMgr.mSnapToPrev) {
+	    moveToPrevRoom();
+	} else {
+	    moveToOrigRoom();
+	}
+    }
+
     public void slide(int deltaX, int deltaY) {
     }
 
