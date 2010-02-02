@@ -36,6 +36,10 @@ public class World extends GLObject {
     public final static float ROOM_WIDTH  = ViewManager.convertToLevel(3, ViewManager.PROJ_WIDTH);
     public final static float ROOM_HEIGHT = ViewManager.convertToLevel(3, ViewManager.PROJ_HEIGHT);
 
+    /* Only draw rooms which is current, left and right */
+    public final static int ROOM_VISIBLE_LEFT  = 1;
+    public final static int ROOM_VISIBLE_RIGHT = 1;
+
     public World() {
 	super(0, 0, 0, 0);
 	mChildren = new LinkedList<GLObject>();
@@ -82,7 +86,14 @@ public class World extends GLObject {
 		mAnimation.applyAnimation(gl);
 	    }
 	}
-	for (int i = 0; i < mChildren.size(); i++) {
+
+	int current = getCurrentRoom();
+	int count   = getChildrenCount();
+	int start = current - ROOM_VISIBLE_LEFT;
+	int end   = count   + ROOM_VISIBLE_RIGHT;
+	start = Math.max(start, 0);
+	end   = Math.min(end, count);
+	for (int i = start; i < end; i++) {
 	    room = (Room)mChildren.get(i);
 	    gl.glPushMatrix();
 	    room.draw(gl);
