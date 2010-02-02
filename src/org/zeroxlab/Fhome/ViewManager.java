@@ -105,6 +105,8 @@ public class ViewManager {
     private TextureManager   mTextureManager;
     private GestureManager   mGestureMgr;
 
+    private boolean mMiniMode = false;
+
     private TouchSurface mTouchSurface;
     private World mWorld;
     private Room room, room2, room3, room4, room5, room6;
@@ -181,6 +183,22 @@ public class ViewManager {
 	}
 
 	mDownId = id;
+    }
+
+    public void turnOnMiniMode() {
+	if (mMiniMode == true) {
+	    return;
+	} else {
+	    mMiniMode = true;
+	}
+    }
+
+    public void turnOffMiniMode() {
+	if (mMiniMode == false) {
+	    return;
+	} else {
+	    mMiniMode = false;
+	}
     }
 
     public void release(int screenX, int screenY) {
@@ -324,6 +342,11 @@ public class ViewManager {
     }
 
     private void drawBottomBar(GL10 gl) {
+	/* We do not draw Bottom Bar at Mini mode */
+	if (mMiniMode) {
+	    return;
+	}
+
 	gl.glPushMatrix();
 	gl.glTranslatef(
 		convertToLevel(LEVEL_BAR, PROJ_LEFT)
