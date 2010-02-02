@@ -91,10 +91,16 @@ public class Launcher extends Activity {
 	    } else if (result == GestureManager.HDRAGGING) {
 		mViewManager.slide(mGestureMgr.getDeltaX(), 0);
 	    } else if (result == GestureManager.DRAGGING) {
+		if (mGestureMgr.mMiniMode) {
+		    mViewManager.turnOnMiniMode();
+		} else {
+		    mViewManager.turnOffMiniMode();
+		}
 	    } else if (result == GestureManager.LONGPRESSING) {
 	    } else if (result == GestureManager.RELEASE) {
 		if (mGestureMgr.mIsDragging && mGestureMgr.mIsHDrag) {
 		    mViewManager.slideEnd();
+		} else if (mGestureMgr.mModeChange){
 		} else {
 		    mViewManager.release(x, y);
 		}
