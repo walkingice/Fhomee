@@ -7,7 +7,7 @@
 	<activity
 	android:name="Launcher"
 	android:label="Fhome"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/icon_question"
 	>
 	<intent-filter>
 	<action android:name="android.intent.action.MAIN" />
