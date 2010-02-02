@@ -103,6 +103,7 @@ public class ViewManager {
     private Timeline mTimeline;
     private ResourcesManager mResourceManager;
     private TextureManager   mTextureManager;
+    private GestureManager   mGestureMgr;
 
     private TouchSurface mTouchSurface;
     private World mWorld;
@@ -233,6 +234,7 @@ public class ViewManager {
 	mTextureManager  = TextureManager.getInstance();
 	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
+	mGestureMgr      = GestureManager.getInstance();
 
 	initGLViews();
     }
