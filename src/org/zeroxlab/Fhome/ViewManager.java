@@ -190,6 +190,7 @@ public class ViewManager {
 	    return;
 	} else {
 	    mMiniMode = true;
+	    mWorld.setMiniMode();
 	}
     }
 
@@ -198,6 +199,7 @@ public class ViewManager {
 	    return;
 	} else {
 	    mMiniMode = false;
+	    mWorld.setNormalMode();
 	}
     }
 
