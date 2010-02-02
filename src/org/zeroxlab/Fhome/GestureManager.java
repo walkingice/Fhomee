@@ -31,10 +31,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class GestureInterpreter {
+public class GestureManager {
 
-    final String TAG="GestureInterpreter";
-    private static GestureInterpreter mGI = new GestureInterpreter();
+    final String TAG="GestureManager";
+    private static GestureManager mGestureMgr = new GestureManager();
     private final static int DEFAULT_WIDTH  = 320;
     private final static int DEFAULT_HEIGHT = 480;
     private int mScreenWidth;
@@ -84,17 +84,17 @@ public class GestureInterpreter {
     public long mPressTime   = 0;
     public long mReleaseTime = 0;
 
-    private GestureInterpreter() {
+    private GestureManager() {
 	updateScreenSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	mWhere = TOPLEVEL;
     }
 
-    synchronized static public GestureInterpreter getInstance() {
-	if (mGI == null) {
-	    mGI = new GestureInterpreter();
+    synchronized static public GestureManager getInstance() {
+	if (mGestureMgr == null) {
+	    mGestureMgr = new GestureManager();
 	}
 
-	return mGI;
+	return mGestureMgr;
     }
 
     public int processMotionEvent(MotionEvent event) {
