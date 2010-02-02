@@ -323,6 +323,31 @@ public class ViewManager {
 	mWorld.generateTextures();
     }
 
+    private void drawBottomBar(GL10 gl) {
+	gl.glPushMatrix();
+	gl.glTranslatef(
+		convertToLevel(LEVEL_BAR, PROJ_LEFT)
+		, convertToLevel(LEVEL_BAR, PROJ_BOTTOM )
+		, 0f);// move to Left-Top
+
+	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
+
+	mBar.draw(gl);
+	gl.glPopMatrix();
+    }
+
+    private void drawTouchSurface(GL10 gl) {
+	gl.glPushMatrix();
+	gl.glTranslatef(
+		convertToLevel(LEVEL_TOUCH, PROJ_LEFT)
+		, convertToLevel(LEVEL_TOUCH, PROJ_BOTTOM )
+		, 0f);// move to Left-Top
+	gl.glTranslatef(0f, 0f, LEVEL_0);   // after rotating, the Z-axis upside down
+
+	mTouchSurface.draw(gl);
+	gl.glPopMatrix();
+    }
+
     public void drawGLViews(GL10 gl) {
 	GLObject obj;
 
@@ -351,27 +376,10 @@ public class ViewManager {
 	gl.glPopMatrix();
 
 	/* Draw Level 1, the Bar and Elfs */
-	gl.glPushMatrix();
-	gl.glTranslatef(
-		convertToLevel(LEVEL_BAR, PROJ_LEFT)
-		, convertToLevel(LEVEL_BAR, PROJ_BOTTOM )
-		, 0f);// move to Left-Top
-
-	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
-
-	mBar.draw(gl);
-	gl.glPopMatrix();
+	drawBottomBar(gl);
 
 	/* Draw the TouchSurface */
-	gl.glPushMatrix();
-	gl.glTranslatef(
-		convertToLevel(LEVEL_TOUCH, PROJ_LEFT)
-		, convertToLevel(LEVEL_TOUCH, PROJ_BOTTOM )
-		, 0f);// move to Left-Top
-	gl.glTranslatef(0f, 0f, LEVEL_0);   // after rotating, the Z-axis upside down
-
-	mTouchSurface.draw(gl);
-	gl.glPopMatrix();
+	drawTouchSurface(gl);
     }
 
     public void jumpToRoomByX(int x) {
