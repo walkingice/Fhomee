@@ -33,6 +33,8 @@ public class World extends GLObject {
 
     private int mCurrentRoom = 0;
 
+    public boolean mMiniMode = false;
+
     public final static float ROOM_WIDTH  = ViewManager.convertToLevel(3, ViewManager.PROJ_WIDTH);
     public final static float ROOM_HEIGHT = ViewManager.convertToLevel(3, ViewManager.PROJ_HEIGHT);
 
@@ -71,6 +73,14 @@ public class World extends GLObject {
 	}
     }
 
+    public void setMiniMode() {
+	mMiniMode = true;
+    }
+
+    public void setNormalMode() {
+	mMiniMode = false;
+    }
+
     @Override
     public int pointerAt(float x, float y) {
 	int current = getCurrentRoom();
@@ -81,6 +91,10 @@ public class World extends GLObject {
     public void draw(GL10 gl) {
 	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
 	Room room;
+
+	if (mMiniMode) {
+	    gl.glTranslatef(0, 0, 15f);
+	}
 	synchronized(mAnimationLock) {
 	    if (mAnimation != null) {
 		mAnimation.applyAnimation(gl);
