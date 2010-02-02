@@ -385,13 +385,22 @@ public class ViewManager {
 
     public void shiftWorldXY(int dx, int dy) {
 	int current = mWorld.getCurrentRoom();
+	int rooms = mWorld.getChildrenCount();
 	float screenX = 3 * dx / PROJ_WIDTH;
+
+	/* At leftest room and slide to right
+	   Or at rightest romm and slide to left */
+	if ((current == 0 && dx > 0)
+		|| (current == rooms - 1 && dx < 0)) {
+	    screenX = screenX / 3 ;
+	}
+
 	float level3X = convertToLevel(LEVEL_WORLD, screenX);
 	float endX = -1 * current * Room.WIDTH + level3X;
 	float endY = 0;
+
 	mWorld.setXY(endX, endY);
 
-	int rooms = mWorld.getChildrenCount();
 	float totalRoomWidth = Room.WIDTH * (rooms - 1);
 	if (endX > 0 ||
 		endX < -1 * totalRoomWidth) {
