@@ -168,14 +168,14 @@ public class GestureManager {
 	    case MotionEvent.ACTION_MOVE:
 		// Decide the state with priority
 		// Dragging is the first, and then is HDragging, Long pressing
-		long time = SystemClock.uptimeMillis();
-		now = PRESSING;
-		if (time - mPressTime > LONGCLICK_THRESHOLD) {
-		    mIsLongClick = true;
-		    now = LONGPRESSING;
-		}
-
 		if (!mIsDragging) {
+		    now = PRESSING;
+		    long time = SystemClock.uptimeMillis();
+		    if (time - mPressTime > LONGCLICK_THRESHOLD) {
+			mIsLongClick = true;
+			now = LONGPRESSING;
+		    }
+
 		    if (Math.abs(y - mPressY) > DRAG_V_THRESHOLD) {
 			mIsDragging = true;
 			mIsHDrag    = false;
