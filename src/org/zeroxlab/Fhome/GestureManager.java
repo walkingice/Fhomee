@@ -51,15 +51,15 @@ public class GestureManager {
     public boolean mSnapToNext = false;
     public boolean mSnapToPrev = false;
 
-    final private float triggerHorizontal = 0.25f;
-    final private float triggerVertical   = 0.75f;
-    private float triggerEnableLeft  = 0;
-    private float triggerEnableRight = 100;
-    private float triggerShiftTop    = 400;
-    private float triggerShiftBottom = 480;
-    public Rect triggerArea;
-    public Rect scaleArea;
-    public Rect shiftArea;
+    private int mSwitchLeft;
+    private int mSwitchRight;
+    private int mSwitchTop;
+    private int mSwitchBottom;
+    public Rect mMiniSwitchOn;
+    public Rect mMiniSwitchOff;
+    public boolean mPressSwitch = false;
+    public boolean mMiniMode    = false;
+    public boolean mModeChange  = false;
 
     private int mWhere;
     final static private int TOPLEVEL = 0;
@@ -149,6 +149,7 @@ public class GestureManager {
 		mReleaseX = x;
 		mReleaseY = y;
 		updateSnappingState();
+		mPressSwitch = false;
 
 		now = RELEASE;
 		break;
@@ -159,9 +160,20 @@ public class GestureManager {
 		mReleaseX = -1;
 		mReleaseY = -1;
 
+		if ((mMiniMode == true && mMiniSwitchOn.contains(x, y))
+			|| (mMiniMode == false && mMiniSwitchOff.contains(x, y))
+			) {
+		    /*If we are at Mini Mode and press MiniMode-On
+		     or we are NOT at Mini Mode and press MiniMode-Off */
+		    mPressSwitch = true;
+		} else {
+		    mPressSwitch = false;
+		}
+
 		/* Reset flag */
 		mIsDragging = false;
 		mIsLongClick = false;
+		mModeChange  = false;
 
 		now = PRESS;
 		break;
@@ -185,6 +197,14 @@ public class GestureManager {
 			mIsHDrag    = true;
 			now = HDRAGGING;
 		    }
+		} else if (mIsDragging && mPressSwitch) {
+		    if (mMiniSwitchOn.contains(x, y)) {
+			mModeChange = true;
+			mMiniMode = true;
+		    } else if (mMiniSwitchOff.contains(x, y)) {
+			mModeChange = true;
+			mMiniMode = false;
+		    }
 		}
 		break;
 	    default:
@@ -197,13 +217,17 @@ public class GestureManager {
     public void updateScreenSize(int width, int height) {
 	mScreenWidth  = width;
 	mScreenHeight = height;
-	triggerEnableLeft = 0;
-	triggerEnableRight = (int)(width  * triggerHorizontal);
-	triggerShiftTop    = (int)(height * triggerVertical);
-	triggerShiftBottom = height;
-	triggerArea = new Rect(0, 0, 100, 100);
-	scaleArea   = new Rect(0, 100, 100, 350);
-	shiftArea   = new Rect(0,350, width, height);
+
+	int switchHeight = (int) (height * 0.25f);
+
+	mSwitchLeft  = 0;
+	mSwitchRight = (int) (width  * 0.33f);
+	mSwitchTop   = (int) (height * 0.4f);
+	mSwitchBottom = mSwitchTop + switchHeight;
+
+	mMiniSwitchOff  = new Rect(mSwitchLeft, mSwitchTop, mSwitchRight, mSwitchBottom);
+	mMiniSwitchOn = new Rect(mMiniSwitchOff);
+	mMiniSwitchOn.offsetTo(mSwitchLeft, mSwitchBottom);
     }
 }
 
