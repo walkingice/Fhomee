@@ -38,7 +38,7 @@ public class Launcher extends Activity {
 
     final String TAG="Launcher";
     TotalScreen mScreen;
-    GestureInterpreter mInterpreter;
+    GestureManager mGestureMgr;
     public static int mDefaultWidth  = 320;
     public static int mDefaultHeight = 480;
 
@@ -48,7 +48,7 @@ public class Launcher extends Activity {
 	LinearLayout layout = new LinearLayout(this);
 	mScreen = new TotalScreen(this);
 	mScreen.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-	mInterpreter = GestureInterpreter.getInstance();
+	mGestureMgr = GestureManager.getInstance();
 	layout.addView(mScreen);
 	setContentView(layout);
     }
@@ -83,20 +83,20 @@ public class Launcher extends Activity {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-	    int result = mInterpreter.processMotionEvent(event);
-	    int x = mInterpreter.mNowX;
-	    int y = mInterpreter.mNowY;
-	    if (result == GestureInterpreter.PRESS){
+	    int result = mGestureMgr.processMotionEvent(event);
+	    int x = mGestureMgr.mNowX;
+	    int y = mGestureMgr.mNowY;
+	    if (result == GestureManager.PRESS){
 		mViewManager.press(x, y);
-	    } else if (result == GestureInterpreter.HDRAGGING) {
-		mViewManager.slide(mInterpreter.getDeltaX(), 0);
-	    } else if (result == GestureInterpreter.DRAGGING) {
-	    } else if (result == GestureInterpreter.LONGPRESSING) {
-	    } else if (result == GestureInterpreter.RELEASE) {
-		if (mInterpreter.mIsDragging && mInterpreter.mIsHDrag) {
-		    if (mInterpreter.mSnapToNext) {
+	    } else if (result == GestureManager.HDRAGGING) {
+		mViewManager.slide(mGestureMgr.getDeltaX(), 0);
+	    } else if (result == GestureManager.DRAGGING) {
+	    } else if (result == GestureManager.LONGPRESSING) {
+	    } else if (result == GestureManager.RELEASE) {
+		if (mGestureMgr.mIsDragging && mGestureMgr.mIsHDrag) {
+		    if (mGestureMgr.mSnapToNext) {
 			mViewManager.moveToNextRoom();
-		    } else if (mInterpreter.mSnapToPrev) {
+		    } else if (mGestureMgr.mSnapToPrev) {
 			mViewManager.moveToPrevRoom();
 		    } else {
 			mViewManager.moveToOrigRoom();
