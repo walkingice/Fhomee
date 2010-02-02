@@ -216,6 +216,7 @@ public class ViewManager {
     }
 
     public void slide(int deltaX, int deltaY) {
+	shiftWorldXY(deltaX, deltaY);
     }
 
     public static float convertToLevel(int level, float from) {
