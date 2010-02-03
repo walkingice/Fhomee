@@ -239,6 +239,20 @@ public class ViewManager {
 	shiftWorldXY(deltaX, deltaY);
     }
 
+    public static float getZDepth(int level) {
+	if (level == LEVEL_TOUCH) {
+	    return LEVEL_0;
+	} else if (level == LEVEL_BAR) {
+	    return LEVEL_1;
+	} else if (level == LEVEL_POSTER) {
+	    return LEVEL_2;
+	} else if (level == LEVEL_WORLD) {
+	    return LEVEL_3;
+	}
+
+	return LEVEL_0;
+    }
+
     public static float convertToLevel(int level, float from) {
 	if (level == 0) {
 	    return from * ZN_LEVEL_0;
