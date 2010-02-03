@@ -46,9 +46,17 @@ public class World extends GLObject {
     public final static int ROOM_VISIBLE_LEFT  = 1;
     public final static int ROOM_VISIBLE_RIGHT = 1;
 
+    public static float BAR_HEIGHT = ROOM_HEIGHT * 0.2f; // 20% of screen height
+    public static float MINIMODE_DEPTH_OFFSET;
+
     public World() {
 	super(0, 0, 0, 0);
 	mChildren = new LinkedList<GLObject>();
+
+	/* depth : height = LEVEL_3 : ROOM_HEIGHT */
+	float height = BAR_HEIGHT + ROOM_HEIGHT + BAR_HEIGHT;
+	float depth  = height * DEPTH / ROOM_HEIGHT;
+	MINIMODE_DEPTH_OFFSET = depth - ViewManager.LEVEL_3;
     }
 
     @Override
@@ -97,7 +105,7 @@ public class World extends GLObject {
 	Room room;
 
 	if (mMiniMode) {
-	    gl.glTranslatef(0, 0, 15f);
+	    gl.glTranslatef(0, 0, MINIMODE_DEPTH_OFFSET);
 	}
 	synchronized(mAnimationLock) {
 	    if (mAnimation != null) {
