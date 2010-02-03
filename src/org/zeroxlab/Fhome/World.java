@@ -104,9 +104,6 @@ public class World extends GLObject {
 	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
 	Room room;
 
-	if (mMiniMode) {
-	    gl.glTranslatef(0, 0, MINIMODE_DEPTH_OFFSET);
-	}
 	synchronized(mAnimationLock) {
 	    if (mAnimation != null) {
 		mAnimation.applyAnimation(gl);
