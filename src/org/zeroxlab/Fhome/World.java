@@ -34,9 +34,13 @@ public class World extends GLObject {
     private int mCurrentRoom = 0;
 
     public boolean mMiniMode = false;
+    private final static int  LEVEL = ViewManager.LEVEL_WORLD;
+    private final static float DEPTH = ViewManager.getZDepth(LEVEL);
 
-    public final static float ROOM_WIDTH  = ViewManager.convertToLevel(3, ViewManager.PROJ_WIDTH);
-    public final static float ROOM_HEIGHT = ViewManager.convertToLevel(3, ViewManager.PROJ_HEIGHT);
+    public final static float ROOM_WIDTH  = ViewManager.convertToLevel(
+	    LEVEL, ViewManager.PROJ_WIDTH);
+    public final static float ROOM_HEIGHT = ViewManager.convertToLevel(
+	    LEVEL, ViewManager.PROJ_HEIGHT);
 
     /* Only draw rooms which is current, left and right */
     public final static int ROOM_VISIBLE_LEFT  = 1;
