@@ -112,7 +112,6 @@ public class ViewManager {
     private Room room, room2, room3, room4, room5, room6;
 
     public final float FAREST_PUSHING_DEPTH = 10f;
-    private float mDrawingDepth;
 
     GLTransition transition;
     GLObject wanted1;
@@ -128,47 +127,6 @@ public class ViewManager {
     Elf elf2;
     Elf elf3;
     Elf elf4;
-
-    public void pushWorld(float eventX, float eventY) {
-	float ratio = eventY / mScreenHeight;
-	mDrawingDepth = FAREST_PUSHING_DEPTH * ratio;
-    }
-
-    private boolean test = true;
-    public void performClick(float screenX, float screenY) {
-	Log.i(TAG,"click on screen x="+screenX+" y="+screenY);
-
-	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
-	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
-	Log.i(TAG,"near x="+nearX+" y="+nearY);
-
-	int id = mBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
-		, convertToLevel(LEVEL_BAR, nearY));
-	if (id == -1) {
-	    float worldX = convertToLevel(LEVEL_WORLD, nearX);
-	    float worldY = convertToLevel(LEVEL_WORLD, nearY);
-	    id = mWorld.pointerAt(worldX, worldY);
-	}
-
-	Log.i(TAG,"Click on GLObject id = "+id);
-
-	float touchX = convertToLevel(LEVEL_TOUCH, nearX);
-	float touchY = convertToLevel(LEVEL_TOUCH, nearY);
-	mTouchSurface.clickAt(touchX, touchY);
-
-	if (id > 1) {
-	    GLObject obj = ObjectManager.getInstance().getGLObjectById(id);
-
-	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
-	    obj.setAnimation(fade);
-	    mTimeline.addAnimation(fade);
-	    obj.onClick();
-	} else if (id == 1){
-	    GLTransAni tr = new GLTransAni(transition);
-	    elf1.setAnimation(tr);
-	    mTimeline.addAnimation(tr);
-	}
-    }
 
     public void press(int screenX, int screenY) {
 	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
@@ -399,9 +357,6 @@ public class ViewManager {
 	 */
 	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
 					//         +y is heading for bottom
-
-	// mDrawingDepth control the looking size of World
-	gl.glTranslatef(0f, 0f, mDrawingDepth);
 
 	/* Draw Level 3, the Rooms of World */
 	gl.glPushMatrix();
