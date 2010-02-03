@@ -46,6 +46,7 @@ public class GLObject {
 
     protected float mDepth = 0f;
 
+    ClickListener mListener;
     GLView mGLView;
     PointF mPosition;
     RectF  mRect;
@@ -347,7 +348,18 @@ public class GLObject {
 	return;
     }
 
+    public void setListener(ClickListener listener) {
+	mListener = listener;
+    }
+
     public void onClick() {
+	if (mListener != null) {
+	    mListener.onClick(this);
+	}
+    }
+
+    interface ClickListener {
+	public void onClick(GLObject obj);
     }
 }
 
