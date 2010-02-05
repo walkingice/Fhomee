@@ -94,6 +94,12 @@ public class Room extends GLObject {
 	mWall.addItem(obj, x, y , angle);
     }
 
+    public GLObject createThumbnail() {
+	GLObject obj = new GLObject(1f, 1f);
+	obj.setDefaultTextureName(mWallTexture);
+	return obj;
+    }
+
     class Wall extends GLObject {
 
 	public Wall(float width, float height, String background) {
