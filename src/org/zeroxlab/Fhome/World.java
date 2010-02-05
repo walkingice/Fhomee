@@ -85,6 +85,16 @@ public class World extends GLObject {
 	}
     }
 
+    public LinkedList<GLObject> createRoomThumbnails() {
+	LinkedList<GLObject> list = new LinkedList<GLObject>();
+	for (int i = 0; i < mChildren.size(); i++) {
+	    Room room = (Room)mChildren.get(i);
+	    list.add(room.createThumbnail());
+	}
+
+	return list;
+    }
+
     public void setMiniMode() {
 	mMiniMode = true;
     }
