@@ -122,6 +122,7 @@ public class ViewManager {
     GLObject wanted6;
     GLObject wanted7;
 
+    TopBar mTopBar;
     BottomBar mBar;
     Elf elf1;
     Elf elf2;
@@ -275,6 +276,9 @@ public class ViewManager {
 	mBar.addElf(elf3);
 	mBar.addElf(elf4);
 
+	mTopBar = new TopBar(barWidth, barHeight, "topbar_background");
+	mTopBar.setXY(0, 0);
+
 	wanted1 = new GLObject(1, 1, 100, 120);
 	wanted2 = new GLObject(10, 1, 100, 100);
 	wanted3 = new GLObject(1, 9, 100, 100);
@@ -311,8 +315,27 @@ public class ViewManager {
     public void generateTextures() {
 	transition.generateTextures();
 	mTouchSurface.generateTextures();
+	mTopBar.generateTextures();
 	mBar.generateTextures();
 	mWorld.generateTextures();
+    }
+
+    private void drawTopBar(GL10 gl) {
+	/* only draw Top Bar at mini mode*/
+	if (!mMiniMode) {
+	    return;
+	}
+
+	gl.glPushMatrix();
+	gl.glTranslatef(
+		convertToLevel(LEVEL_BAR, PROJ_LEFT)
+		, convertToLevel(LEVEL_BAR, PROJ_BOTTOM)
+		, 0f);// move to Left-Top
+
+	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
+
+	mTopBar.draw(gl);
+	gl.glPopMatrix();
     }
 
     private void drawBottomBar(GL10 gl) {
@@ -366,10 +389,14 @@ public class ViewManager {
 		, 0f);// move to Left-Top
 
 	gl.glTranslatef(0f, 0f, LEVEL_3);   // after rotating, the Z-axis upside down
+	if (mMiniMode) {
+	    gl.glTranslatef(0f, 0f, World.MINIMODE_DEPTH_OFFSET);
+	}
 	mWorld.draw(gl);
 	gl.glPopMatrix();
 
 	/* Draw Level 1, the Bar and Elfs */
+	drawTopBar(gl);
 	drawBottomBar(gl);
 
 	/* Draw the TouchSurface */
