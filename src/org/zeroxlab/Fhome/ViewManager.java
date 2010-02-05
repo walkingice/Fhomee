@@ -124,6 +124,7 @@ public class ViewManager {
 
     TopBar mTopBar;
     BottomBar mBar;
+    Dock mDock;
     Elf elf1;
     Elf elf2;
     Elf elf3;
@@ -309,6 +310,10 @@ public class ViewManager {
 	mWorld.addRoom(room5);
 	mWorld.addRoom(room6);
 
+	mDock = new Dock(barWidth, barHeight, "topbar_background");
+	mDock.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
+	mDock.readThumbnails(mWorld);
+
 	mTouchSurface = new TouchSurface();
     }
 
@@ -318,6 +323,25 @@ public class ViewManager {
 	mTopBar.generateTextures();
 	mBar.generateTextures();
 	mWorld.generateTextures();
+	mDock.generateTextures();
+    }
+
+    private void drawDock(GL10 gl) {
+	/* only draw Dock at mini mode*/
+	if (!mMiniMode) {
+	    return;
+	}
+
+	gl.glPushMatrix();
+	gl.glTranslatef(
+		convertToLevel(LEVEL_BAR, PROJ_LEFT)
+		, convertToLevel(LEVEL_BAR, PROJ_BOTTOM)
+		, 0f);// move to Left-Top
+
+	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
+
+	mDock.draw(gl);
+	gl.glPopMatrix();
     }
 
     private void drawTopBar(GL10 gl) {
@@ -397,6 +421,7 @@ public class ViewManager {
 
 	/* Draw Level 1, the Bar and Elfs */
 	drawTopBar(gl);
+	drawDock(gl);
 	drawBottomBar(gl);
 
 	/* Draw the TouchSurface */
