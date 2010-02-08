@@ -428,15 +428,6 @@ public class ViewManager {
 	drawTouchSurface(gl);
     }
 
-    public void jumpToRoomByX(int x) {
-	int rooms = mWorld.getRoomNumber();
-	int dest = (int)((rooms * x / Launcher.mDefaultWidth ) );
-	if (dest != mWorld.getCurrentRoom()) {
-	    Log.i(TAG,"Jump to "+dest);
-	    mWorld.moveToRoom(dest);
-	}
-    }
-
     public void shiftWorldXY(int dx, int dy) {
 	int current = mWorld.getCurrentRoom();
 	int rooms = mWorld.getChildrenCount();
