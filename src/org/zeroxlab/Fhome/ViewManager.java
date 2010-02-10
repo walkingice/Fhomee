@@ -130,6 +130,30 @@ public class ViewManager {
     Elf elf4;
 
     public void press(int screenX, int screenY) {
+	if (mMiniMode == true) {
+	    mDownId = -1;
+	} else {
+	    mDownId = getObjectIdOfWorld(screenX, screenY);
+	}
+    }
+
+    public void release(int screenX, int screenY) {
+	if (mMiniMode == true) {
+	    mUpId = -1;
+	} else {
+	    mUpId = getObjectIdOfWorld(screenX, screenY);
+	}
+
+	if (mDownId == mUpId && mUpId != -1) {
+	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mUpId);
+	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
+	    obj.setAnimation(fade);
+	    mTimeline.addAnimation(fade);
+	    obj.onClick();
+	}
+    }
+
+    private int getObjecIdOfWorld(int screenX, int screenY) {
 	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 
@@ -141,7 +165,7 @@ public class ViewManager {
 	    id = mWorld.pointerAt(worldX, worldY);
 	}
 
-	mDownId = id;
+	return id;
     }
 
     public void turnOnMiniMode() {
@@ -159,28 +183,6 @@ public class ViewManager {
 	} else {
 	    mMiniMode = false;
 	    mWorld.setNormalMode();
-	}
-    }
-
-    public void release(int screenX, int screenY) {
-	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
-	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
-
-	int id = mBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
-		, convertToLevel(LEVEL_BAR, nearY));
-	if (id == -1) {
-	    float worldX = convertToLevel(LEVEL_WORLD, nearX);
-	    float worldY = convertToLevel(LEVEL_WORLD, nearY);
-	    id = mWorld.pointerAt(worldX, worldY);
-	}
-
-	mUpId = id;
-	if (mDownId == mUpId && mUpId != -1) {
-	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mUpId);
-	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
-	    obj.setAnimation(fade);
-	    mTimeline.addAnimation(fade);
-	    obj.onClick();
 	}
     }
 
