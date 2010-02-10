@@ -131,6 +131,11 @@ public class ViewManager {
 
     public void press(int screenX, int screenY) {
 	if (mMiniMode == true) {
+	    if (mGestureMgr.mBumpDock == true) {
+		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
+		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
+		mDock.bumpObjects(levelX);
+	    }
 	    mDownId = -1;
 	} else {
 	    mDownId = getObjectIdOfWorld(screenX, screenY);
@@ -139,6 +144,7 @@ public class ViewManager {
 
     public void release(int screenX, int screenY) {
 	if (mMiniMode == true) {
+	    mDock.bumpObjects(-1);
 	    mUpId = -1;
 	} else {
 	    mUpId = getObjectIdOfWorld(screenX, screenY);
@@ -187,17 +193,31 @@ public class ViewManager {
     }
 
     public void slideEnd() {
-	if (mGestureMgr.mSnapToNext) {
-	    moveToNextRoom();
-	} else if (mGestureMgr.mSnapToPrev) {
-	    moveToPrevRoom();
+	if (mMiniMode == true) {
 	} else {
-	    moveToOrigRoom();
+	    if (mGestureMgr.mSnapToNext) {
+		moveToNextRoom();
+	    } else if (mGestureMgr.mSnapToPrev) {
+		moveToPrevRoom();
+	    } else {
+		moveToOrigRoom();
+	    }
 	}
     }
 
-    public void slide(int deltaX, int deltaY) {
-	shiftWorldXY(deltaX, deltaY);
+    public void slide() {
+	if (mMiniMode == true) {
+	    if (mGestureMgr.mBumpDock == true) {
+		int screenX = mGestureMgr.mNowX;
+		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
+		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
+		mDock.bumpObjects(levelX);
+	    } else {
+		mDock.bumpObjects(-1);
+	    }
+	} else {
+	    shiftWorldXY(mGestureMgr.getDeltaX(), 0);
+	}
     }
 
     /**
