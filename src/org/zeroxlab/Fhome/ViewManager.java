@@ -113,7 +113,6 @@ public class ViewManager {
 
     public final float FAREST_PUSHING_DEPTH = 10f;
 
-    GLTransition transition;
     GLObject wanted1;
     GLObject wanted2;
     GLObject wanted3;
@@ -258,12 +257,6 @@ public class ViewManager {
 	room5 = new Room("wall_5", "ground");
 	room6 = new Room("wall", "ground");
 
-	String name[] = new String[] {"ani_1"
-	    , "ani_2", "ani_3", "ani_4", "ani_5"};
-	long time[] = new long[] {2000
-	    , 100, 100, 100, 100};
-	transition = new GLTransition(name, time);
-
 	elf1 = new Elf();
 	elf2 = new Elf();
 	elf3 = new Elf();
@@ -324,7 +317,6 @@ public class ViewManager {
     }
 
     public void generateTextures() {
-	transition.generateTextures();
 	mTouchSurface.generateTextures();
 	mTopBar.generateTextures();
 	mBar.generateTextures();
