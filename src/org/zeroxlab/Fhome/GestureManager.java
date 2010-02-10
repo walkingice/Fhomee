@@ -57,6 +57,8 @@ public class GestureManager {
     private int mSwitchBottom;
     public Rect mMiniSwitchOn;
     public Rect mMiniSwitchOff;
+    public Rect mDockArea;
+    public boolean mBumpDock    = false;
     public boolean mPressSwitch = false;
     public boolean mMiniMode    = false;
     public boolean mModeChange  = false;
@@ -170,6 +172,10 @@ public class GestureManager {
 		    mPressSwitch = false;
 		}
 
+		if (mDockArea.contains(x, y)) {
+		    mBumpDock = true;
+		}
+
 		/* Reset flag */
 		mIsDragging = false;
 		mIsLongClick = false;
@@ -197,13 +203,19 @@ public class GestureManager {
 			mIsHDrag    = true;
 			now = HDRAGGING;
 		    }
-		} else if (mIsDragging && mPressSwitch) {
+		} else if (!mIsHDrag && mPressSwitch) {
 		    if (mMiniSwitchOn.contains(x, y)) {
 			mModeChange = true;
 			mMiniMode = true;
 		    } else if (mMiniSwitchOff.contains(x, y)) {
 			mModeChange = true;
 			mMiniMode = false;
+		    }
+		} else if (mIsDragging) {
+		    if (mDockArea.contains(x, y)) {
+			mBumpDock = true;
+		    } else {
+			mBumpDock = false;
 		    }
 		}
 		break;
@@ -228,6 +240,8 @@ public class GestureManager {
 	mMiniSwitchOff  = new Rect(mSwitchLeft, mSwitchTop, mSwitchRight, mSwitchBottom);
 	mMiniSwitchOn = new Rect(mMiniSwitchOff);
 	mMiniSwitchOn.offsetTo(mSwitchLeft, mSwitchBottom);
+
+	mDockArea = new Rect(0,(int)(height * 0.8f), mScreenWidth, mScreenHeight);
     }
 }
 
