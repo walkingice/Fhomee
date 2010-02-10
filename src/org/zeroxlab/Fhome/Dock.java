@@ -42,6 +42,8 @@ public class Dock extends GLObject {
     protected static float mObjWidth  = 0f;
     protected static float mObjHeight = 0f;
 
+    protected World mWorld;
+
     public Dock(float width, float height) {
 	this(width, height, null);
     }
@@ -80,13 +82,52 @@ public class Dock extends GLObject {
 	super.setSize(width, height);
     }
 
+    public void bumpObjects(int press) {
+	int x = press;
+
+	if (mChildren == null || mWorld == null) {
+	    return;
+	}
+
+	/* If out of bounds, do not bump any objects */
+	if (x < super.getX() || x > super.width()) {
+	    x = -1;
+	}
+
+	GLObject obj;
+	for (int i = 0; i < getChildrenCount(); i++) {
+	    obj = mChildren.get(i);
+	    if (x == -1 ) {
+		float objX  = obj.getX();
+		obj.setXY(objX, mVGap);
+		obj.setDepth(0);
+	    } else {
+		int offset = Math.abs((int)obj.getX() - x);
+		float ratio = offset / super.width();
+		float objX  = obj.getX();
+		obj.setXY(objX, mVGap + 40*(ratio - 1));
+		obj.setDepth(5*(ratio - 1));
+	    }
+	}
+
+	if (mWorld != null) {
+	    int now = mWorld.getCurrentRoom();
+	    int next = (int)(x * mWorld.getChildrenCount()  / super.width());
+	    if (now != next) {
+		mWorld.moveToRoom(next);
+	    }
+	}
+    }
+
     public void readThumbnails(World world) {
 	if (world == null) {
 	    Log.i(TAG, "Error: World is null");
 	    return;
 	}
 
-	LinkedList<GLObject> list = world.createRoomThumbnails();
+	mWorld = world;
+
+	LinkedList<GLObject> list = mWorld.createRoomThumbnails();
 	int size = list.size();
 
 	if (size == 0) {
