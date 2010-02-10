@@ -89,7 +89,7 @@ public class Launcher extends Activity {
 	    if (result == GestureManager.PRESS){
 		mViewManager.press(x, y);
 	    } else if (result == GestureManager.HDRAGGING) {
-		mViewManager.slide(mGestureMgr.getDeltaX(), 0);
+		mViewManager.slide();
 	    } else if (result == GestureManager.DRAGGING) {
 		if (mGestureMgr.mMiniMode) {
 		    mViewManager.turnOnMiniMode();
