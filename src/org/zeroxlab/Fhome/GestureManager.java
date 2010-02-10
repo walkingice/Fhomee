@@ -172,9 +172,7 @@ public class GestureManager {
 		    mPressSwitch = false;
 		}
 
-		if (mDockArea.contains(x, y)) {
-		    mBumpDock = true;
-		}
+		mBumpDock = mDockArea.contains(x, y);
 
 		/* Reset flag */
 		mIsDragging = false;
@@ -212,11 +210,7 @@ public class GestureManager {
 			mMiniMode = false;
 		    }
 		} else if (mIsDragging) {
-		    if (mDockArea.contains(x, y)) {
-			mBumpDock = true;
-		    } else {
-			mBumpDock = false;
-		    }
+		    mBumpDock = mDockArea.contains(x, y);
 		}
 		break;
 	    default:
