@@ -153,7 +153,7 @@ public class ViewManager {
 	}
     }
 
-    private int getObjecIdOfWorld(int screenX, int screenY) {
+    private int getObjectIdOfWorld(int screenX, int screenY) {
 	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 
@@ -231,7 +231,7 @@ public class ViewManager {
 	    return near * ZN_LEVEL_3;
 	}
 
-	return from;
+	return near;
     }
 
     public ViewManager(Context context,GLSurfaceView surface) {
