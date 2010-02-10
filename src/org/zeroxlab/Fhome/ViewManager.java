@@ -199,15 +199,35 @@ public class ViewManager {
 	shiftWorldXY(deltaX, deltaY);
     }
 
-    public static float convertToLevel(int level, float from) {
+    /**
+     * Get the Z value of the specified level
+     */
+    public static float getZDepth(int level) {
+	if (level == LEVEL_TOUCH) {
+	    return LEVEL_0;
+	} else if (level == LEVEL_BAR) {
+	    return LEVEL_1;
+	} else if (level == LEVEL_POSTER) {
+	    return LEVEL_2;
+	} else if (level == LEVEL_WORLD) {
+	    return LEVEL_3;
+	}
+
+	return LEVEL_0;
+    }
+
+    /**
+     * Convert the coordinate from Near surface to specified level
+     */
+    public static float convertToLevel(int level, float near) {
 	if (level == 0) {
-	    return from * ZN_LEVEL_0;
+	    return near * ZN_LEVEL_0;
 	} else if (level == 1) {
-	    return from * ZN_LEVEL_1;
+	    return near * ZN_LEVEL_1;
 	} else if (level == 2) {
-	    return from * ZN_LEVEL_2;
+	    return near * ZN_LEVEL_2;
 	} else if (level == 3) {
-	    return from * ZN_LEVEL_3;
+	    return near * ZN_LEVEL_3;
 	}
 
 	return from;
