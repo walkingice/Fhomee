@@ -101,7 +101,7 @@ public class ObjectManager{
      * otherwise GC never recycle the memory.
      */
     public void unregister(GLObject obj) {
-	Integer id = new Integer(obj.getID());
+	Integer id = new Integer(obj.getId());
 	mObjectMap.remove(id);
     }
 
