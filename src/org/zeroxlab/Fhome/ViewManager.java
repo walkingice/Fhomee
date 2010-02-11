@@ -201,9 +201,11 @@ public class ViewManager {
 	}
 
 	if (mMiniMode == true) {
-	    if (mGestureMgr.mBumpDock == true) {
-		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
-		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
+	    float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
+	    float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
+	    int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
+	    int levelY  = (int)convertToLevel(LEVEL_BAR, nearY);
+	    if (mDock.contains(levelX, levelY)) {
 		mDock.bumpObjects(levelX);
 	    } else {
 		mDock.bumpObjects(-1);
@@ -219,12 +221,15 @@ public class ViewManager {
 
     public void press(int screenX, int screenY) {
 	if (mMiniMode == true) {
-	    if (mGestureMgr.mBumpDock == true) {
+	    mDownId = getObjectIdOfBar(screenX, screenY);
+
+	    if (mDownId == mDock.getId()) {
 		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
 		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
 		mDock.bumpObjects(levelX);
+	    } else {
+		mDock.bumpObjects(-1);
 	    }
-	    mDownId = -1;
 	} else {
 	    mDownId = getObjectIdOfWorld(screenX, screenY);
 	}
