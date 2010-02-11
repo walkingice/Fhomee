@@ -143,7 +143,7 @@ public class GLObject {
 	// TextureManager.clearTexture(blahblah);
     }
 
-    public int getID() {
+    public int getId() {
 	return mID;
     }
 
