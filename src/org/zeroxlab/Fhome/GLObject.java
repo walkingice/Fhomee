@@ -84,6 +84,13 @@ public class GLObject {
 	resetInvertMatrix();
     }
 
+    public boolean contains(float x, float y) {
+	mPts[0] = x;
+	mPts[1] = y;
+	mInvert.mapPoints(mPts);
+	return mRect.contains(mPts[0], mPts[1]);
+    }
+
     public int pointerAt(float x, float y) {
 	int id = -1;
 
