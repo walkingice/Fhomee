@@ -94,6 +94,8 @@ public class ViewManager {
 
     private int mDownId;
     private int mUpId;
+    private int mPressId;
+    private int mReleaseId;
 
     final String TAG="ViewManager";
     private Context mContext;
@@ -129,6 +131,92 @@ public class ViewManager {
     Elf elf3;
     Elf elf4;
 
+    /**
+     * This method was called while user Pressing the screen.
+     */
+    public void onPress(int screenX, int screenY) {
+	if (mMiniMode == true) {
+	    mPressId = getObjectIdOfBar(screenX, screenY);
+	    if (mPressId == mDock.getID()) {
+		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
+		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
+		mDock.press(levelX);
+	    }
+	} else {
+	    mPressId = getObjectIdOfWorld(screenX, screenY);
+	}
+    }
+
+    /**
+     * This method was called while user Leaving the screen.
+     */
+    public void onRelease(int screenX, int screenY) {
+	mDock.bumpObjects(-1);
+
+	if (mMiniMode == true) {
+	    mReleaseId = getObjectIdOfBar(screenX, screenY);
+	    if (mReleaseId == -1) {
+		turnOffMiniMode();
+	    } else if (mReleaseId == mDock.getID()) {
+		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
+		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
+		mDock.release(levelX);
+	    }
+	} else {
+	    if (mGestureMgr.mSnapToNext) {
+		moveToNextRoom();
+	    } else if (mGestureMgr.mSnapToPrev) {
+		moveToPrevRoom();
+	    } else {
+		moveToOrigRoom();
+	    }
+	    mReleaseId = getObjectIdOfWorld(screenX, screenY);
+	}
+
+	if (mReleaseId == mPressId) {
+	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mPressId);
+	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
+	    obj.setAnimation(fade);
+	    mTimeline.addAnimation(fade);
+	    obj.onClick();
+
+	    if (mReleaseId == mDock.getID()) {
+		int next = mDock.getSelectedRoom();
+		if (next != -1) {
+		    moveToRoom(next);
+		    turnOffMiniMode();
+		}
+	    }
+	}
+    }
+
+    /**
+     * This method was called while user Moving on the screen.
+     */
+    public void onMove(int screenX, int screenY) {
+	if (mGestureMgr.mMiniMode) {
+	    turnOnMiniMode();
+	} else {
+	    turnOffMiniMode();
+	}
+
+	if (mMiniMode == true) {
+	    if (mGestureMgr.mBumpDock == true) {
+		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
+		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
+		mDock.bumpObjects(levelX);
+	    } else {
+		mDock.bumpObjects(-1);
+	    }
+	} else {
+	    if (mGestureMgr.mIsHDrag) {
+		shiftWorldXY(mGestureMgr.getDeltaX(), 0);
+	    } else if (mGestureMgr.mIsLongClick) {
+		// do nothing yet
+	    }
+	}
+    }
+
     public void press(int screenX, int screenY) {
 	if (mMiniMode == true) {
 	    if (mGestureMgr.mBumpDock == true) {
@@ -157,6 +245,19 @@ public class ViewManager {
 	    mTimeline.addAnimation(fade);
 	    obj.onClick();
 	}
+    }
+
+    private int getObjectIdOfBar(int screenX, int screenY) {
+	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
+	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
+	float levelX = convertToLevel(LEVEL_BAR, nearX);
+	float levelY = convertToLevel(LEVEL_BAR, nearY);
+	int id = mDock.pointerAt(levelX, levelY);
+	if (id == -1) {
+	    id = mTopBar.pointerAt(levelX, levelY);
+	}
+
+	return id;
     }
 
     private int getObjectIdOfWorld(int screenX, int screenY) {
