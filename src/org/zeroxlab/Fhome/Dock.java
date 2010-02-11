@@ -42,7 +42,14 @@ public class Dock extends GLObject {
     protected static float mObjWidth  = 0f;
     protected static float mObjHeight = 0f;
 
+    protected int mPressObj;
+    protected int mReleaseObj;
+    protected int mSelectRoom;
+
     protected World mWorld;
+
+    /* If we never rearrange the objects position, let call it Normal */
+    protected boolean mNormal = true;
 
     public Dock(float width, float height) {
 	this(width, height, null);
@@ -94,6 +101,12 @@ public class Dock extends GLObject {
 	    x = -1;
 	}
 
+	if (x == -1 && mNormal == true) {
+	    return;
+	} else {
+	    mNormal = false;
+	}
+
 	GLObject obj;
 	for (int i = 0; i < getChildrenCount(); i++) {
 	    obj = mChildren.get(i);
@@ -110,12 +123,17 @@ public class Dock extends GLObject {
 	    }
 	}
 
-	if (mWorld != null) {
+	if (mWorld != null && x != -1) {
 	    int now = mWorld.getCurrentRoom();
 	    int next = (int)(x * mWorld.getChildrenCount()  / super.width());
 	    if (now != next) {
 		mWorld.moveToRoom(next);
 	    }
+	}
+
+	if (x == -1) {
+	    /* Reset whole objects to normal state */
+	    mNormal = true;
 	}
     }
 
@@ -190,6 +208,35 @@ public class Dock extends GLObject {
 		gl.glPopMatrix();
 	    }
 	}
+    }
+
+    public void release(int x) {
+	mReleaseObj = getTarget(x);
+    }
+
+    public void press(int x) {
+	mPressObj = getTarget(x);
+    }
+
+    private int getTarget(int x) {
+	float ratio = x / super.width();
+	return (int)(ratio * mObjNum);
+    }
+
+    public int getSelectedRoom() {
+	return mSelectRoom;
+    }
+
+    @Override
+    public void onClick() {
+	if (mReleaseObj == mPressObj && mPressObj != -1) {
+	    mSelectRoom = mReleaseObj;
+	} else {
+	    mSelectRoom = -1;
+	}
+
+	mReleaseObj = -1;
+	mPressObj   = -1;
     }
 }
 
