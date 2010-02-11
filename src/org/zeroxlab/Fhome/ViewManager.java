@@ -137,7 +137,7 @@ public class ViewManager {
     public void onPress(int screenX, int screenY) {
 	if (mMiniMode == true) {
 	    mPressId = getObjectIdOfBar(screenX, screenY);
-	    if (mPressId == mDock.getID()) {
+	    if (mPressId == mDock.getId()) {
 		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
 		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
 		mDock.press(levelX);
@@ -157,7 +157,7 @@ public class ViewManager {
 	    mReleaseId = getObjectIdOfBar(screenX, screenY);
 	    if (mReleaseId == -1) {
 		turnOffMiniMode();
-	    } else if (mReleaseId == mDock.getID()) {
+	    } else if (mReleaseId == mDock.getId()) {
 		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
 		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
 		mDock.release(levelX);
@@ -180,7 +180,7 @@ public class ViewManager {
 	    mTimeline.addAnimation(fade);
 	    obj.onClick();
 
-	    if (mReleaseId == mDock.getID()) {
+	    if (mReleaseId == mDock.getId()) {
 		int next = mDock.getSelectedRoom();
 		if (next != -1) {
 		    moveToRoom(next);
