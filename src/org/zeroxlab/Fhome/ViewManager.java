@@ -252,12 +252,16 @@ public class ViewManager {
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 	float levelX = convertToLevel(LEVEL_BAR, nearX);
 	float levelY = convertToLevel(LEVEL_BAR, nearY);
-	int id = mDock.pointerAt(levelX, levelY);
-	if (id == -1) {
-	    id = mTopBar.pointerAt(levelX, levelY);
+
+	if (mDock.contains(levelX, levelY)) {
+	    return mDock.getId();
 	}
 
-	return id;
+	if (mTopBar.contains(levelX, levelY)) {
+	    return mTopBar.pointerAt(levelX, levelY);
+	}
+
+	return -1;
     }
 
     private int getObjectIdOfWorld(int screenX, int screenY) {
