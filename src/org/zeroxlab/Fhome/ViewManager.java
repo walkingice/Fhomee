@@ -219,39 +219,6 @@ public class ViewManager {
 	}
     }
 
-    public void press(int screenX, int screenY) {
-	if (mMiniMode == true) {
-	    mDownId = getObjectIdOfBar(screenX, screenY);
-
-	    if (mDownId == mDock.getId()) {
-		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
-		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
-		mDock.bumpObjects(levelX);
-	    } else {
-		mDock.bumpObjects(-1);
-	    }
-	} else {
-	    mDownId = getObjectIdOfWorld(screenX, screenY);
-	}
-    }
-
-    public void release(int screenX, int screenY) {
-	if (mMiniMode == true) {
-	    mDock.bumpObjects(-1);
-	    mUpId = -1;
-	} else {
-	    mUpId = getObjectIdOfWorld(screenX, screenY);
-	}
-
-	if (mDownId == mUpId && mUpId != -1) {
-	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mUpId);
-	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
-	    obj.setAnimation(fade);
-	    mTimeline.addAnimation(fade);
-	    obj.onClick();
-	}
-    }
-
     private int getObjectIdOfBar(int screenX, int screenY) {
 	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
@@ -299,34 +266,6 @@ public class ViewManager {
 	} else {
 	    mMiniMode = false;
 	    mWorld.setNormalMode();
-	}
-    }
-
-    public void slideEnd() {
-	if (mMiniMode == true) {
-	} else {
-	    if (mGestureMgr.mSnapToNext) {
-		moveToNextRoom();
-	    } else if (mGestureMgr.mSnapToPrev) {
-		moveToPrevRoom();
-	    } else {
-		moveToOrigRoom();
-	    }
-	}
-    }
-
-    public void slide() {
-	if (mMiniMode == true) {
-	    if (mGestureMgr.mBumpDock == true) {
-		int screenX = mGestureMgr.mNowX;
-		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
-		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
-		mDock.bumpObjects(levelX);
-	    } else {
-		mDock.bumpObjects(-1);
-	    }
-	} else {
-	    shiftWorldXY(mGestureMgr.getDeltaX(), 0);
 	}
     }
 
