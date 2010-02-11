@@ -86,24 +86,13 @@ public class Launcher extends Activity {
 	    int result = mGestureMgr.processMotionEvent(event);
 	    int x = mGestureMgr.mNowX;
 	    int y = mGestureMgr.mNowY;
-	    if (result == GestureManager.PRESS){
-		mViewManager.press(x, y);
-	    } else if (result == GestureManager.HDRAGGING) {
-		mViewManager.slide();
-	    } else if (result == GestureManager.DRAGGING) {
-		if (mGestureMgr.mMiniMode) {
-		    mViewManager.turnOnMiniMode();
-		} else {
-		    mViewManager.turnOffMiniMode();
-		}
-	    } else if (result == GestureManager.LONGPRESSING) {
-	    } else if (result == GestureManager.RELEASE) {
-		if (mGestureMgr.mIsDragging && mGestureMgr.mIsHDrag) {
-		    mViewManager.slideEnd();
-		} else if (mGestureMgr.mModeChange){
-		} else {
-		    mViewManager.release(x, y);
-		}
+	    int action = event.getAction();
+	    if (mGestureMgr.mIsDragging) {
+		mViewManager.onMove(x, y);
+	    } else if (action == MotionEvent.ACTION_UP) {
+		mViewManager.onRelease(x, y);
+	    } else if (action == MotionEvent.ACTION_DOWN) {
+		mViewManager.onPress(x, y);
 	    }
 	    mScreen.requestRender();
 	    return true;
