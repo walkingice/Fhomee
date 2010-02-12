@@ -155,7 +155,7 @@ public class ViewManager {
 
 	if (mMiniMode == true) {
 	    mReleaseId = getObjectIdOfBar(screenX, screenY);
-	    if (mReleaseId == -1) {
+	    if (mReleaseId == -1 && mGestureMgr.mIsVDrag) {
 		turnOffMiniMode();
 	    } else if (mReleaseId == mDock.getId()) {
 		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
@@ -180,7 +180,7 @@ public class ViewManager {
 	    mTimeline.addAnimation(fade);
 	    obj.onClick();
 
-	    if (mReleaseId == mDock.getId()) {
+	    if (mReleaseId == mDock.getId() && !mGestureMgr.mIsLongClick) {
 		int next = mDock.getSelectedRoom();
 		if (next != -1) {
 		    moveToRoom(next);
@@ -204,7 +204,7 @@ public class ViewManager {
 	}
 
 	if (mMiniMode == true) {
-	    if (!mGestureMgr.mIsHDrag) {
+	    if (mGestureMgr.mIsVDrag) {
 		return;
 	    }
 	    float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
