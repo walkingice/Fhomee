@@ -153,6 +153,8 @@ public class GestureManager {
 		updateSnappingState();
 		mPressSwitch = false;
 
+		mModeChange = false;
+
 		now = RELEASE;
 		break;
 	    case MotionEvent.ACTION_DOWN:
@@ -162,15 +164,8 @@ public class GestureManager {
 		mReleaseX = -1;
 		mReleaseY = -1;
 
-		if ((mMiniMode == true && mMiniSwitchOn.contains(x, y))
-			|| (mMiniMode == false && mMiniSwitchOff.contains(x, y))
-			) {
-		    /*If we are at Mini Mode and press MiniMode-On
-		     or we are NOT at Mini Mode and press MiniMode-Off */
-		    mPressSwitch = true;
-		} else {
-		    mPressSwitch = false;
-		}
+		mPressSwitch = mMiniSwitchOn.contains(x, y) || mMiniSwitchOff.contains(x, y);
+		mMiniMode    = mMiniSwitchOn.contains(x, y);
 
 		mBumpDock = mDockArea.contains(x, y);
 
@@ -202,11 +197,11 @@ public class GestureManager {
 			now = HDRAGGING;
 		    }
 		} else if (!mIsHDrag && mPressSwitch) {
+		    mModeChange = ((mMiniMode && mMiniSwitchOff.contains(x, y))
+			    ||(!mMiniMode && mMiniSwitchOn.contains(x, y)));
 		    if (mMiniSwitchOn.contains(x, y)) {
-			mModeChange = true;
 			mMiniMode = true;
 		    } else if (mMiniSwitchOff.contains(x, y)) {
-			mModeChange = true;
 			mMiniMode = false;
 		    }
 		} else if (mIsDragging) {
