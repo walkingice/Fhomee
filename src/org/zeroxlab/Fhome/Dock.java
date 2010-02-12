@@ -219,6 +219,9 @@ public class Dock extends GLObject {
     }
 
     private int getTarget(int x) {
+	if (x > super.width() || x <  getX()) {
+	    return -1;
+	}
 	float ratio = x / super.width();
 	return (int)(ratio * mObjNum);
     }
