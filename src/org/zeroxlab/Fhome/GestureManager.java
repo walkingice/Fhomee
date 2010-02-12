@@ -44,6 +44,7 @@ public class GestureManager {
     public final static int DRAG_V_THRESHOLD = 20; // 20px
     public boolean mIsDragging = false;
     public boolean mIsHDrag    = false;
+    public boolean mIsVDrag    = false;
 
     public final static long LONGCLICK_THRESHOLD = 1000;
     public boolean mIsLongClick = false;
@@ -57,8 +58,6 @@ public class GestureManager {
     private int mSwitchBottom;
     public Rect mMiniSwitchOn;
     public Rect mMiniSwitchOff;
-    public Rect mDockArea;
-    public boolean mBumpDock    = false;
     public boolean mPressSwitch = false;
     public boolean mMiniMode    = false;
     public boolean mModeChange  = false;
@@ -82,6 +81,8 @@ public class GestureManager {
     public int mPressY = -1;
     public int mReleaseX = -1;
     public int mReleaseY = -1;
+    public int mDeltaX = -1;
+    public int mDeltaY = -1;
 
     public long mPressTime   = 0;
     public long mReleaseTime = 0;
@@ -106,16 +107,15 @@ public class GestureManager {
 	    return RELEASE;
 	}
 
-	Log.i(TAG,"Now is:"+mNow+"\tDrag:"+mIsDragging+"\tHorizontal:"+mIsHDrag+"\tLong:"+mIsLongClick);
-	return mNow;
+	return 0;
     }
 
     public int getDeltaX() {
-	return mNowX - mPressX;
+	return mDeltaX;
     }
 
     public int getDeltaY() {
-	return mNowY - mPressY;
+	return mDeltaY;
     }
 
     public long pressTime() {
@@ -123,12 +123,11 @@ public class GestureManager {
     }
 
     private void updateSnappingState() {
-	int deltaX = getDeltaX();
 	int threshold = (int) (mScreenWidth / 2);
-	if (Math.abs(deltaX) < threshold) {
+	if (Math.abs(mDeltaX) < threshold) {
 	    mSnapToNext = false;
 	    mSnapToPrev = false;
-	} else if (deltaX > 0) {
+	} else if (mDeltaX > 0) {
 	    mSnapToNext = false;
 	    mSnapToPrev = true;
 	} else {
@@ -143,6 +142,8 @@ public class GestureManager {
 	int y = (int) event.getY();
 	mNowX = x;
 	mNowY = y;
+	mDeltaX = mNowX - mPressX;
+	mDeltaY = mNowY - mPressY;
 	int now = mNow;
 
 	switch (action) {
@@ -152,7 +153,6 @@ public class GestureManager {
 		mReleaseY = y;
 		updateSnappingState();
 		mPressSwitch = false;
-
 		mModeChange = false;
 
 		now = RELEASE;
@@ -163,11 +163,11 @@ public class GestureManager {
 		mPressY = y;
 		mReleaseX = -1;
 		mReleaseY = -1;
+		mDeltaX   = 0;
+		mDeltaY   = 0;
 
 		mPressSwitch = mMiniSwitchOn.contains(x, y) || mMiniSwitchOff.contains(x, y);
 		mMiniMode    = mMiniSwitchOn.contains(x, y);
-
-		mBumpDock = mDockArea.contains(x, y);
 
 		/* Reset flag */
 		mIsDragging = false;
@@ -182,30 +182,15 @@ public class GestureManager {
 		if (!mIsDragging) {
 		    now = PRESSING;
 		    long time = SystemClock.uptimeMillis();
-		    if (time - mPressTime > LONGCLICK_THRESHOLD) {
-			mIsLongClick = true;
-			now = LONGPRESSING;
-		    }
+		    mIsLongClick = (time - mPressTime > LONGCLICK_THRESHOLD);
+		    mIsHDrag = Math.abs(mDeltaX) > DRAG_H_THRESHOLD;
+		    mIsVDrag = Math.abs(mDeltaY) > DRAG_V_THRESHOLD;
+		    mIsDragging = mIsHDrag || mIsVDrag;
 
-		    if (Math.abs(y - mPressY) > DRAG_V_THRESHOLD) {
-			mIsDragging = true;
-			mIsHDrag    = false;
-			now = DRAGGING;
-		    } else if (Math.abs(x - mPressX) > DRAG_H_THRESHOLD) {
-			mIsDragging = true;
-			mIsHDrag    = true;
-			now = HDRAGGING;
-		    }
-		} else if (!mIsHDrag && mPressSwitch) {
+		} else if (mIsVDrag && mPressSwitch) {
 		    mModeChange = ((mMiniMode && mMiniSwitchOff.contains(x, y))
 			    ||(!mMiniMode && mMiniSwitchOn.contains(x, y)));
-		    if (mMiniSwitchOn.contains(x, y)) {
-			mMiniMode = true;
-		    } else if (mMiniSwitchOff.contains(x, y)) {
-			mMiniMode = false;
-		    }
-		} else if (mIsDragging) {
-		    mBumpDock = mDockArea.contains(x, y);
+		    mMiniMode = mMiniSwitchOn.contains(x, y);
 		}
 		break;
 	    default:
@@ -229,8 +214,6 @@ public class GestureManager {
 	mMiniSwitchOff  = new Rect(mSwitchLeft, mSwitchTop, mSwitchRight, mSwitchBottom);
 	mMiniSwitchOn = new Rect(mMiniSwitchOff);
 	mMiniSwitchOn.offsetTo(mSwitchLeft, mSwitchBottom);
-
-	mDockArea = new Rect(0,(int)(height * 0.8f), mScreenWidth, mScreenHeight);
     }
 }
 
