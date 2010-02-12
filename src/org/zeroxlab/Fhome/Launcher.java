@@ -87,7 +87,7 @@ public class Launcher extends Activity {
 	    int x = mGestureMgr.mNowX;
 	    int y = mGestureMgr.mNowY;
 	    int action = event.getAction();
-	    if (mGestureMgr.mIsDragging) {
+	    if (action == MotionEvent.ACTION_MOVE && mGestureMgr.mIsDragging) {
 		mViewManager.onMove(x, y);
 	    } else if (action == MotionEvent.ACTION_UP) {
 		mViewManager.onRelease(x, y);
