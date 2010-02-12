@@ -173,7 +173,7 @@ public class ViewManager {
 	    mReleaseId = getObjectIdOfWorld(screenX, screenY);
 	}
 
-	if (mReleaseId == mPressId) {
+	if (mPressId != -1 && mReleaseId == mPressId) {
 	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mPressId);
 	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
 	    obj.setAnimation(fade);
@@ -194,13 +194,19 @@ public class ViewManager {
      * This method was called while user Moving on the screen.
      */
     public void onMove(int screenX, int screenY) {
-	if (mGestureMgr.mMiniMode) {
-	    turnOnMiniMode();
-	} else {
-	    turnOffMiniMode();
+	if(mGestureMgr.mModeChange) {
+	    if (mGestureMgr.mMiniMode) {
+		turnOnMiniMode();
+	    } else {
+		turnOffMiniMode();
+	    }
+	    return;
 	}
 
 	if (mMiniMode == true) {
+	    if (!mGestureMgr.mIsHDrag) {
+		return;
+	    }
 	    float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
 	    float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 	    int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
