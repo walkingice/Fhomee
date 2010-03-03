@@ -46,7 +46,7 @@ public class World extends GLObject {
     public final static int ROOM_VISIBLE_LEFT  = 1;
     public final static int ROOM_VISIBLE_RIGHT = 1;
 
-    public static float BAR_HEIGHT = ROOM_HEIGHT * 0.2f; // 20% of screen height
+    public static float BAR_HEIGHT = ROOM_HEIGHT * ViewManager.BAR_HEIGHT_RATIO;
     public static float MINIMODE_DEPTH_OFFSET;
 
     public World() {
