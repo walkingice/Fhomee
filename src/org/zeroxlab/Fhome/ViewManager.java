@@ -59,6 +59,8 @@ public class ViewManager {
     public static float PROJ_WIDTH  = Math.abs(PROJ_RIGHT - PROJ_LEFT);
     public static float PROJ_HEIGHT = Math.abs(PROJ_TOP - PROJ_BOTTOM);
 
+    public static float BAR_HEIGHT_RATIO = 0.15f;
+
     public final static int LEVEL_TOUCH  = 0;
     public final static int LEVEL_BAR    = 1;
     public final static int LEVEL_POSTER = 2;
@@ -345,7 +347,7 @@ public class ViewManager {
 	elf4.setDefaultTextureName("toad");
 
 	float barWidth  = convertToLevel(LEVEL_BAR, PROJ_WIDTH);
-	float barHeight = convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.15f);
+	float barHeight = convertToLevel(LEVEL_BAR, PROJ_HEIGHT * BAR_HEIGHT_RATIO);
 	mBar = new BottomBar(barWidth, barHeight);
 	mBar.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
 	mBar.addElf(elf1);
