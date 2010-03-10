@@ -66,6 +66,31 @@ public class TextureManager {
 	mTextureMap.clear();
     }
 
+    public int generateStringTexture(String string, Paint paint) {
+	float width   = paint.measureText(string);
+	float ascent  = Math.abs(paint.ascent());
+	float descent = Math.abs(paint.descent());
+	float height = ascent + descent;
+
+	/* width and height should be the power of 2 */
+	float temp = 16;
+	while (temp < width) {
+	    temp = temp * 2;
+	}
+	width = temp;
+	temp = 16;
+	while (temp < height) {
+	    temp = temp * 2;
+	}
+	height = temp;
+
+	Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.ARGB_4444);
+	Canvas canvas = new Canvas(bitmap);
+	bitmap.eraseColor(Color.TRANSPARENT);
+	canvas.drawText(string, 0, ascent, paint);
+	return generateOneTexture(bitmap, string);
+    }
+
     public int generateOneTexture(Bitmap bitmap, String name) {
 
 	Integer textureId = (Integer)mTextureMap.get(name);
