@@ -171,6 +171,14 @@ public class GLObject {
 	return mAngle;
     }
 
+    public float getWidth() {
+	return this.width();
+    }
+
+    public float getHeight() {
+	return this.height();
+    }
+
     public float width() {
 	return mRect.width();
     }
