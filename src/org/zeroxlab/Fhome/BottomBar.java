@@ -114,7 +114,8 @@ public class BottomBar extends GLObject {
 
 	if (mHasChildren) {
 	    GLObject obj;
-	    for (int i = 0; i < mChildren.size(); i++) {
+	    int length = Math.min(mChildren.size(), mElfMax);
+	    for (int i = 0; i < length; i++) {
 		obj = mChildren.get(i);
 		gl.glPushMatrix();
 		obj.draw(gl);
