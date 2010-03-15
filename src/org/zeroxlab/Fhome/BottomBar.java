@@ -45,10 +45,19 @@ public class BottomBar extends GLObject {
 
     private GLTranslate mShiftAnimation;
 
+    /* Be used for Elf for moving */
+    protected GLTranslate[] mElfMotion;
+    protected long mMotionTime = 800;
+
     public BottomBar(float width, float height) {
 	super(0, 0, width, height);
 	mShiftAnimation = new GLTranslate(100, 0, 0);
 	updateParameters();
+
+	mElfMotion = new GLTranslate[mElfMax];
+	for (int i = 0; i < mElfMax; i++) {
+	    mElfMotion[i] = new GLTranslate(mMotionTime, 0f, 0f);
+	}
     }
 
     @Override
