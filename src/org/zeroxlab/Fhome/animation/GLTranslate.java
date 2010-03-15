@@ -36,9 +36,28 @@ public class GLTranslate extends GLAnimation{
     private float mGapX = 0f;
     private float mGapY = 0f;
 
+    private float mStartAngle = 0f;
+    private float mEndAngle   = 0f;
+    private float mIncludedAngle = 0f;
+
     GLTranslate(long howlong, float endX, float endY) {
 	super(howlong, 10);
 	setDestination(endX, endY);
+    }
+
+    public void setAngle(float endAngle) {
+	float startAngle = 0f;
+	if (mObject != null) {
+	    startAngle = mObject.getAngle();
+	}
+
+	setAngle(startAngle, endAngle);
+    }
+
+    public void setAngle(float startAngle, float endAngle) {
+	mStartAngle = startAngle;
+	mEndAngle   = endAngle;
+	mIncludedAngle = mEndAngle - mStartAngle;
     }
 
     public void bindGLObject(GLObject object) {
@@ -46,6 +65,9 @@ public class GLTranslate extends GLAnimation{
 	mStartX = mObject.getX();
 	mStartY = mObject.getY();
 	setDestination(mEndX, mEndY);
+	float angle = mObject.getAngle();
+	Log.i(TAG, "Reset angle while binding object:"+mObject.getId());
+	setAngle(mObject.getAngle(), mObject.getAngle());
     }
 
     public void setDestination(float destX, float destY) {
@@ -59,6 +81,7 @@ public class GLTranslate extends GLAnimation{
 	/* if this animation is interrupted, mObject becomes null */
 	if (mObject != null) {
 	    mObject.setXY(mEndX, mEndY);
+	    mObject.setAngle(mEndAngle);
 	}
 	super.complete();
     }
@@ -71,7 +94,9 @@ public class GLTranslate extends GLAnimation{
 	float ratio = elapse / life;
 	float x = mGapX * ratio + mStartX;
 	float y = mGapY * ratio + mStartY;
+	float angle = mIncludedAngle * ratio + mStartAngle;
 	mObject.setXY(x, y);
+	mObject.setAngle(angle);
 	return glObjectDrawItself;
     }
 }
