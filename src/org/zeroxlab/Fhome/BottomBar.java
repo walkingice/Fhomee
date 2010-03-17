@@ -94,17 +94,19 @@ public class BottomBar extends GLObject {
     }
 
     public void addElf(Elf elf) {
+	addElf(elf, getChildrenCount()); // add to tail
+    }
+
+    public void addElf(Elf elf, int index) {
 	setElfSize(elf);
+	addChild(index, elf);
 
-	int count = 0;
-	if (mChildren != null) {
-	    count = mChildren.size();
+	Elf child;
+	for (int i = index; i < mChildren.size(); i++) {
+	    float x = getXByIndex(i);
+	    child = (Elf)mChildren.get(i);
+	    child.setPosition(x, 0);
 	}
-
-	float x = getXByIndex(count);
-
-	elf.setPosition(x, 0);
-	addChild(elf);
     }
 
     protected void setElfSize(Elf elf) {
