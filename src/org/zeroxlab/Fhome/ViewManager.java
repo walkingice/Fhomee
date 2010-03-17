@@ -67,7 +67,7 @@ public class ViewManager {
     public final static int LEVEL_WORLD  = 3;
 
     public static float LEVEL_0     = 4f;  // TouchSurface
-    public static float LEVEL_1     = 20f; // elf
+    public static float LEVEL_1     = 20f; // Pet
     public static float LEVEL_2     = 28f; // poster
     public static float LEVEL_3     = 30f; // wall
     /*     Z +------ X'
@@ -132,10 +132,10 @@ public class ViewManager {
     TopBar mTopBar;
     BottomBar mBar;
     Dock mDock;
-    Elf elf1;
-    Elf elf2;
-    Elf elf3;
-    Elf elf4;
+    Pet pet1;
+    Pet pet2;
+    Pet pet3;
+    Pet pet4;
 
     /**
      * This method was called while user Pressing the screen.
@@ -340,24 +340,24 @@ public class ViewManager {
 	room5 = new Room("wall_5", "ground");
 	room6 = new Room("wall", "ground");
 
-	elf1 = new Elf();
-	elf2 = new Elf();
-	elf3 = new Elf();
-	elf4 = new Elf();
+	pet1 = new Pet();
+	pet2 = new Pet();
+	pet3 = new Pet();
+	pet4 = new Pet();
 
-	elf1.setDefaultTextureName("mario");
-	elf2.setDefaultTextureName("luigi");
-	elf3.setDefaultTextureName("peach");
-	elf4.setDefaultTextureName("toad");
+	pet1.setDefaultTextureName("mario");
+	pet2.setDefaultTextureName("luigi");
+	pet3.setDefaultTextureName("peach");
+	pet4.setDefaultTextureName("toad");
 
 	float barWidth  = convertToLevel(LEVEL_BAR, PROJ_WIDTH);
 	float barHeight = convertToLevel(LEVEL_BAR, PROJ_HEIGHT * BAR_HEIGHT_RATIO);
 	mBar = new BottomBar(barWidth, barHeight);
 	mBar.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
-	mBar.addElf(elf1);
-	mBar.addElf(elf2);
-	mBar.addElf(elf3);
-	mBar.addElf(elf4);
+	mBar.addPet(pet1);
+	mBar.addPet(pet2);
+	mBar.addPet(pet3);
+	mBar.addPet(pet4);
 
 	mTopBar = new TopBar(barWidth, barHeight, "topbar_background");
 	mTopBar.setXY(0, 0);
@@ -506,7 +506,7 @@ public class ViewManager {
 	mWorld.draw(gl);
 	gl.glPopMatrix();
 
-	/* Draw Level 1, the Bar and Elfs */
+	/* Draw Level 1, the Bar and Pets */
 	drawTopBar(gl);
 	drawDock(gl);
 	drawBottomBar(gl);

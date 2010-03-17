@@ -32,12 +32,12 @@ import javax.microedition.khronos.opengles.GL10;
 public class BottomBar extends GLObject {
 
     final String TAG = "BottomBar";
-    final int mElfMax = 4;
+    final int mPetMax = 4;
     float CELL_WIDTH  = 0f;
     float CELL_HEIGHT = 0f;
-    float ELF_WIDTH   = 0f;
-    float ELF_HEIGHT  = 0f;
-    float ELF_MARGIN  = 0f;
+    float PET_WIDTH   = 0f;
+    float PET_HEIGHT  = 0f;
+    float PET_MARGIN  = 0f;
 
     final public static int STANDING = 0;
     final public static int WALKING  = 1;
@@ -45,8 +45,8 @@ public class BottomBar extends GLObject {
 
     private GLTranslate mShiftAnimation;
 
-    /* Be used for Elf for moving */
-    protected GLTranslate[] mElfMotion;
+    /* Be used for Pet for moving */
+    protected GLTranslate[] mPetMotion;
     protected long mMotionTime = 800;
 
     public BottomBar(float width, float height) {
@@ -54,9 +54,9 @@ public class BottomBar extends GLObject {
 	mShiftAnimation = new GLTranslate(100, 0, 0);
 	updateParameters();
 
-	mElfMotion = new GLTranslate[mElfMax];
-	for (int i = 0; i < mElfMax; i++) {
-	    mElfMotion[i] = new GLTranslate(mMotionTime, 0f, 0f);
+	mPetMotion = new GLTranslate[mPetMax];
+	for (int i = 0; i < mPetMax; i++) {
+	    mPetMotion[i] = new GLTranslate(mMotionTime, 0f, 0f);
 	}
     }
 
@@ -70,11 +70,11 @@ public class BottomBar extends GLObject {
 	float w = super.getWidth();
 	float h = super.getHeight();
 
-	ELF_MARGIN  = w * 0.02f;
-	CELL_WIDTH  = (w / mElfMax) - ELF_MARGIN;
+	PET_MARGIN  = w * 0.02f;
+	CELL_WIDTH  = (w / mPetMax) - PET_MARGIN;
 	CELL_HEIGHT = h;
-	ELF_WIDTH   = CELL_WIDTH  - ELF_MARGIN * 2;
-	ELF_HEIGHT  = CELL_HEIGHT - ELF_MARGIN * 2;
+	PET_WIDTH   = CELL_WIDTH  - PET_MARGIN * 2;
+	PET_HEIGHT  = CELL_HEIGHT - PET_MARGIN * 2;
     }
 
     public void standing() {
@@ -93,31 +93,31 @@ public class BottomBar extends GLObject {
 	Timeline.getInstance().addAnimation(mShiftAnimation);
     }
 
-    public void addElf(Elf elf) {
-	addElf(elf, getChildrenCount()); // add to tail
+    public void addPet(Pet elf) {
+	addPet(elf, getChildrenCount()); // add to tail
     }
 
-    public void addElf(Elf elf, int index) {
-	setElfSize(elf);
+    public void addPet(Pet elf, int index) {
+	setPetSize(elf);
 	addChild(index, elf);
 
-	Elf child;
+	Pet child;
 	for (int i = index; i < mChildren.size(); i++) {
 	    float x = getXByIndex(i);
-	    child = (Elf)mChildren.get(i);
+	    child = (Pet)mChildren.get(i);
 	    child.setPosition(x, 0);
 	}
     }
 
-    protected void setElfSize(Elf elf) {
-	float ratio = ELF_WIDTH / elf.getWidth();
-	float finalWidth  = ELF_WIDTH;
+    protected void setPetSize(Pet elf) {
+	float ratio = PET_WIDTH / elf.getWidth();
+	float finalWidth  = PET_WIDTH;
 	float finalHeight = ratio * elf.getHeight();
 	elf.setSize(finalWidth, finalHeight);
     }
 
     private float getXByIndex(int index) {
-	return index * (ELF_MARGIN + CELL_WIDTH + ELF_MARGIN) + ELF_MARGIN;
+	return index * (PET_MARGIN + CELL_WIDTH + PET_MARGIN) + PET_MARGIN;
     }
 
     public void draw(GL10 gl) {
@@ -125,7 +125,7 @@ public class BottomBar extends GLObject {
 
 	if (mHasChildren) {
 	    GLObject obj;
-	    int length = Math.min(mChildren.size(), mElfMax);
+	    int length = Math.min(mChildren.size(), mPetMax);
 	    for (int i = 0; i < length; i++) {
 		obj = mChildren.get(i);
 		gl.glPushMatrix();

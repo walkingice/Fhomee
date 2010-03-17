@@ -33,9 +33,9 @@ import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
 
-public class Elf extends GLObject{
+public class Pet extends GLObject{
 
-    final String TAG = "Elf";
+    final String TAG = "Pet";
 
     protected float mPositionX;
     protected float mPositionY;
@@ -59,7 +59,7 @@ public class Elf extends GLObject{
 	, "elf_walk4"
     };
 
-    Elf() {
+    Pet() {
 	super(0, 0, 20, 20);
 	int footNum = mWalkingFoot.length;
 	mWalkingFootID = new int[footNum];
