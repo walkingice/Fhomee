@@ -99,10 +99,11 @@ public class ViewManager {
     private int mPressId;
     private int mReleaseId;
 
-    final String TAG="ViewManager";
-    private Context mContext;
+    final static String TAG="ViewManager";
+    private static ViewManager mViewManager;
+    private static Context mContext;
     private Rect mViewPort;
-    private GLSurfaceView mSurfaceView;
+    private static GLSurfaceView mSurfaceView;
     private WallRenderer  mRenderer;
     private Timeline mTimeline;
     private ResourcesManager mResourceManager;
@@ -315,7 +316,31 @@ public class ViewManager {
 	return near;
     }
 
-    public ViewManager(Context context,GLSurfaceView surface) {
+    public static void setSurfaceView(GLSurfaceView surfaceView) {
+	mSurfaceView = surfaceView;
+    }
+
+    public static void setContext(Context context) {
+	mContext = context;
+    }
+
+    synchronized static public ViewManager getInstance() {
+	if (mContext == null) {
+	    Log.i(TAG, "Oooops...Context is null");
+	}
+
+	if (mSurfaceView == null) {
+	    Log.i(TAG, "Oooops...SurfaceView is null");
+	}
+
+	if (mViewManager == null) {
+	    mViewManager = new ViewManager(mContext, mSurfaceView);
+	}
+
+	return mViewManager;
+    }
+
+    private ViewManager(Context context,GLSurfaceView surface) {
 	mContext     = context;
 	mSurfaceView = surface;
 	mRenderer = new WallRenderer(this);
