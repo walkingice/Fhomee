@@ -100,13 +100,18 @@ public class BottomBar extends GLObject {
     public void addPet(Pet elf, int index) {
 	setPetSize(elf);
 	addChild(index, elf);
+	resetPetsPosition();
+    }
 
-	Pet child;
-	for (int i = index; i < mChildren.size(); i++) {
-	    float x = getXByIndex(i);
-	    child = (Pet)mChildren.get(i);
-	    child.setPosition(x, 0);
+    public Pet removePet(int index) {
+	if (index < 0 || index == mChildren.size()) {
+	    Log.i(TAG,"Pet " + index + "th doesn't exist");
+	    return null;
 	}
+
+	Pet pet = (Pet)mChildren.remove(index);
+	resetPetsPosition();
+	return pet;
     }
 
     protected void setPetSize(Pet elf) {
@@ -135,6 +140,15 @@ public class BottomBar extends GLObject {
 	}
 
 	return;
+    }
+
+    private void resetPetsPosition() {
+	Pet child;
+	for (int i = 0; i < mChildren.size(); i++) {
+	    float x = getXByIndex(i);
+	    child = (Pet)mChildren.get(i);
+	    child.setPosition(x, 0);
+	}
     }
 }
 
