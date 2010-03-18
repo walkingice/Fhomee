@@ -298,6 +298,9 @@ public class GLObject {
     }
 
     public int getChildrenCount() {
+	if (mChildren == null) {
+	    return 0;
+	}
 	return mChildren.size();
     }
 
