@@ -69,9 +69,7 @@ public class Launcher extends Activity {
 	ViewManager mViewManager;
 	TotalScreen(Context context) {
 	    super(context);
-	    ViewManager.setContext(context);
-	    ViewManager.setSurfaceView(this);
-	    mViewManager = ViewManager.getInstance();
+	    mViewManager = new ViewManager(context, this);
 	    setOnClickListener(this);
 	}
 
