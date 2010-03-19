@@ -43,6 +43,8 @@ public class BottomBar extends GLObject {
     final public static int WALKING  = 1;
     private int mStatus = STANDING;
 
+    private Elf mElf;
+
     private GLTranslate mShiftAnimation;
 
     /* Be used for Pet for moving */
@@ -53,6 +55,10 @@ public class BottomBar extends GLObject {
 	super(0, 0, width, height);
 	mShiftAnimation = new GLTranslate(100, 0, 0);
 	updateParameters();
+
+	mElf = new Elf();
+	addPet(mElf);
+	mElf.setBottomBar(this);
 
 	mPetMotion = new GLTranslate[mPetMax];
 	for (int i = 0; i < mPetMax; i++) {
@@ -107,6 +113,10 @@ public class BottomBar extends GLObject {
 	if (index < 0 || index == mChildren.size()) {
 	    Log.i(TAG,"Pet " + index + "th doesn't exist");
 	    return null;
+	}
+
+	if (index == 0) {
+	    Log.i(TAG, "Do not remove first ELF please");
 	}
 
 	Pet pet = (Pet)mChildren.remove(index);
