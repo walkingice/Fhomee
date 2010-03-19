@@ -133,11 +133,6 @@ public class ViewManager {
     TopBar mTopBar;
     BottomBar mBar;
     Dock mDock;
-    Pet pet1;
-    Pet pet2;
-    Pet pet3;
-    Pet pet4;
-
     /**
      * This method was called while user Pressing the screen.
      */
@@ -365,24 +360,10 @@ public class ViewManager {
 	room5 = new Room("wall_5", "ground");
 	room6 = new Room("wall", "ground");
 
-	pet1 = new Pet();
-	pet2 = new Pet();
-	pet3 = new Pet();
-	pet4 = new Pet();
-
-	pet1.setDefaultTextureName("mario");
-	pet2.setDefaultTextureName("luigi");
-	pet3.setDefaultTextureName("peach");
-	pet4.setDefaultTextureName("toad");
-
 	float barWidth  = convertToLevel(LEVEL_BAR, PROJ_WIDTH);
 	float barHeight = convertToLevel(LEVEL_BAR, PROJ_HEIGHT * BAR_HEIGHT_RATIO);
 	mBar = new BottomBar(barWidth, barHeight);
 	mBar.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
-	mBar.addPet(pet1);
-	mBar.addPet(pet2);
-	mBar.addPet(pet3);
-	mBar.addPet(pet4);
 
 	mTopBar = new TopBar(barWidth, barHeight, "topbar_background");
 	mTopBar.setXY(0, 0);
