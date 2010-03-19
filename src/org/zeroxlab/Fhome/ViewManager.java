@@ -177,9 +177,6 @@ public class ViewManager {
 
 	if (mPressId != -1 && mReleaseId == mPressId) {
 	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mPressId);
-	    GLFade fade = new GLFade(1000, 1f, 1f, 1f);
-	    obj.setAnimation(fade);
-	    mTimeline.addAnimation(fade);
 	    obj.onClick();
 
 	    if (mReleaseId == mDock.getId() && !mGestureMgr.mIsLongClick) {
