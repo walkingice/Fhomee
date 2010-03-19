@@ -44,9 +44,9 @@ public class TextureManager {
 
     private GL10 mGLContext;
 
-    private HashMap mTextureMap;
+    private HashMap<String, TextureObj>  mTextureObjMap;
     private TextureManager() {
-	mTextureMap = new HashMap();
+	mTextureObjMap = new HashMap<String, TextureObj>();
     }
 
     synchronized static public TextureManager getInstance() {
@@ -63,7 +63,14 @@ public class TextureManager {
     }
 
     public void clearAll() {
-	mTextureMap.clear();
+	Collection<TextureObj> collection = mTextureObjMap.values();
+	TextureObj[] array = new TextureObj[collection.size()];
+	array = collection.toArray(array);
+	for (int i = 0; i < array.length; i++) {
+	    array[i].destroy();
+	}
+
+	mTextureObjMap.clear();
     }
 
     public int generateStringTexture(String string, Paint paint) {
@@ -93,9 +100,9 @@ public class TextureManager {
 
     public int generateOneTexture(Bitmap bitmap, String name) {
 
-	Integer textureId = (Integer)mTextureMap.get(name);
+	TextureObj obj = mTextureObjMap.get(name);
 
-	if(textureId == null) {
+	if(obj == null) {
 	    int[] textures = new int[1];
 
 	    mGLContext.glGenTextures(1, textures, 0);
@@ -113,19 +120,51 @@ public class TextureManager {
 		    GL10.GL_REPLACE);
 
 	    GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-	    bitmap.recycle();
 
-	    textureId = new Integer(textures[0]);
-	    recordTextureName(name, textureId);
+	    obj = new TextureObj(name, bitmap, textures[0]);
+	    bitmap.recycle();
+	    recordTextureName(name, obj);
 	} else {
 	    Log.i(TAG, name + "created");
 	}
 
-	return textureId.intValue();
+	return obj.getTexture();
     }
 
-    private void recordTextureName(String name, Integer index) {
-	mTextureMap.put(name, index);
+    private void recordTextureName(String name, TextureObj obj) {
+	mTextureObjMap.put(name, obj);
+    }
+
+    class TextureObj {
+	int    mId;
+	String mName;
+	Bitmap mBitmap;
+
+	TextureObj(String name, Bitmap bitmap) {
+	    this(name, bitmap, -1);
+	}
+
+	TextureObj(String name, Bitmap bitmap, int id) {
+	    mId     = id;
+	    mName   = name;
+	    mBitmap = Bitmap.createBitmap(bitmap);
+	}
+
+	Bitmap getBitmap() {
+	    return mBitmap;
+	}
+
+	int getTexture() {
+	    return mId;
+	}
+
+	String getName() {
+	    return mName;
+	}
+
+	void destroy() {
+	    mBitmap.recycle();
+	}
     }
 }
 
