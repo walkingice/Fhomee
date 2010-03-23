@@ -130,7 +130,7 @@ public class ViewManager {
     int mFontId;
 
     public static TopBar mTopBar;
-    public static BottomBar mBar;
+    public static BottomBar mBottomBar;
     public static Dock mDock;
     /**
      * This method was called while user Pressing the screen.
@@ -244,7 +244,7 @@ public class ViewManager {
 	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 
-	int id = mBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
+	int id = mBottomBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
 		, convertToLevel(LEVEL_BAR, nearY));
 	if (id == -1) {
 	    float worldX = convertToLevel(LEVEL_WORLD, nearX);
@@ -334,8 +334,8 @@ public class ViewManager {
 
 	float barWidth  = convertToLevel(LEVEL_BAR, PROJ_WIDTH);
 	float barHeight = convertToLevel(LEVEL_BAR, PROJ_HEIGHT * BAR_HEIGHT_RATIO);
-	mBar = new BottomBar(barWidth, barHeight);
-	mBar.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
+	mBottomBar = new BottomBar(barWidth, barHeight);
+	mBottomBar.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
 
 	mTopBar = new TopBar(barWidth, barHeight, "topbar_background");
 	mTopBar.setXY(0, 0);
@@ -386,7 +386,7 @@ public class ViewManager {
     public void generateTextures() {
 	mTouchSurface.generateTextures();
 	mTopBar.generateTextures();
-	mBar.generateTextures();
+	mBottomBar.generateTextures();
 	mWorld.generateTextures();
 	mDock.generateTextures();
     }
@@ -441,7 +441,7 @@ public class ViewManager {
 
 	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
 
-	mBar.draw(gl);
+	mBottomBar.draw(gl);
 	gl.glPopMatrix();
     }
 
@@ -514,9 +514,9 @@ public class ViewManager {
 	float totalRoomWidth = Room.WIDTH * (rooms - 1);
 	if (endX > 0 ||
 		endX < -1 * totalRoomWidth) {
-	    float barY = mBar.getY();
+	    float barY = mBottomBar.getY();
 	    float level1X = convertToLevel(LEVEL_BAR, screenX);
-	    mBar.setXY(level1X, barY);
+	    mBottomBar.setXY(level1X, barY);
 	}
     }
 
@@ -534,7 +534,7 @@ public class ViewManager {
 
     public void moveToRoom(int next) {
 	mWorld.moveToRoom(next);
-	mBar.backToCenter();
+	mBottomBar.backToCenter();
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
