@@ -129,9 +129,9 @@ public class ViewManager {
     String   mFontString;
     int mFontId;
 
-    TopBar mTopBar;
-    BottomBar mBar;
-    Dock mDock;
+    public static TopBar mTopBar;
+    public static BottomBar mBar;
+    public static Dock mDock;
     /**
      * This method was called while user Pressing the screen.
      */
