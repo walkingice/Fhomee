@@ -140,8 +140,7 @@ public class GLObject {
      */
     public void clear() {
 	ObjectManager.getInstance().unregister(this);
-	// Maybe we need clear up its texture like...
-	// TextureManager.clearTexture(blahblah);
+	destroyGLView();
     }
 
     public int getId() {
@@ -242,6 +241,7 @@ public class GLObject {
      * @param name The Default texture name.
      */
     public void setDefaultTextureName(String name) {
+	destroyGLView();
 	mDefaultTextureName = name;
 	createGLView();
     }
@@ -264,8 +264,12 @@ public class GLObject {
     }
 
     private void destroyGLView() {
-	mGLView  = null;
-	mVisible = false;
+	if (mVisible) {
+	    TextureObj obj = mGLView.getTexture();
+	    TextureMgr.removeTextureObj(obj);
+	    mGLView  = null;
+	    mVisible = false;
+	}
     }
 
     /**
