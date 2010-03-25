@@ -25,6 +25,8 @@ import android.content.Context;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import org.zeroxlab.Fhome.TextureManager.TextureObj;
+
 public class GLTransAni extends GLAnimation {
 
     final static String TAG="GLTransAni";
@@ -42,16 +44,16 @@ public class GLTransAni extends GLAnimation {
     /* This method was called iff this Animation complete but not be interrupted.*/
     public void complete() {
 	if (mObject != null) {
-	    int id = mObject.getDefaultTextureID();
-	    mObject.setTextureID(id);
+	    TextureObj obj = mObject.getDefaultTexture();
+	    mObject.setTexture(obj);
 	}
 	super.complete();
     }
 
     public boolean applyAnimation(GL10 gl) {
 	boolean glObjectDrawItself = true;
-	int id = mTransition.getNowTextureID();
-	mObject.setTextureID(id);
+	TextureObj obj = mTransition.getNowTextureObj();
+	mObject.setTexture(obj);
 	return glObjectDrawItself;
     }
 }
