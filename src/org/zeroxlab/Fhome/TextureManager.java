@@ -66,6 +66,20 @@ public class TextureManager {
 
     public void setGLContext(GL10 gl) {
 	mGLContext = gl;
+	clearTextures();
+    }
+
+    private void clearTextures() {
+	synchronized (mLocker) {
+	    Iterator<TextureObj> iterator = mTextureMap.values().iterator();
+	    while(iterator.hasNext()) {
+		TextureObj obj = iterator.next();
+		mPendingMap.put(obj.getName(), obj);
+	    }
+
+	    mTextureMap.clear();
+	    mHasPending = true;
+	}
     }
 
     public void clearAll() {
