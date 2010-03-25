@@ -246,7 +246,7 @@ public class GLObject {
 	createGLView();
     }
 
-    private void createGLView() {
+    protected void createGLView() {
 	/* This GLObjew is visible and has texture, create a GLView */
 	if (mGLView == null) {
 	    mGLView = new GLView();
