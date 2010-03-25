@@ -8,7 +8,7 @@
 	android:name="Launcher"
 	android:theme="@style/Theme"
 	android:label="Fhome"
-        android:icon="@drawable/icon_question"
+        android:icon="@drawable/icon"
 	>
 	<intent-filter>
 	<action android:name="android.intent.action.MAIN" />
