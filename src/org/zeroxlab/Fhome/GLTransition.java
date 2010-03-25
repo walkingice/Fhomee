@@ -26,6 +26,8 @@ import android.graphics.Bitmap;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import org.zeroxlab.Fhome.TextureManager.TextureObj;
+
 public class GLTransition{
 
     final static String TAG="GLTransition";
@@ -43,13 +45,13 @@ public class GLTransition{
 
     protected String[] mName;
     protected long[]   mTime;
-    protected int[]    mTextures;
+    protected TextureObj[] mTextures;
 
     GLTransition(String[] name, long[] time) {
 	int length = name.length;
 	mName = new String[length];
 	mTime = new long[length];
-	mTextures = new int[length];
+	mTextures = new TextureObj[length];
 
 	for (int i = 0; i < length; i++) {
 	    mName[i] = name[i];
@@ -84,7 +86,7 @@ public class GLTransition{
 	Bitmap bitmap;
 	for (int i = 0; i < mName.length; i++) {
 	    bitmap = ResourcesMgr.getBitmapByName(mName[i]);
-	    mTextures[i] = TextureMgr.generateOneTexture(bitmap, mName[i]);
+	    mTextures[i] = TextureMgr.getTextureObj(bitmap, mName[i]);
 	}
     }
 
@@ -95,7 +97,7 @@ public class GLTransition{
      *
      * @return the corresponding texture id
      */
-    public int getNowTextureID() {
+    public TextureObj getNowTextureObj() {
 	if (mStart + mTotal < Now) {
 	    mStart = Now;
 	}
