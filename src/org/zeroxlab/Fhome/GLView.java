@@ -37,6 +37,8 @@ import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import org.zeroxlab.Fhome.TextureManager.TextureObj;
+
 public class GLView {
 
     final static String TAG = "GLView";
@@ -53,7 +55,7 @@ public class GLView {
     private FloatBuffer mTextureBuf;
     private FloatBuffer mColorBuf;
 
-    private int mTextureID;
+    private TextureObj mTextureObj;
 
     RectF mArea;// quick hack, it supposed to be 4 arbitrary points
 		// but not a Rectangle. Maybe a GLView will compose
@@ -111,8 +113,8 @@ public class GLView {
 	mColorBuf.position(0);
     }
 
-    public void setTextureID(int texture) {
-	mTextureID = texture;
+    public void setTexture(TextureObj obj) {
+	mTextureObj = obj;
     }
 
     public void setSize(RectF rect) {
@@ -148,6 +150,10 @@ public class GLView {
 	mVertexBuf.position(0);
     }
 
+    public TextureObj getTexture() {
+	return mTextureObj;
+    }
+
     public void drawGLView(GL10 gl) {
 	if (!visible) {
 	    return;
@@ -155,7 +161,11 @@ public class GLView {
 
 	gl.glFrontFace(gl.GL_CW);
 	gl.glVertexPointer(VERTEX_DIMENSION, GL10.GL_FLOAT, 0, mVertexBuf);
-	gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureID);
+	if (mTextureObj != null) {
+	    gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureObj.getTexture());
+	} else {
+	    Log.i(TAG, "Oooops, texture object is null");
+	}
 	gl.glTexCoordPointer(TEXTURE_DIMENSION, GL10.GL_FLOAT, 0, mTextureBuf);
 	gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuf);
     }
