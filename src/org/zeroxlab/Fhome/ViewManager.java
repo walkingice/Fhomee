@@ -113,7 +113,7 @@ public class ViewManager {
 
     private TouchSurface mTouchSurface;
     private World mWorld;
-    private Room room, room2, room3, room4, room5, room6;
+    private Room room1, room2, room3, room4, room5, room6;
 
     public final float FAREST_PUSHING_DEPTH = 10f;
 
@@ -325,12 +325,12 @@ public class ViewManager {
     }
 
     public void initGLViews() {
-	room = new Room("wall_6", "ground_2");
-	room2 = new Room("wall_2", "ground");
-	room3 = new Room("wall_3", "ground");
-	room4 = new Room("wall_4", "ground");
-	room5 = new Room("wall_5", "ground");
-	room6 = new Room("wall", "ground");
+	room1 = new Room("lohas_wall", "lohas_ground");
+	room2 = new Room("lohas_wall", "lohas_ground");
+	room3 = new Room("lohas_wall", "lohas_ground");
+	room4 = new Room("lohas_wall", "lohas_ground");
+	room5 = new Room("lohas_wall", "lohas_ground");
+	room6 = new Room("lohas_wall", "lohas_ground");
 
 	float barWidth  = convertToLevel(LEVEL_BAR, PROJ_WIDTH);
 	float barHeight = convertToLevel(LEVEL_BAR, PROJ_HEIGHT * BAR_HEIGHT_RATIO);
@@ -366,10 +366,10 @@ public class ViewManager {
 	mFont.setColor(0x11FF33);
 	mFont.setAlpha(0x99);
 	mFont.setSize(300f, 80f);
-	room.addItem(mFont, 20f, 60f, 10f);
+	room1.addItem(mFont, 20f, 60f, 10f);
 
 	mWorld = new World();
-	mWorld.addRoom(room);
+	mWorld.addRoom(room1);
 	mWorld.addRoom(room2);
 	mWorld.addRoom(room3);
 	mWorld.addRoom(room4);
