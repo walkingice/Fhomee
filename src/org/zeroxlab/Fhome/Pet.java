@@ -33,6 +33,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
 
+import org.zeroxlab.Fhome.TextureManager.TextureObj;
+
 public class Pet extends GLObject{
 
     final String TAG = "Pet";
@@ -41,9 +43,9 @@ public class Pet extends GLObject{
     protected float mPositionY;
     protected Jump mJumpAni;
 
-    protected int mBorderID;
+    protected TextureObj mBorderTexture;
     protected String mBorderName = "elf_border";
-    protected int mStandID;
+    protected TextureObj mStandTexture;
     protected String mStandName  = "elf_stand";
 
     protected GLView mBorder;
@@ -72,6 +74,16 @@ public class Pet extends GLObject{
 	mBorder = new GLView();
 	mFoot   = new GLView();
 
+	Bitmap bitmap;
+	bitmap    = ResourcesMgr.getBitmapByName(mBorderName);
+	mBorderTexture = TextureMgr.getTextureObj(bitmap, mBorderName);
+	bitmap.recycle();
+	bitmap    = ResourcesMgr.getBitmapByName(mStandName);
+	mStandTexture  = TextureMgr.getTextureObj(bitmap, mStandName);
+	bitmap.recycle();
+	mBorder.setTexture(mBorderTexture);
+	mFoot.setTexture(mStandTexture);
+
 	mJumpAni = new Jump(1000, mPositionX, mPositionY);
     }
 
@@ -92,23 +104,6 @@ public class Pet extends GLObject{
 	mPositionX = x;
 	mPositionY = y;
 	super.setXY(x, y);
-    }
-
-    public void generateTextures() {
-	super.generateTextures();
-	int length = mWalkingFoot.length;
-	Bitmap bitmap;
-	for (int i = 0; i < length; i++) {
-	    bitmap = ResourcesMgr.getBitmapByName(mWalkingFoot[i]);
-	    mWalkingFootID[i] = TextureMgr.generateOneTexture(bitmap, mWalkingFoot[i]);
-	}
-
-	bitmap    = ResourcesMgr.getBitmapByName(mBorderName);
-	mBorderID = TextureMgr.generateOneTexture(bitmap, mBorderName);
-    	bitmap    = ResourcesMgr.getBitmapByName(mStandName);
-	mStandID  = TextureMgr.generateOneTexture(bitmap, mStandName);
-	mBorder.setTextureID(mBorderID);
-	mFoot.setTextureID(mStandID);
     }
 
     @Override
