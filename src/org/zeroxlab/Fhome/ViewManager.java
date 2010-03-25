@@ -383,14 +383,6 @@ public class ViewManager {
 	mTouchSurface = new TouchSurface();
     }
 
-    public void generateTextures() {
-	mTouchSurface.generateTextures();
-	mTopBar.generateTextures();
-	mBottomBar.generateTextures();
-	mWorld.generateTextures();
-	mDock.generateTextures();
-    }
-
     private void drawDock(GL10 gl) {
 	/* only draw Dock at mini mode*/
 	if (!mMiniMode) {
@@ -560,8 +552,6 @@ public class ViewManager {
 
 	    gl.glEnable(gl.GL_BLEND);
 	    gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE_MINUS_SRC_ALPHA);
-
-	    mManager.generateTextures();
 	}
 
 	public void onSurfaceChanged(GL10 gl, int w, int h) {
@@ -588,6 +578,10 @@ public class ViewManager {
 	    gl.glTexEnvx(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
 		    GL10.GL_MODULATE);
 	    gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+
+	    if (mTextureManager.hasNonGeneratingTextures()) {
+		mTextureManager.generateTexture();
+	    }
 
 	    mManager.drawGLViews(gl);
 	}
