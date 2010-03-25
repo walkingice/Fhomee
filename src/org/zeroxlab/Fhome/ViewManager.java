@@ -540,6 +540,14 @@ public class ViewManager {
 
 	    mTextureManager.setGLContext(gl);
 
+	    String version = gl.glGetString(gl.GL_VERSION);
+	    String test = gl.glGetString(gl.GL_EXTENSIONS);
+	    String result[] = test.split(" ");
+	    Log.i(TAG, "Version: " + version);
+	    for (int i = 0; i < result.length; i++) {
+		Log.i(TAG, "Extension: " + result[i]);
+	    }
+
 	    gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT,
 		    GL10.GL_FASTEST);
 	    gl.glClearColor(.5f, .1f, .1f, 1);
