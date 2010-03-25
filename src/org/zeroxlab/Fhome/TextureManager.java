@@ -120,11 +120,13 @@ public class TextureManager {
 
 	obj = mTextureMap.get(name);
 	if (obj != null) {
+	    obj.increaseBinding(); // one more GLObject bind to this texture
 	    return obj;
 	}
 
 	obj = mPendingMap.get(name);
 	if (obj != null) {
+	    obj.increaseBinding(); // one more GLObject bind to this texture
 	    return obj;
 	}
 
@@ -137,11 +139,22 @@ public class TextureManager {
 	return obj;
     }
 
-    public boolean hasNonGeneratingTextures() {
+    public void removeTextureObj(TextureObj obj) {
+	obj.decreaseBinding();
+	if (obj.bindingCount() == 0) {
+	    synchronized(mLocker) {
+		mPendingMap.put(obj.getName(), obj);
+		mTextureMap.remove(obj.getName());
+		mHasPending = true;
+	    }
+	}
+    }
+
+    public boolean hasPendingTextures() {
 	return mHasPending;
     }
 
-    public void generateTexture() {
+    public void updateTexture() {
 	if (!mHasPending) {
 	    return;
 	}
@@ -151,28 +164,16 @@ public class TextureManager {
 	    TextureObj[] array = new TextureObj[collection.size()];
 	    array = collection.toArray(array);
 	    int length = array.length;
-	    int[] textures = new int[length];
-	    mGLContext.glGenTextures(length, textures, 0);
+
 	    for (int i = 0; i < length; i++) {
 		TextureObj obj = array[i];
-		obj.setTexture(textures[i]);
-
-		mGLContext.glBindTexture(GL10.GL_TEXTURE_2D, obj.getTexture());
-		mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-			GL10.GL_NEAREST);
-		mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D,
-			GL10.GL_TEXTURE_MAG_FILTER,
-			GL10.GL_LINEAR);
-		mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-			GL10.GL_CLAMP_TO_EDGE);
-		mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-			GL10.GL_CLAMP_TO_EDGE);
-		mGLContext.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
-			GL10.GL_REPLACE);
-		Bitmap b = obj.getBitmap();
-		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, obj.getBitmap(), 0);
-
-		mTextureMap.put(obj.getName(), obj);
+		if (obj.bindingCount() > 0) {
+		    generateTexture(obj);
+		    mTextureMap.put(obj.getName(), obj);
+		} else {
+		    deleteTexture(obj);
+		    obj.destroy();
+		}
 	    }
 
 	    mPendingMap.clear();
@@ -180,8 +181,38 @@ public class TextureManager {
 	}
     }
 
+    private void generateTexture(TextureObj obj) {
+	int length     = 1;
+	int[] textures = new int[length];
+	mGLContext.glGenTextures(length, textures, 0);
+	mGLContext.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
+
+	mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+		GL10.GL_NEAREST);
+	mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D,
+		GL10.GL_TEXTURE_MAG_FILTER,
+		GL10.GL_LINEAR);
+	mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
+		GL10.GL_CLAMP_TO_EDGE);
+	mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
+		GL10.GL_CLAMP_TO_EDGE);
+	mGLContext.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
+		GL10.GL_REPLACE);
+	GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, obj.getBitmap(), 0);
+
+	obj.setTexture(textures[0]);
+    }
+
+    private void deleteTexture(TextureObj obj) {
+	int length     = 1;
+	int[] textures = new int[length];
+	textures[0] = obj.getTexture();
+	mGLContext.glDeleteTextures(length, textures, 0);
+    }
+
     class TextureObj {
 	int    mId;
+	int    mBinding;
 	String mName;
 	Bitmap mBitmap;
 
@@ -198,6 +229,8 @@ public class TextureManager {
 		config = Bitmap.Config.ARGB_4444;
 	    }
 	    mBitmap = bitmap.copy(config, true);
+
+	    mBinding = 1;
 	}
 
 	Bitmap getBitmap() {
@@ -214,6 +247,18 @@ public class TextureManager {
 
 	String getName() {
 	    return mName;
+	}
+
+	void increaseBinding() {
+	    mBinding++;
+	}
+
+	void decreaseBinding() {
+	    mBinding--;
+	}
+
+	int bindingCount() {
+	    return mBinding;
 	}
 
 	void destroy() {
