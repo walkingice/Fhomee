@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
 
+import org.zeroxlab.Fhome.TextureManager.TextureObj;
+
 /** 
  * GLObject represent any Object on the screen
  * it encapsulants the information including position, size...etc
@@ -78,21 +80,19 @@ public class GLString extends GLObject {
 	mTextPaint.setColor(color);
     }
 
-    public void generateTextures() {
-	if (mVisible) {
-	    int id;
-	    id = TextureMgr.generateStringTexture(mDefaultTextureName, mTextPaint);
-	    mGLView.setTextureID(id);
-	    mDefaultTextureID = id;
+    @Override
+    protected void createGLView() {
+	/* This GLObjew is visible and has texture, create a GLView */
+	if (mGLView == null) {
+	    mGLView = new GLView();
+	    mGLView.setSize(mRect);
+
+	    TextureObj texture;
+	    texture= TextureMgr.getStringTextureObj(mDefaultTextureName, mTextPaint);
+	    mGLView.setTexture(texture);
 	}
 
-	if (mHasChildren) {
-	    GLObject obj;
-	    for (int i = 0; i < mChildren.size(); i++) {
-		obj = mChildren.get(i);
-		obj.generateTextures();
-	    }
-	}
+	mVisible = true;
     }
 }
 
