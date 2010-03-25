@@ -33,6 +33,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
 
+import org.zeroxlab.Fhome.TextureManager.TextureObj;
+
 /** 
  * GLObject represent any Object on the screen
  * it encapsulants the information including position, size...etc
@@ -57,7 +59,6 @@ public class GLObject {
     Matrix mInvert;
     float mPts[];
 
-    protected int    mDefaultTextureID = -1;
     protected String mDefaultTextureName;
 
     private int mID = -1;
@@ -217,28 +218,30 @@ public class GLObject {
      *
      * @param id The id of texture which will be drawed.
      */
-    public void setTextureID(int id) {
+    public void setTexture(TextureObj obj) {
 	if (mVisible != true) {
 	    createGLView();
 	}
 
-	mGLView.setTextureID(id);
+	mGLView.setTexture(obj);
     }
 
-    public int getDefaultTextureID() {
-	return mDefaultTextureID;
+    public TextureObj getDefaultTexture() {
+	if (mVisible) {
+	    return mGLView.getTexture();
+	}
+
+	return null;
     }
 
     /**
      * Reset the Default Texture name *ONLY*.
-     * This method does not change the default texture id.
-     * The id will be detected at method generateTextures().
-     * Because the GL Context of TextureManager might changed.
+     * The GL Context of TextureManager might change.
+     * TextureMgr will assign the Texture Id to TextureObj
      *
      * @param name The Default texture name.
      */
     public void setDefaultTextureName(String name) {
-	mDefaultTextureID = -1;
 	mDefaultTextureName = name;
 	createGLView();
     }
@@ -248,6 +251,13 @@ public class GLObject {
 	if (mGLView == null) {
 	    mGLView = new GLView();
 	    mGLView.setSize(mRect);
+
+	    TextureObj texture;
+	    Bitmap bitmap;
+	    bitmap = ResourcesMgr.getBitmapByName(mDefaultTextureName);
+	    texture= TextureMgr.getTextureObj(bitmap, mDefaultTextureName);
+	    bitmap.recycle();
+	    mGLView.setTexture(texture);
 	}
 
 	mVisible = true;
@@ -306,25 +316,6 @@ public class GLObject {
 
     public void setDepth(float depth) {
 	mDepth = depth;
-    }
-
-    public void generateTextures() {
-	if (mVisible) {
-	    int    id;
-	    Bitmap bitmap;
-	    bitmap = ResourcesMgr.getBitmapByName(mDefaultTextureName);
-	    id     = TextureMgr.generateOneTexture(bitmap, mDefaultTextureName);
-	    mGLView.setTextureID(id);
-	    mDefaultTextureID = id;
-	}
-
-	if (mHasChildren) {
-	    GLObject obj;
-	    for (int i = 0; i < mChildren.size(); i++) {
-		obj = mChildren.get(i);
-		obj.generateTextures();
-	    }
-	}
     }
 
     /* This GLObject locate at a position which relate to its parent
