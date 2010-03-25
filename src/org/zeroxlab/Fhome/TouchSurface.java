@@ -62,12 +62,6 @@ public class TouchSurface extends GLObject {
 	mNotify = new GLTransition(name, time);
     }
 
-    @Override
-    public void generateTextures() {
-	mSight.generateTextures();
-	mNotify.generateTextures();
-    }
-
     public void clickAt(float x, float y) {
 	x = x - mSightWidth / 2;
 	y = y - mSightHeight / 2;
