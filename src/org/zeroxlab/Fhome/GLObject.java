@@ -156,6 +156,14 @@ public class GLObject {
 	return mPosition.y;
     }
 
+    public void setVisible(boolean visible) {
+	mVisible = false;
+    }
+
+    public boolean getVisible() {
+	return mVisible;
+    }
+
     public void setSize(float width, float height) {
 	mRect.set(0, 0, width, height);
 	if (mGLView != null) {
@@ -219,7 +227,7 @@ public class GLObject {
      * @param id The id of texture which will be drawed.
      */
     public void setTexture(TextureObj obj) {
-	if (mVisible != true) {
+	if (mGLView == null) {
 	    createGLView();
 	}
 
@@ -227,7 +235,7 @@ public class GLObject {
     }
 
     public TextureObj getDefaultTexture() {
-	if (mVisible) {
+	if (mGLView != null) {
 	    return mGLView.getTexture();
 	}
 
@@ -265,12 +273,13 @@ public class GLObject {
     }
 
     private void destroyGLView() {
-	if (mVisible) {
+	if (mGLView != null) {
 	    TextureObj obj = mGLView.getTexture();
 	    TextureMgr.removeTextureObj(obj);
 	    mGLView  = null;
-	    mVisible = false;
 	}
+
+	mVisible = false;
     }
 
     /**
@@ -353,6 +362,10 @@ public class GLObject {
     }
 
     protected void drawMyself(GL10 gl) {
+	if (mGLView == null) {
+	    return;
+	}
+
 	mGLView.drawGLView(gl);
 	/* Animation might change drawing color, reset it. */
 	gl.glColor4f(1f, 1f, 1f, 1f);
