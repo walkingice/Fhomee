@@ -86,6 +86,7 @@ public class TopBar extends GLObject {
 
     public void displayObj(LinkedList<GLObject> list) {
 	mList = list;
+	mHasChildren = true;  //therefore drawChildren will be called
 	resetObjPosition();
     }
 
@@ -102,33 +103,17 @@ public class TopBar extends GLObject {
     }
 
     @Override
-    public void draw(GL10 gl) {
-	moveModelViewToPosition(gl);
-	if (!mVisible) {
+    public void drawChildren(GL10 gl) {
+	if (mList == null) {
 	    return;
 	}
 
-	boolean drawMyself = true;
-	synchronized (mAnimationLock) {
-	    if (mAnimation != null) {
-		drawMyself = mAnimation.applyAnimation(gl);
-	    }
-	}
-
-	if (drawMyself) {
-	    mGLView.drawGLView(gl);
-
-	    if (mList == null) {
-		return;
-	    }
-
-	    GLObject obj;
-	    for (int i = 0; i < mList.size(); i++) {
-		obj = mList.get(i);
-		gl.glPushMatrix();
-		obj.draw(gl);
-		gl.glPopMatrix();
-	    }
+	GLObject obj;
+	for (int i = 0; i < mList.size(); i++) {
+	    obj = mList.get(i);
+	    gl.glPushMatrix();
+	    obj.draw(gl);
+	    gl.glPopMatrix();
 	}
     }
 }
