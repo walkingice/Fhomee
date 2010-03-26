@@ -121,32 +121,15 @@ public class Room extends GLObject {
 	    setDefaultTextureName(background);
 	}
 
-	public void draw(GL10 gl) {
-	    moveModelViewToPosition(gl);
-	    if (mGLView != null) {
-		boolean drawMyself = true;
-		synchronized (mAnimationLock) {
-		    if (mAnimation != null) {
-			drawMyself = mAnimation.applyAnimation(gl);
-		    }
-		}
+	protected void drawChildren(GL10 gl) {
+	    GLObject obj;
+	    for (int i = 0; i < mChildren.size(); i++) {
+		obj = mChildren.get(i);
 
-		if (drawMyself) {
-		    mGLView.drawGLView(gl);
-		}
-		gl.glColor4f(1f, 1f, 1f, 1f);
-	    }
-
-	    if (mHasChildren) {
-		GLObject obj;
-		for (int i = 0; i < mChildren.size(); i++) {
-		    obj = mChildren.get(i);
-
-		    gl.glPushMatrix();
-		    gl.glRotatef(90f, 1f, 0f, 0f);
-		    obj.draw(gl);
-		    gl.glPopMatrix();
-		}
+		gl.glPushMatrix();
+		gl.glRotatef(90f, 1f, 0f, 0f);
+		obj.draw(gl);
+		gl.glPopMatrix();
 	    }
 	    return;
 	}
