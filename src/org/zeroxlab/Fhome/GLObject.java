@@ -62,6 +62,7 @@ public class GLObject {
     protected String mDefaultTextureName;
 
     private int mID = -1;
+    protected boolean mChildrenVisible = true;
     protected boolean mHasChildren = false;
     LinkedList<GLObject> mChildren;
 
@@ -329,35 +330,47 @@ public class GLObject {
 	gl.glRotatef(mAngle, 0, 0, 1f);
     }
 
+    protected void drawChildren(GL10 gl) {
+	GLObject obj;
+	for (int i = 0; i < mChildren.size(); i++) {
+	    obj = mChildren.get(i);
+
+	    gl.glPushMatrix();
+	    obj.draw(gl);
+	    gl.glPopMatrix();
+	}
+    }
+
+    protected boolean applyAnimation(GL10 gl) {
+	boolean drawGLView = true;
+	synchronized (mAnimationLock) {
+	    if (mAnimation != null) {
+		drawGLView = mAnimation.applyAnimation(gl);
+	    }
+	}
+
+	return drawGLView;
+    }
+
+    protected void drawMyself(GL10 gl) {
+	mGLView.drawGLView(gl);
+	/* Animation might change drawing color, reset it. */
+	gl.glColor4f(1f, 1f, 1f, 1f);
+    }
+
     public void draw(GL10 gl) {
 	moveModelViewToPosition(gl);
-	if (mVisible) {
-	    boolean drawMyself = true;
-	    synchronized (mAnimationLock) {
-		if (mAnimation != null) {
-		    drawMyself = mAnimation.applyAnimation(gl);
-		}
-	    }
 
-	    if (drawMyself) {
-		mGLView.drawGLView(gl);
-	    }
+	boolean drawGLView;
+	drawGLView = applyAnimation(gl);
 
-	    /* Animation might change drawing color, reset it. */
-	    gl.glColor4f(1f, 1f, 1f, 1f);
+	if (mVisible && drawGLView) {
+	    drawMyself(gl);
 	}
 
-	if (mHasChildren) {
-	    GLObject obj;
-	    for (int i = 0; i < mChildren.size(); i++) {
-		obj = mChildren.get(i);
-
-		gl.glPushMatrix();
-		obj.draw(gl);
-		gl.glPopMatrix();
-	    }
+	if (mHasChildren && mChildrenVisible) {
+	    drawChildren(gl);
 	}
-
 	return;
     }
 
