@@ -135,29 +135,21 @@ public class BottomBar extends GLObject {
 	return index * (PET_MARGIN + CELL_WIDTH + PET_MARGIN) + PET_MARGIN;
     }
 
-    public void draw(GL10 gl) {
-	moveModelViewToPosition(gl);
-
-	if (mHasChildren) {
-	    GLObject obj;
-	    int length = Math.min(mChildren.size(), mPetMax);
-	    for (int i = 0; i < length; i++) {
-		obj = mChildren.get(i);
-		gl.glPushMatrix();
-		obj.draw(gl);
-		gl.glPopMatrix();
-	    }
-	}
-
-	return;
-    }
-
     private void resetPetsPosition() {
 	Pet child;
 	for (int i = 0; i < mChildren.size(); i++) {
 	    float x = getXByIndex(i);
 	    child = (Pet)mChildren.get(i);
 	    child.setPosition(x, 0);
+	}
+    }
+
+    private void resetPetsVisibility() {
+	GLObject obj;
+	for (int i = 0; i < getChildrenCount(); i++) {
+	    obj = mChildren.get(i);
+	    boolean visible = i < mPetMax;
+	    obj.setVisible(visible);
 	}
     }
 }
