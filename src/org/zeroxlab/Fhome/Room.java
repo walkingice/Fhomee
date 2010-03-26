@@ -76,8 +76,7 @@ public class Room extends GLObject {
 	addChild(mGround);
     }
 
-    public void draw(GL10 gl) {
-	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
+    public void drawChildren(GL10 gl) {
 	gl.glRotatef(mAngle, 0, 0, 1f);
 	gl.glPushMatrix();
 	mWall.draw(gl);
