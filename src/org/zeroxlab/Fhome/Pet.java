@@ -107,27 +107,11 @@ public class Pet extends GLObject{
     }
 
     @Override
-    public void draw(GL10 gl) {
-	moveModelViewToPosition(gl);
-	if (mVisible || true) { // || true for testing
-	    boolean drawMyself = true;
-	    synchronized (mAnimationLock) {
-		if (mAnimation != null) {
-		    drawMyself = mAnimation.applyAnimation(gl);
-		}   
-	    }   
-
-	    if (drawMyself) {
-		mGLView.drawGLView(gl);
-		mBorder.drawGLView(gl);
-		//mGLView.drawGLView(gl);
-		gl.glTranslatef(0f, mBorderRect.height(), 0f);
-		mFoot.drawGLView(gl);
-	    }   
-
-	    /* Animation might change drawing color, reset it. */
-	    gl.glColor4f(1f, 1f, 1f, 1f);
-	}
+    public void drawMyself(GL10 gl) {
+	super.drawMyself(gl);
+	mBorder.drawGLView(gl);
+	gl.glTranslatef(0f, mBorderRect.height(), 0f);
+	mFoot.drawGLView(gl);
     }
 
     @Override
