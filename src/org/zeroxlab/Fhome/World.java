@@ -110,16 +110,9 @@ public class World extends GLObject {
 	return room.pointerAt(x + current * ROOM_WIDTH , y);
     }
 
-    public void draw(GL10 gl) {
-	gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
+    @Override
+    protected void drawChildren(GL10 gl) {
 	Room room;
-
-	synchronized(mAnimationLock) {
-	    if (mAnimation != null) {
-		mAnimation.applyAnimation(gl);
-	    }
-	}
-
 	int current = getCurrentRoom();
 	int count   = getChildrenCount();
 	int start = current - ROOM_VISIBLE_LEFT;
