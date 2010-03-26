@@ -179,37 +179,6 @@ public class Dock extends GLObject {
 	}
     }
 
-    @Override
-    public void draw(GL10 gl) {
-	moveModelViewToPosition(gl);
-	if (!mVisible) {
-	    return;
-	}
-
-	boolean drawMyself = true;
-	synchronized (mAnimationLock) {
-	    if (mAnimation != null) {
-		drawMyself = mAnimation.applyAnimation(gl);
-	    }
-	}
-
-	if (drawMyself) {
-	    mGLView.drawGLView(gl);
-
-	    if (!mHasChildren) {
-		return;
-	    }
-
-	    GLObject obj;
-	    for (int i = 0; i < mChildren.size(); i++) {
-		obj = mChildren.get(i);
-		gl.glPushMatrix();
-		obj.draw(gl);
-		gl.glPopMatrix();
-	    }
-	}
-    }
-
     public void release(int x) {
 	mReleaseObj = getTarget(x);
     }
