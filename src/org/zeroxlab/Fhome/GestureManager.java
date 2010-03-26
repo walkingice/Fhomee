@@ -208,7 +208,7 @@ public class GestureManager {
 
 	mSwitchLeft  = 0;
 	mSwitchRight = (int) (width  * 0.33f);
-	mSwitchTop   = (int) (height * 0.4f);
+	mSwitchTop   = (int) (height * 0.6f);
 	mSwitchBottom = mSwitchTop + switchHeight;
 
 	mMiniSwitchOff  = new Rect(mSwitchLeft, mSwitchTop, mSwitchRight, mSwitchBottom);
