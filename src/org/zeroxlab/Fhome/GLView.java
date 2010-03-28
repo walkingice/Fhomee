@@ -91,6 +91,15 @@ public class GLView {
 	mIndexBuf.put((byte)3);
 	mIndexBuf.position(0);
 
+	// clean all to zero
+	mVertexBuf.position(0);
+	for (int i=0; i< mVertexNum; i++) {
+	    mVertexBuf.put((float)0);
+	    mVertexBuf.put((float)0);
+	    mVertexBuf.put((float)0);
+	}
+	mVertexBuf.position(0);
+
 	// (0, 0) is Left-Top corner of Texture image
 	mTextureBuf.position(0);
 	mTextureBuf.put(0f); // (0, 0)
@@ -111,6 +120,8 @@ public class GLView {
 	    mColorBuf.put(0.7f);
 	}
 	mColorBuf.position(0);
+
+	mArea = new RectF();
     }
 
     public void setTexture(TextureObj obj) {
@@ -125,27 +136,27 @@ public class GLView {
 	 *  +------+
 	 *  3      2
 	 */
-	mArea = new RectF(rect);
+	mArea.set(rect);
 	float height = mArea.height();
 	float width  = mArea.width();
 
 	mVertexBuf.position(0);
 	// point 0
-	mVertexBuf.put((float)0);
-	mVertexBuf.put((float)0);
-	mVertexBuf.put((float)0);
+	//mVertexBuf.put(0, (float)0);
+	//mVertexBuf.put(1, (float)0);
+	//mVertexBuf.put(2, (float)0);
 	// point 1
-	mVertexBuf.put((float)width);
-	mVertexBuf.put((float)0);
-	mVertexBuf.put((float)0);
+	mVertexBuf.put(3, (float)width);
+	//mVertexBuf.put(4, (float)0);
+	//mVertexBuf.put(5, (float)0);
 	// point 2
-	mVertexBuf.put((float)width);
-	mVertexBuf.put((float)height);
-	mVertexBuf.put((float)0);
+	mVertexBuf.put(6, (float)width);
+	mVertexBuf.put(7, (float)height);
+	//mVertexBuf.put(8, (float)0);
 	// point 3
-	mVertexBuf.put((float)0);
-	mVertexBuf.put((float)height);
-	mVertexBuf.put((float)0);
+	//mVertexBuf.put(9, (float)0);
+	mVertexBuf.put(10, (float)height);
+	//mVertexBuf.put(11,(float)0);
 
 	mVertexBuf.position(0);
     }
