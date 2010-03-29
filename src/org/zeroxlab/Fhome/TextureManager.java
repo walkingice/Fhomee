@@ -101,7 +101,7 @@ public class TextureManager {
 	mPendingMap.clear();
     }
 
-    public TextureObj getStringTextureObj(String string, Paint paint) {
+    public TextureObj getStringTextureObj(String name, String string, Paint paint) {
 	float width   = paint.measureText(string);
 	float ascent  = Math.abs(paint.ascent());
 	float descent = Math.abs(paint.descent());
@@ -123,7 +123,7 @@ public class TextureManager {
 	Canvas canvas = new Canvas(bitmap);
 	bitmap.eraseColor(Color.TRANSPARENT);
 	canvas.drawText(string, 0, ascent, paint);
-	TextureObj obj = getTextureObj(bitmap, string);
+	TextureObj obj = getTextureObj(bitmap, name);
 	bitmap.recycle();
 	return obj;
     }
