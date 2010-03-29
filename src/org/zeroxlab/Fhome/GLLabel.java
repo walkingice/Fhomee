@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -40,59 +41,168 @@ import org.zeroxlab.Fhome.TextureManager.TextureObj;
  * GLObject represent any Object on the screen
  * it encapsulants the information including position, size...etc
  */
-public class GLString extends GLObject {
+public class GLLabel extends GLObject {
 
-    final String TAG = "GLString";
-    public final static float mMinWidth  = 20;
-    public final static float mMinHeight = 20;
+    final String TAG = "GLLabel";
+    public final static float mMinWidth  = 200;
+    public final static float mMinHeight = 200;
 
     protected Paint mTextPaint;
-    protected float mDefaultTextSize = 30f;
+    protected float mDefaultTextSize = 20f;
+    protected int mLevel = ViewManager.LEVEL_POSTER;
 
-    GLString(String string) {
+    String mString;
+    String mStringName;
+    GLView mTextView;
+    RectF  mTextRect;
+    float  mTextX = 0f;
+    float  mTextY = 0f;
+
+    GLLabel(String string) {
 	this(string, 255, 0, 0, 0);
     }
 
-    GLString(String string, int a, int r, int g, int b) {
+    GLLabel(String string, int a, int r, int g, int b) {
 	this(mMinWidth, mMinHeight, string, a, r, g, b);
     }
 
-    GLString(float width, float height, String string
+    GLLabel(float width, float height, String string
 	    , int a, int r, int g, int b) {
 	this(0f, 0f, width, height, string, a, r, g, b);
     }
 
-    GLString(float x, float y, float width, float height, String string
+    GLLabel(float x, float y, float width, float height, String string
 	    , int a, int r, int g, int b) {
 	super(x, y, width, height);
 	mTextPaint = new Paint();
 	mTextPaint.setAntiAlias(true);
 	mTextPaint.setARGB(a, r, g, b);
-	mTextPaint.setTextSize(mDefaultTextSize);
-	setDefaultTextureName(string);
+	setTextSize(mDefaultTextSize);
+	setText(string);
     }
 
     public void setAlpha(int alpha) {
 	mTextPaint.setAlpha(alpha);
     }
 
+    public void setLevel(int level) {
+	mLevel = level;
+    }
+
     public void setColor(int color) {
 	mTextPaint.setColor(color);
     }
 
-    @Override
-    protected void createGLView() {
-	/* This GLObjew is visible and has texture, create a GLView */
-	if (mGLView == null) {
-	    mGLView = new GLView();
-	    mGLView.setSize(mRect);
+    public void setTextSize(float size) {
+	mTextPaint.setTextSize(size);
 
-	    TextureObj texture;
-	    texture= TextureMgr.getStringTextureObj(mDefaultTextureName, mTextPaint);
-	    mGLView.setTexture(texture);
+	if (mTextView != null) {
+	    tweakTextSize();
+	}
+    }
+
+    public void setText(String text) {
+	destroyText();
+	mString = text;
+	mStringName = text;
+	createText();
+    }
+
+    @Override
+    public void setSize(float width, float height) {
+	super.setSize(width, height);
+	tweakTextSize();
+    }
+
+    private void tweakTextSize() {
+
+	if (mTextView == null) {
+	    return;
 	}
 
+	float textWidth  = mTextPaint.measureText(mString);
+	float ascent     = Math.abs(mTextPaint.ascent());
+	float descent    = Math.abs(mTextPaint.descent());
+	float textHeight = ascent + descent;
+
+        /* sadly, width and height should be the power of 2 */
+	/* Therefore, the size of TextView is usually larger than we seen */
+	Bitmap textureBitmap = mTextView.getTexture().getBitmap();
+        float textureWidth  = textureBitmap.getWidth();
+        float textureHeight = textureBitmap.getHeight();
+
+	int screenWidth  = ViewManager.mScreenWidth;
+	int screenHeight = ViewManager.mScreenHeight;
+	float nearWidth  = ViewManager.PROJ_WIDTH  * textureWidth / screenWidth;
+	float nearHeight = ViewManager.PROJ_HEIGHT * textureHeight/ screenHeight;
+	float w = ViewManager.convertToLevel(mLevel, nearWidth);
+	float h = ViewManager.convertToLevel(mLevel, nearHeight);
+	mTextRect = new RectF(0, 0, w, h);
+	mTextView.setSize(mTextRect);
+
+	/* If we have background, move text to the center */
+	if (mGLView == null) {
+	    mTextX = 0f;
+	    mTextY = 0f;
+	} else {
+	    /* User only care about the visible area or text */
+	    nearWidth  = ViewManager.PROJ_WIDTH  * textWidth / screenWidth;
+	    nearHeight = ViewManager.PROJ_HEIGHT * textHeight/ screenHeight;
+	    w = ViewManager.convertToLevel(mLevel, nearWidth);
+	    h = ViewManager.convertToLevel(mLevel, nearHeight);
+	    mTextX = (mRect.width() - w)/ 2;
+	    mTextY = (mRect.height()- h)/ 2;
+	}
+    }
+
+    public void setBackground(String background) {
+	super.setDefaultTextureName(background);
+	tweakTextSize();
+    }
+
+    protected void createText() {
+	if (mTextView == null) {
+	    mTextView = new GLView();
+
+	    TextureObj texture;
+	    texture = TextureMgr.getStringTextureObj(mStringName, mString, mTextPaint);
+	    mTextView.setTexture(texture);
+	}
+
+	tweakTextSize();
 	mVisible = true;
+    }
+
+    protected void destroyText() {
+	if (mTextView != null) {
+	    TextureObj obj = mTextView.getTexture();
+	    TextureMgr.removeTextureObj(obj);
+	    mTextView.clear();
+	    mTextView = null;
+	}
+
+	mVisible = (mGLView != null); // do background?
+    }
+
+    @Override
+    protected void drawMyself(GL10 gl) {
+	if (mGLView != null) {
+	    mGLView.drawGLView(gl);
+	}
+
+	if (mTextView != null) {
+	    gl.glTranslatef(mTextX, mTextY, 0f);
+	    mTextView.drawGLView(gl);
+	}
+
+	gl.glColor4f(1f, 1f, 1f, 1f);
+    }
+
+    @Override
+    protected void destroyGLView() {
+	super.destroyGLView();
+
+	mVisible = (mTextView != null); // no backgroud but has Text
     }
 }
 
