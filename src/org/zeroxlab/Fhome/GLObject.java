@@ -272,10 +272,11 @@ public class GLObject {
 	mVisible = true;
     }
 
-    private void destroyGLView() {
+    protected void destroyGLView() {
 	if (mGLView != null) {
 	    TextureObj obj = mGLView.getTexture();
 	    TextureMgr.removeTextureObj(obj);
+	    mGLView.clear();
 	    mGLView  = null;
 	}
 
