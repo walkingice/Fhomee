@@ -125,7 +125,7 @@ public class ViewManager {
     GLObject wanted6;
     GLObject wanted7;
 
-    GLString mFont;
+    GLLabel  mFont;
     String   mFontString;
     int mFontId;
 
@@ -362,11 +362,12 @@ public class ViewManager {
 	room2.addItem(wanted6, 220f, 150f, 180f);
 	room3.addItem(wanted7, 130f, 30f, 30f);
 
-	mFont = new GLString("I like Super Mario");
+	mFont = new GLLabel("I like Super Mario");
 	mFont.setColor(0x11FF33);
 	mFont.setAlpha(0x99);
 	mFont.setSize(300f, 80f);
-	room1.addItem(mFont, 20f, 60f, 10f);
+	mFont.setBackground("bubble");
+	room1.addItem(mFont, 20f, 60f, 0f);
 
 	mWorld = new World();
 	mWorld.addRoom(room1);
