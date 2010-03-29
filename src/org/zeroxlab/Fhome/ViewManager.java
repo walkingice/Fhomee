@@ -117,6 +117,7 @@ public class ViewManager {
 
     public final float FAREST_PUSHING_DEPTH = 10f;
 
+    boolean mGLViewsCreated = false;
     GLObject wanted1;
     GLObject wanted2;
     GLObject wanted3;
@@ -320,8 +321,6 @@ public class ViewManager {
 	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
 	mGestureMgr      = GestureManager.getInstance();
-
-	initGLViews();
     }
 
     public void initGLViews() {
@@ -582,6 +581,10 @@ public class ViewManager {
 		gl.glFrustumf(PROJ_LEFT, PROJ_RIGHT
 			, PROJ_BOTTOM, PROJ_TOP
 			, PROJ_NEAR, PROJ_FAR);
+	    }
+
+	    if (!mGLViewsCreated) {
+		initGLViews();
 	    }
 	}
 
