@@ -181,6 +181,10 @@ public class GLView {
 	gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuf);
     }
 
+    //FIXME: should we have to perform any clear to ByteBuffer? I am not sure
+    public void clear() {
+    }
+
     public void hide() {
 	visible = false;
     }
