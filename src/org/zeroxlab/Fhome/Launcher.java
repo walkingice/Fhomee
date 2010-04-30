@@ -47,7 +47,6 @@ public class Launcher extends Activity {
 	super.onCreate(savedInstanceState);
 	LinearLayout layout = new LinearLayout(this);
 	mScreen = new TotalScreen(this);
-	mScreen.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	mGestureMgr = GestureManager.getInstance();
 	layout.addView(mScreen);
 	setContentView(layout);
@@ -69,7 +68,10 @@ public class Launcher extends Activity {
 	ViewManager mViewManager;
 	TotalScreen(Context context) {
 	    super(context);
-	    mViewManager = new ViewManager(context, this);
+	    ResourcesManager.setContext(context);
+	    ViewManager.setSurface(this);
+	    mViewManager = ViewManager.getInstance();
+	    setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 	    setOnClickListener(this);
 	}
 

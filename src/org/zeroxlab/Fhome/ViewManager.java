@@ -99,11 +99,11 @@ public class ViewManager {
     private int mPressId;
     private int mReleaseId;
 
-    final String TAG="ViewManager";
-    private Context mContext;
+    private static final String TAG="ViewManager";
+    private static ViewManager mViewMgr;
     private Rect mViewPort;
-    private GLSurfaceView mSurfaceView;
-    private WallRenderer  mRenderer;
+    private static GLSurfaceView mSurfaceView;
+    private WallRenderer mRenderer;
     private Timeline mTimeline;
     private ResourcesManager mResourceManager;
     private TextureManager   mTextureManager;
@@ -308,19 +308,34 @@ public class ViewManager {
 	return near;
     }
 
-    public ViewManager(Context context,GLSurfaceView surface) {
-	mContext     = context;
+    public static void setSurface(GLSurfaceView surface) {
 	mSurfaceView = surface;
-	mRenderer = new WallRenderer(this);
+	mViewMgr = null; // reset
+    }
+
+    private ViewManager() {
+	mRenderer = new WallRenderer();
 	mSurfaceView.setEGLConfigChooser(false);
 	mSurfaceView.setRenderer(mRenderer);
 
-	ResourcesManager.setContext(mContext);
 	mResourceManager = ResourcesManager.getInstance();
 	mTextureManager  = TextureManager.getInstance();
 	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
 	mGestureMgr      = GestureManager.getInstance();
+    }
+
+    public static ViewManager getInstance() {
+	if (mViewMgr != null) {
+	    return mViewMgr;
+	}
+
+	if (mSurfaceView == null) {
+	    Log.i(TAG, "OOOOps..you should set Surface before getInstance");
+	}
+
+	mViewMgr = new ViewManager();
+	return mViewMgr;
     }
 
     public void initGLViews() {
@@ -530,11 +545,6 @@ public class ViewManager {
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
-	private ViewManager mManager;
-
-	public WallRenderer(ViewManager manager) {
-	    mManager = manager;
-	}
 
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
@@ -597,7 +607,7 @@ public class ViewManager {
 		mTextureManager.updateTexture();
 	    }
 
-	    mManager.drawGLViews(gl);
+	    drawGLViews(gl);
 	}
     }
 }
