@@ -94,6 +94,9 @@ public class ViewManager {
     public static int mScreenWidth;
     public static int mScreenHeight;
 
+    /* convert Screen Location into Near surface*/
+    private static PointF mNearPoint;
+
     private int mDownId;
     private int mUpId;
     private int mPressId;
@@ -256,6 +259,12 @@ public class ViewManager {
 	return id;
     }
 
+    /* Convert location from Screen to Near and store in PointF near */
+    private void getNearLocation(PointF near, int screenX, int screenY) {
+	near.x = PROJ_WIDTH  * screenX / mScreenWidth;
+	near.y = PROJ_HEIGHT * screenY / mScreenHeight;
+    }
+
     public void turnOnMiniMode() {
 	if (mMiniMode == true) {
 	    return;
@@ -323,6 +332,8 @@ public class ViewManager {
 	mTimeline        = Timeline.getInstance();
 	mTimeline.monitor(mSurfaceView);
 	mGestureMgr      = GestureManager.getInstance();
+
+	mNearPoint = new PointF();
     }
 
     public static ViewManager getInstance() {
