@@ -150,6 +150,8 @@ public class ViewManager {
 		mDock.onPressEvent(mLevelPoint, event);
 	    }
 	} else {
+	    getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
+	    mPetBar.onPressEvent(mLevelPoint, event);
 	    mPressId = getObjectIdOfWorld(mNearPoint.x, mNearPoint.y);
 	}
     }
@@ -219,7 +221,13 @@ public class ViewManager {
 	    }
 	} else {
 	    if (mGestureMgr.mIsHDrag) {
-		shiftWorldXY(mGestureMgr.getDeltaX(), 0);
+		getNearLocation(mNearPoint, screenX, screenY);
+
+		getLevelLocation(LEVEL_WORLD, mLevelPoint, mNearPoint.x, mNearPoint.y);
+		mWorld.onDragEvent(mLevelPoint, event);
+
+		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
+		mPetBar.onDragEvent(mLevelPoint, event);
 	    } else if (mGestureMgr.mIsLongClick) {
 		// do nothing yet
 	    }
@@ -401,6 +409,8 @@ public class ViewManager {
 	mWorld.addRoom(room5);
 	mWorld.addRoom(room6);
 
+	mPetBar.setWorld(mWorld);
+
 	mDock = new Dock(barWidth, barHeight, "topbar_background");
 	mDock.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
 	mDock.readThumbnails(mWorld);
@@ -508,33 +518,6 @@ public class ViewManager {
 
 	/* Draw the TouchSurface */
 	drawTouchSurface(gl);
-    }
-
-    public void shiftWorldXY(int dx, int dy) {
-	int current = mWorld.getCurrentRoom();
-	int rooms = mWorld.getChildrenCount();
-	float screenX = 3 * dx / PROJ_WIDTH;
-
-	/* At leftest room and slide to right
-	   Or at rightest romm and slide to left */
-	if ((current == 0 && dx > 0)
-		|| (current == rooms - 1 && dx < 0)) {
-	    screenX = screenX / 3 ;
-	}
-
-	float level3X = convertToLevel(LEVEL_WORLD, screenX);
-	float endX = -1 * current * Room.WIDTH + level3X;
-	float endY = 0;
-
-	mWorld.setXY(endX, endY);
-
-	float totalRoomWidth = Room.WIDTH * (rooms - 1);
-	if (endX > 0 ||
-		endX < -1 * totalRoomWidth) {
-	    float barY = mPetBar.getY();
-	    float level1X = convertToLevel(LEVEL_BAR, screenX);
-	    mPetBar.setXY(level1X, barY);
-	}
     }
 
     public void moveToOrigRoom() {
