@@ -147,7 +147,7 @@ public class ViewManager {
 	    mPressId = getObjectIdOfBar(mNearPoint.x, mNearPoint.y);
 	    if (mPressId == mDock.getId()) {
 		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
-		mDock.press((int)mLevelPoint.x);
+		mDock.onPressEvent(mLevelPoint, event);
 	    }
 	} else {
 	    mPressId = getObjectIdOfWorld(mNearPoint.x, mNearPoint.y);
@@ -158,7 +158,6 @@ public class ViewManager {
      * This method was called while user Leaving the screen.
      */
     public void onRelease(int screenX, int screenY, MotionEvent event) {
-	mDock.bumpObjects(-1);
 	getNearLocation(mNearPoint, screenX, screenY);
 
 	if (mMiniMode == true) {
@@ -167,7 +166,7 @@ public class ViewManager {
 		turnOffMiniMode();
 	    } else if (mReleaseId == mDock.getId()) {
 		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
-		mDock.release((int)mLevelPoint.x);
+		mDock.onReleaseEvent(mLevelPoint, event);
 	    }
 	} else {
 	    if (mGestureMgr.mSnapToNext) {
@@ -214,7 +213,7 @@ public class ViewManager {
 	    getNearLocation(mNearPoint, screenX, screenY);
 	    getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
 	    if (mDock.contains(mLevelPoint.x, mLevelPoint.y)) {
-		mDock.bumpObjects((int)mLevelPoint.x);
+		mDock.onDragEvent(mLevelPoint, event);
 	    } else {
 		mDock.bumpObjects(-1);
 	    }
