@@ -47,6 +47,8 @@ public class Launcher extends Activity {
 	super.onCreate(savedInstanceState);
 	LinearLayout layout = new LinearLayout(this);
 	mScreen = new TotalScreen(this);
+	mScreen.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR
+		| GLSurfaceView.DEBUG_LOG_GL_CALLS);
 	mGestureMgr = GestureManager.getInstance();
 	layout.addView(mScreen);
 	setContentView(layout);
