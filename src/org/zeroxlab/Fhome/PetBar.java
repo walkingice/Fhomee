@@ -24,12 +24,13 @@ import android.util.Log;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.view.MotionEvent;
 
 import android.content.res.Resources;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class PetBar extends GLObject {
+public class PetBar extends GLObject implements Touchable {
 
     final String TAG = "PetBar";
     final int mPetMax = 4;
@@ -51,6 +52,10 @@ public class PetBar extends GLObject {
     protected GLTranslate[] mPetMotion;
     protected long mMotionTime = 800;
 
+    private World mWorld;
+
+    private PointF mPressPoint;
+
     public PetBar(float width, float height) {
 	super(0, 0, width, height);
 	mShiftAnimation = new GLTranslate(100, 0, 0);
@@ -64,6 +69,12 @@ public class PetBar extends GLObject {
 	for (int i = 0; i < mPetMax; i++) {
 	    mPetMotion[i] = new GLTranslate(mMotionTime, 0f, 0f);
 	}
+
+	mPressPoint = new PointF();
+    }
+
+    public void setWorld(World world) {
+	mWorld = world;
     }
 
     @Override
@@ -151,6 +162,32 @@ public class PetBar extends GLObject {
 	    boolean visible = i < mPetMax;
 	    obj.setVisible(visible);
 	}
+    }
+
+    public boolean onPressEvent(PointF point, MotionEvent event) {
+	mPressPoint.x = point.x;
+	return true;
+    }
+
+    public boolean onReleaseEvent(PointF point, MotionEvent event) {
+	return true;
+    }
+
+    public boolean onDragEvent(PointF point, MotionEvent event) {
+	if (mWorld == null) {
+	    Log.i(TAG, "World is null");
+	    return true;
+	}
+
+	float dx = point.x - mPressPoint.x;
+	int current = mWorld.getCurrentRoom();
+	if (current == 0 && dx > 0) {
+	    setXY(dx / 3, getY());
+	} else if (current == (mWorld.getChildrenCount() - 1) && dx < 0) {
+	    setXY(dx / 3, getY());
+	}
+
+	return true;
     }
 }
 
