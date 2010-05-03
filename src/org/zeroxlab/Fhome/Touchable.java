@@ -21,11 +21,12 @@ package org.zeroxlab.Fhome;
 
 import android.util.Log;
 import android.view.MotionEvent;
+import android.graphics.PointF;
 import javax.microedition.khronos.opengles.GL10;
 
 interface Touchable {
-    public boolean onPressEvent(float nowX, float nowY, MotionEvent event);
-    public boolean onReleaseEvent(float nowX, float nowY, MotionEvent event);
-    public boolean onDragEvent(float nowX, float nowY, MotionEvent event);
+    public boolean onPressEvent(PointF point, MotionEvent event);
+    public boolean onReleaseEvent(PointF point, MotionEvent event);
+    public boolean onDragEvent(PointF point, MotionEvent event);
 }
 
