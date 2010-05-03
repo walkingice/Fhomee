@@ -131,7 +131,7 @@ public class ViewManager {
     int mFontId;
 
     public static TopBar mTopBar;
-    public static BottomBar mBottomBar;
+    public static PetBar mPetBar;
     public static Dock mDock;
     /**
      * This method was called while user Pressing the screen.
@@ -245,7 +245,7 @@ public class ViewManager {
 	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
 	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
 
-	int id = mBottomBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
+	int id = mPetBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
 		, convertToLevel(LEVEL_BAR, nearY));
 	if (id == -1) {
 	    float worldX = convertToLevel(LEVEL_WORLD, nearX);
@@ -348,8 +348,8 @@ public class ViewManager {
 
 	float barWidth  = convertToLevel(LEVEL_BAR, PROJ_WIDTH);
 	float barHeight = convertToLevel(LEVEL_BAR, PROJ_HEIGHT * BAR_HEIGHT_RATIO);
-	mBottomBar = new BottomBar(barWidth, barHeight);
-	mBottomBar.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
+	mPetBar = new PetBar(barWidth, barHeight);
+	mPetBar.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
 
 	mTopBar = new TopBar(barWidth, barHeight, "topbar_background");
 	mTopBar.setXY(0, 0);
@@ -434,7 +434,7 @@ public class ViewManager {
 	gl.glPopMatrix();
     }
 
-    private void drawBottomBar(GL10 gl) {
+    private void drawPetBar(GL10 gl) {
 	/* We do not draw Bottom Bar at Mini mode */
 	if (mMiniMode) {
 	    return;
@@ -448,7 +448,7 @@ public class ViewManager {
 
 	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
 
-	mBottomBar.draw(gl);
+	mPetBar.draw(gl);
 	gl.glPopMatrix();
     }
 
@@ -494,7 +494,7 @@ public class ViewManager {
 	/* Draw Level 1, the Bar and Pets */
 	drawTopBar(gl);
 	drawDock(gl);
-	drawBottomBar(gl);
+	drawPetBar(gl);
 
 	/* Draw the TouchSurface */
 	drawTouchSurface(gl);
@@ -521,9 +521,9 @@ public class ViewManager {
 	float totalRoomWidth = Room.WIDTH * (rooms - 1);
 	if (endX > 0 ||
 		endX < -1 * totalRoomWidth) {
-	    float barY = mBottomBar.getY();
+	    float barY = mPetBar.getY();
 	    float level1X = convertToLevel(LEVEL_BAR, screenX);
-	    mBottomBar.setXY(level1X, barY);
+	    mPetBar.setXY(level1X, barY);
 	}
     }
 
@@ -541,7 +541,7 @@ public class ViewManager {
 
     public void moveToRoom(int next) {
 	mWorld.moveToRoom(next);
-	mBottomBar.backToCenter();
+	mPetBar.backToCenter();
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {

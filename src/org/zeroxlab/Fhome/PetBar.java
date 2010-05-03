@@ -29,9 +29,9 @@ import android.content.res.Resources;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class BottomBar extends GLObject {
+public class PetBar extends GLObject {
 
-    final String TAG = "BottomBar";
+    final String TAG = "PetBar";
     final int mPetMax = 4;
     float CELL_WIDTH  = 0f;
     float CELL_HEIGHT = 0f;
@@ -51,14 +51,14 @@ public class BottomBar extends GLObject {
     protected GLTranslate[] mPetMotion;
     protected long mMotionTime = 800;
 
-    public BottomBar(float width, float height) {
+    public PetBar(float width, float height) {
 	super(0, 0, width, height);
 	mShiftAnimation = new GLTranslate(100, 0, 0);
 	updateParameters();
 
 	mElf = new Elf();
 	addPet(mElf);
-	mElf.setBottomBar(this);
+	mElf.setPetBar(this);
 
 	mPetMotion = new GLTranslate[mPetMax];
 	for (int i = 0; i < mPetMax; i++) {

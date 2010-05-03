@@ -38,15 +38,15 @@ public class Elf extends Pet{
     final String TAG = "Elf";
 
     final String DEFAULT_TEXTURE = "mario";
-    private BottomBar mBottomBar;
+    private PetBar mPetBar;
 
     Elf() {
 	super();
 	setDefaultTextureName(DEFAULT_TEXTURE);
     }
 
-    public void setBottomBar(BottomBar bar) {
-	mBottomBar = bar;
+    public void setPetBar(PetBar bar) {
+	mPetBar = bar;
     }
 
     @Override
