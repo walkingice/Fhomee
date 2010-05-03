@@ -23,11 +23,12 @@ import android.util.Log;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.view.MotionEvent;
 
 import java.util.LinkedList;
 import javax.microedition.khronos.opengles.GL10;
 
-public class World extends GLObject {
+public class World extends GLObject implements Touchable {
 
     final String TAG = "World";
 
@@ -49,6 +50,8 @@ public class World extends GLObject {
     public static float BAR_HEIGHT = ROOM_HEIGHT * ViewManager.BAR_HEIGHT_RATIO;
     public static float MINIMODE_DEPTH_OFFSET;
 
+    private static GestureManager mGestureMgr;
+
     public World() {
 	super(0, 0, 0, 0);
 	mChildren = new LinkedList<GLObject>();
@@ -57,6 +60,8 @@ public class World extends GLObject {
 	float height = BAR_HEIGHT + ROOM_HEIGHT + BAR_HEIGHT;
 	float depth  = height * DEPTH / ROOM_HEIGHT;
 	MINIMODE_DEPTH_OFFSET = depth - ViewManager.LEVEL_3;
+
+	mGestureMgr = GestureManager.getInstance();
     }
 
     @Override
@@ -159,6 +164,37 @@ public class World extends GLObject {
 	GLTranslate ani = new GLTranslate(time, endX, 0);
 	this.setAnimation(ani);
 	Timeline.getInstance().addAnimation(ani);
+    }
+
+    public boolean onPressEvent(PointF point, MotionEvent event) {
+	return true;
+    }
+
+    public boolean onReleaseEvent(PointF point, MotionEvent event) {
+	return true;
+    }
+
+    public boolean onDragEvent(PointF point, MotionEvent event) {
+	int dx = mGestureMgr.getDeltaX();
+	float levelX = ViewManager.convertToLevel(ViewManager.LEVEL_WORLD, dx);
+	int current = this.getCurrentRoom();
+	int rooms   = this.getChildrenCount();
+
+	/* At leftest room and slide to right
+	   Or at rightest romm and slide to left */
+	if ((current == 0 && dx > 0)
+		|| (current == rooms - 1 && dx < 0)) {
+	    levelX = levelX / ViewManager.PROJ_WIDTH;
+	} else {
+	    levelX = levelX * 3 / ViewManager.PROJ_WIDTH;
+	}
+
+	float endX = -1 * current * Room.WIDTH + levelX;
+	float endY = 0;
+
+	this.setXY(endX, endY);
+
+	return true;
     }
 }
 
