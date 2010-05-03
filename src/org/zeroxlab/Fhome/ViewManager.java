@@ -96,6 +96,8 @@ public class ViewManager {
 
     /* convert Screen Location into Near surface*/
     private static PointF mNearPoint;
+    /* convert Near location into specific Level */
+    private static PointF mLevelPoint;
 
     private int mDownId;
     private int mUpId;
@@ -140,15 +142,15 @@ public class ViewManager {
      * This method was called while user Pressing the screen.
      */
     public void onPress(int screenX, int screenY) {
+	getNearLocation(mNearPoint, screenX, screenY);
 	if (mMiniMode == true) {
-	    mPressId = getObjectIdOfBar(screenX, screenY);
+	    mPressId = getObjectIdOfBar(mNearPoint.x, mNearPoint.y);
 	    if (mPressId == mDock.getId()) {
-		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
-		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
-		mDock.press(levelX);
+		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
+		mDock.press((int)mLevelPoint.x);
 	    }
 	} else {
-	    mPressId = getObjectIdOfWorld(screenX, screenY);
+	    mPressId = getObjectIdOfWorld(mNearPoint.x, mNearPoint.y);
 	}
     }
 
@@ -157,15 +159,15 @@ public class ViewManager {
      */
     public void onRelease(int screenX, int screenY) {
 	mDock.bumpObjects(-1);
+	getNearLocation(mNearPoint, screenX, screenY);
 
 	if (mMiniMode == true) {
-	    mReleaseId = getObjectIdOfBar(screenX, screenY);
+	    mReleaseId = getObjectIdOfBar(mNearPoint.x, mNearPoint.y);
 	    if (mReleaseId == -1 && mGestureMgr.mIsVDrag) {
 		turnOffMiniMode();
 	    } else if (mReleaseId == mDock.getId()) {
-		float nearX = PROJ_WIDTH * screenX / mScreenWidth;
-		int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
-		mDock.release(levelX);
+		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
+		mDock.release((int)mLevelPoint.x);
 	    }
 	} else {
 	    if (mGestureMgr.mSnapToNext) {
@@ -175,7 +177,7 @@ public class ViewManager {
 	    } else {
 		moveToOrigRoom();
 	    }
-	    mReleaseId = getObjectIdOfWorld(screenX, screenY);
+	    mReleaseId = getObjectIdOfWorld(mNearPoint.x, mNearPoint.y);
 	}
 
 	if (mPressId != -1 && mReleaseId == mPressId) {
@@ -209,12 +211,10 @@ public class ViewManager {
 	    if (mGestureMgr.mIsVDrag) {
 		return;
 	    }
-	    float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
-	    float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
-	    int levelX  = (int)convertToLevel(LEVEL_BAR, nearX);
-	    int levelY  = (int)convertToLevel(LEVEL_BAR, nearY);
-	    if (mDock.contains(levelX, levelY)) {
-		mDock.bumpObjects(levelX);
+	    getNearLocation(mNearPoint, screenX, screenY);
+	    getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
+	    if (mDock.contains(mLevelPoint.x, mLevelPoint.y)) {
+		mDock.bumpObjects((int)mLevelPoint.x);
 	    } else {
 		mDock.bumpObjects(-1);
 	    }
@@ -227,33 +227,26 @@ public class ViewManager {
 	}
     }
 
-    private int getObjectIdOfBar(int screenX, int screenY) {
-	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
-	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
-	float levelX = convertToLevel(LEVEL_BAR, nearX);
-	float levelY = convertToLevel(LEVEL_BAR, nearY);
+    private int getObjectIdOfBar(float nearX, float nearY) {
+	getLevelLocation(LEVEL_BAR, mLevelPoint, nearX, nearY);
 
-	if (mDock.contains(levelX, levelY)) {
+	if (mDock.contains(mLevelPoint.x, mLevelPoint.y)) {
 	    return mDock.getId();
 	}
 
-	if (mTopBar.contains(levelX, levelY)) {
-	    return mTopBar.pointerAt(levelX, levelY);
+	if (mTopBar.contains(mLevelPoint.x, mLevelPoint.y)) {
+	    return mTopBar.pointerAt(mLevelPoint.x, mLevelPoint.y);
 	}
 
 	return -1;
     }
 
-    private int getObjectIdOfWorld(int screenX, int screenY) {
-	float nearX = PROJ_WIDTH  * screenX / mScreenWidth;
-	float nearY = PROJ_HEIGHT * screenY / mScreenHeight;
-
-	int id = mPetBar.pointerAt(convertToLevel(LEVEL_BAR, nearX)
-		, convertToLevel(LEVEL_BAR, nearY));
+    private int getObjectIdOfWorld(float nearX, float nearY) {
+	getLevelLocation(LEVEL_BAR, mLevelPoint, nearX, nearY);
+	int id = mPetBar.pointerAt(mLevelPoint.x, mLevelPoint.y);
 	if (id == -1) {
-	    float worldX = convertToLevel(LEVEL_WORLD, nearX);
-	    float worldY = convertToLevel(LEVEL_WORLD, nearY);
-	    id = mWorld.pointerAt(worldX, worldY);
+	    getLevelLocation(LEVEL_WORLD, mLevelPoint, nearX, nearY);
+	    id = mWorld.pointerAt(mLevelPoint.x, mLevelPoint.y);
 	}
 
 	return id;
@@ -263,6 +256,12 @@ public class ViewManager {
     private void getNearLocation(PointF near, int screenX, int screenY) {
 	near.x = PROJ_WIDTH  * screenX / mScreenWidth;
 	near.y = PROJ_HEIGHT * screenY / mScreenHeight;
+    }
+
+    /* Convert location from Near to Level */
+    private void getLevelLocation(int level, PointF levelP, float nearX, float nearY) {
+	levelP.x = convertToLevel(level, nearX);
+	levelP.y = convertToLevel(level, nearY);
     }
 
     public void turnOnMiniMode() {
@@ -334,6 +333,7 @@ public class ViewManager {
 	mGestureMgr      = GestureManager.getInstance();
 
 	mNearPoint = new PointF();
+	mLevelPoint = new PointF();
     }
 
     public static ViewManager getInstance() {
