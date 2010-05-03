@@ -25,13 +25,14 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import android.view.MotionEvent;
 import android.content.res.Resources;
 
 import java.util.LinkedList;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class Dock extends GLObject {
+public class Dock extends GLObject implements Touchable {
 
     final String TAG = "Dock";
 
@@ -87,54 +88,6 @@ public class Dock extends GLObject {
     @Override
     public void setSize(float width, float height) {
 	super.setSize(width, height);
-    }
-
-    public void bumpObjects(int press) {
-	int x = press;
-
-	if (mChildren == null || mWorld == null) {
-	    return;
-	}
-
-	/* If out of bounds, do not bump any objects */
-	if (x < super.getX() || x > super.width()) {
-	    x = -1;
-	}
-
-	if (x == -1 && mNormal == true) {
-	    return;
-	} else {
-	    mNormal = false;
-	}
-
-	GLObject obj;
-	for (int i = 0; i < getChildrenCount(); i++) {
-	    obj = mChildren.get(i);
-	    if (x == -1 ) {
-		float objX  = obj.getX();
-		obj.setXY(objX, mVGap);
-		obj.setDepth(0);
-	    } else {
-		int offset = Math.abs((int)obj.getX() - x);
-		float ratio = offset / super.width();
-		float objX  = obj.getX();
-		obj.setXY(objX, mVGap + 40*(ratio - 1));
-		obj.setDepth(5*(ratio - 1));
-	    }
-	}
-
-	if (mWorld != null && x != -1) {
-	    int now = mWorld.getCurrentRoom();
-	    int next = (int)(x * mWorld.getChildrenCount()  / super.width());
-	    if (now != next) {
-		mWorld.moveToRoom(next);
-	    }
-	}
-
-	if (x == -1) {
-	    /* Reset whole objects to normal state */
-	    mNormal = true;
-	}
     }
 
     public void readThumbnails(World world) {
@@ -197,6 +150,73 @@ public class Dock extends GLObject {
 
     public int getSelectedRoom() {
 	return mSelectRoom;
+    }
+
+    public boolean onPressEvent(PointF point, MotionEvent event) {
+	mPressObj = getTarget((int)point.x);
+	return true;
+    }
+
+    public boolean onReleaseEvent(PointF point, MotionEvent event) {
+	mReleaseObj = getTarget((int)point.x);
+
+	bumpObjects(-1);
+	return true;
+    }
+
+    public boolean onDragEvent(PointF point, MotionEvent event) {
+	bumpObjects((int)point.x);
+	return true;
+    }
+
+    public void bumpObjects(int press) {
+	int x = press;
+
+	if (mChildren == null || mWorld == null) {
+	    return;
+	}
+
+	/* If out of bounds, do not bump any objects */
+	if (x < super.getX() || x > super.width()) {
+	    x = -1;
+	}
+
+	if (x == -1 && mNormal == true) {
+	    return;
+	} else {
+	    mNormal = false;
+	}
+
+	GLObject obj;
+	for (int i = 0; i < getChildrenCount(); i++) {
+	    obj = mChildren.get(i);
+	    if (x == -1 ) {
+		float objX  = obj.getX();
+		obj.setXY(objX, mVGap);
+		obj.setDepth(0);
+	    } else {
+		int offset = Math.abs((int)obj.getX() - x);
+		float ratio = offset / super.width();
+		float objX  = obj.getX();
+		obj.setXY(objX, mVGap + 40*(ratio - 1));
+		obj.setDepth(5*(ratio - 1));
+	    }
+	}
+
+	if (mWorld != null && x != -1) {
+	    int now = mWorld.getCurrentRoom();
+	    int next = (int)(x * mWorld.getChildrenCount()  / super.width());
+	    if (now != next) {
+		mWorld.moveToRoom(next);
+	    }
+	}
+
+	if (x == -1) {
+	    /* Reset whole objects to normal state */
+	    mNormal = true;
+	}
+
+	return;
     }
 
     @Override
