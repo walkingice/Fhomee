@@ -141,7 +141,7 @@ public class ViewManager {
     /**
      * This method was called while user Pressing the screen.
      */
-    public void onPress(int screenX, int screenY) {
+    public void onPress(int screenX, int screenY, MotionEvent event) {
 	getNearLocation(mNearPoint, screenX, screenY);
 	if (mMiniMode == true) {
 	    mPressId = getObjectIdOfBar(mNearPoint.x, mNearPoint.y);
@@ -157,7 +157,7 @@ public class ViewManager {
     /**
      * This method was called while user Leaving the screen.
      */
-    public void onRelease(int screenX, int screenY) {
+    public void onRelease(int screenX, int screenY, MotionEvent event) {
 	mDock.bumpObjects(-1);
 	getNearLocation(mNearPoint, screenX, screenY);
 
@@ -197,7 +197,7 @@ public class ViewManager {
     /**
      * This method was called while user Moving on the screen.
      */
-    public void onMove(int screenX, int screenY) {
+    public void onMove(int screenX, int screenY, MotionEvent event) {
 	if(mGestureMgr.mModeChange) {
 	    if (mGestureMgr.mMiniMode) {
 		turnOnMiniMode();
