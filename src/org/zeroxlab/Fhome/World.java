@@ -171,6 +171,14 @@ public class World extends GLObject implements Touchable {
     }
 
     public boolean onReleaseEvent(PointF point, MotionEvent event) {
+	if (mGestureMgr.mSnapToNext) {
+	    this.moveToRoom(this.getCurrentRoom() + 1);
+	} else if (mGestureMgr.mSnapToPrev) {
+	    this.moveToRoom(this.getCurrentRoom() - 1);
+	} else {
+	    this.moveToRoom(this.getCurrentRoom());
+	}
+
 	return true;
     }
 

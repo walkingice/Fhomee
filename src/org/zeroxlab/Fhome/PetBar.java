@@ -170,6 +170,7 @@ public class PetBar extends GLObject implements Touchable {
     }
 
     public boolean onReleaseEvent(PointF point, MotionEvent event) {
+	this.backToCenter();
 	return true;
     }
 

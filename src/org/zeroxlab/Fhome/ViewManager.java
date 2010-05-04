@@ -171,13 +171,10 @@ public class ViewManager {
 		mDock.onReleaseEvent(mLevelPoint, event);
 	    }
 	} else {
-	    if (mGestureMgr.mSnapToNext) {
-		moveToNextRoom();
-	    } else if (mGestureMgr.mSnapToPrev) {
-		moveToPrevRoom();
-	    } else {
-		moveToOrigRoom();
-	    }
+	    getLevelLocation(LEVEL_WORLD, mLevelPoint, mNearPoint.x, mNearPoint.y);
+	    mWorld.onReleaseEvent(mLevelPoint, event);
+	    getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
+	    mPetBar.onReleaseEvent(mLevelPoint, event);
 	    mReleaseId = getObjectIdOfWorld(mNearPoint.x, mNearPoint.y);
 	}
 
@@ -188,7 +185,7 @@ public class ViewManager {
 	    if (mReleaseId == mDock.getId() && !mGestureMgr.mIsLongClick) {
 		int next = mDock.getSelectedRoom();
 		if (next != -1) {
-		    moveToRoom(next);
+		    mWorld.moveToRoom(next);
 		    turnOffMiniMode();
 		}
 	    }
@@ -518,23 +515,6 @@ public class ViewManager {
 
 	/* Draw the TouchSurface */
 	drawTouchSurface(gl);
-    }
-
-    public void moveToOrigRoom() {
-	this.moveToRoom(mWorld.getCurrentRoom());
-    }
-
-    public void moveToNextRoom() {
-	this.moveToRoom(mWorld.getCurrentRoom() + 1);
-    }
-
-    public void moveToPrevRoom() {
-	this.moveToRoom(mWorld.getCurrentRoom() - 1);
-    }
-
-    public void moveToRoom(int next) {
-	mWorld.moveToRoom(next);
-	mPetBar.backToCenter();
     }
 
     class WallRenderer implements GLSurfaceView.Renderer {
