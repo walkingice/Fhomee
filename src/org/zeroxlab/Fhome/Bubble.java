@@ -40,9 +40,44 @@ public class Bubble extends GLObject {
     public final static int BUTTON_OK     = 1;
     public final static int BUTTON_CANCEL = 2;
 
+    GLLabel mLabel;
+    public final static String mDefaultLabelText = "Hello World";
+    public final static int mDefaultLabelColor = 0x11FF33;
+    public final static int mDefaultLabelAlpha = 0x200;
+
+    GLObject mClose;
+    public final static String mCloseTexture = "close";
+    public final static float mCloseWidth  = 25f;
+    public final static float mCloseHeight = 25f;
+
     public Bubble() {
 	super(1f, 1f);
 	setDefaultTextureName(background);
+
+	mLabel = new GLLabel(mDefaultLabelText);
+	mLabel.setAlpha(mDefaultLabelAlpha);
+	mLabel.setColor(mDefaultLabelColor);
+	addChild(mLabel);
+
+	mClose = new GLObject(mCloseWidth, mCloseHeight);
+	mClose.setDefaultTextureName(mCloseTexture);
+	float x = this.getWidth()  - mCloseWidth;
+	float y = this.getHeight() - mCloseHeight;
+	mClose.setXY(x, y);
+	addChild(mClose);
+    }
+
+    @Override
+    public void setSize(float width, float height) {
+	super.setSize(width, height);
+	float x = this.getWidth()  - mCloseWidth;
+	float y = 0;
+	mClose.setXY(x, y);
+
+	mLabel.setSize(width * 0.8f, height * 0.8f);
+	x = (this.getWidth()  - mLabel.getWidth())  / 2;
+	y = (this.getHeight() - mLabel.getHeight()) / 2;
+	mLabel.setXY(x, y);
     }
 
     public void setInformation() {
