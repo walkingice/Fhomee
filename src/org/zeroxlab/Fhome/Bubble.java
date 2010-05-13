@@ -42,8 +42,7 @@ public class Bubble extends GLObject {
 
     GLLabel mLabel;
     public final static String mDefaultLabelText = "Hello World";
-    public final static int mDefaultLabelColor = 0x11FF33;
-    public final static int mDefaultLabelAlpha = 0x200;
+    public final static int mDefaultLabelColor = 0xFF000000;
 
     GLObject mClose;
     public final static String mCloseTexture = "close";
@@ -55,7 +54,6 @@ public class Bubble extends GLObject {
 	setDefaultTextureName(background);
 
 	mLabel = new GLLabel(mDefaultLabelText);
-	mLabel.setAlpha(mDefaultLabelAlpha);
 	mLabel.setColor(mDefaultLabelColor);
 	addChild(mLabel);
 
@@ -80,7 +78,10 @@ public class Bubble extends GLObject {
 	mLabel.setXY(x, y);
     }
 
-    public void setInformation() {
+    public void setText(String text) {
+	mLabel.setText(text);
+	mLabel.setXY(0, 0);
+	//setSize(getWidth(), getHeight()); // reset text size
     }
 
     public void addButton(int type) {
