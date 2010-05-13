@@ -81,10 +81,6 @@ public class GLLabel extends GLObject {
 	setText(string);
     }
 
-    public void setAlpha(int alpha) {
-	mTextPaint.setAlpha(alpha);
-    }
-
     public void setLevel(int level) {
 	mLevel = level;
     }
