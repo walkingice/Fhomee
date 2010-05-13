@@ -58,6 +58,10 @@ public class GLLabel extends GLObject {
     float  mTextX = 0f;
     float  mTextY = 0f;
 
+    GLLabel() {
+	this("");
+    }
+
     GLLabel(String string) {
 	this(string, 255, 0, 0, 0);
     }
@@ -78,7 +82,9 @@ public class GLLabel extends GLObject {
 	mTextPaint.setAntiAlias(true);
 	mTextPaint.setARGB(a, r, g, b);
 	setTextSize(mDefaultTextSize);
-	setText(string);
+	if (!string.equals("")) {
+	    setText(string);
+	}
     }
 
     public void setLevel(int level) {
