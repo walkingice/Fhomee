@@ -205,8 +205,6 @@ public class GLLabel extends GLObject {
 
     protected void destroyText() {
 	if (mTextView != null) {
-	    TextureObj obj = mTextView.getTexture();
-	    TextureMgr.removeTextureObj(obj);
 	    mTextView.clear();
 	    mTextView = null;
 	}
@@ -228,6 +226,13 @@ public class GLLabel extends GLObject {
 	gl.glColor4f(1f, 1f, 1f, 1f);
     }
 
+    @Override
+    public void clear() {
+	super.clear();
+	if (mTextView != null) {
+	    mTextView.clear();
+	}
+    }
     @Override
     protected void destroyGLView() {
 	super.destroyGLView();
