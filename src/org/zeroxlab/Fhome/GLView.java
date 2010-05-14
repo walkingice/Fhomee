@@ -57,6 +57,8 @@ public class GLView {
 
     private TextureObj mTextureObj;
 
+    public static TextureManager TextureMgr = TextureManager.getInstance();
+
     RectF mArea;// quick hack, it supposed to be 4 arbitrary points
 		// but not a Rectangle. Maybe a GLView will compose
 		// arbitrary triangle in the feature...hope so.
@@ -183,6 +185,8 @@ public class GLView {
 
     //FIXME: should we have to perform any clear to ByteBuffer? I am not sure
     public void clear() {
+	TextureObj obj = getTexture();
+	TextureMgr.removeTextureObj(obj);
     }
 
     public void hide() {
