@@ -157,7 +157,7 @@ public class GLObject {
     }
 
     public void setVisible(boolean visible) {
-	mVisible = false;
+	mVisible = visible;
     }
 
     public boolean getVisible() {
