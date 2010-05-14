@@ -38,8 +38,13 @@ import android.content.res.Resources;
 import org.zeroxlab.Fhome.TextureManager.TextureObj;
 
 /** 
- * GLObject represent any Object on the screen
- * it encapsulants the information including position, size...etc
+ * GLLabel is a GLObject which contains a String text.
+ *
+ * The coordinate at OpenGL is different from Pixel-based skia.
+ * If user set text size to GLLabel, GLLabel should convert the
+ * size into OpenGL coordinate then display the text as User expect.
+ * Text always display at the center of GLLabel, setSize never
+ * effect the size of Text but only background.
  */
 public class GLLabel extends GLObject {
 
@@ -51,6 +56,19 @@ public class GLLabel extends GLObject {
     protected float mDefaultTextSize = 20f;
     protected int mLevel = ViewManager.LEVEL_POSTER;
 
+    /* stores the text size in pixel */
+    float mTextWidthPx  = 0f;
+    float mTextHeightPx = 0f;
+
+    /* stores the original texture size. User might
+       change the size of GLLabel. Somehow we need
+       the original size to display font size correctly */
+    float mTextureWidth  = 0f;
+    float mTextureHeight = 0f;
+
+    /*TODO: A String texture needs a Name at the same time.
+      I don't have any good ideat to generate a readable and
+      unique name for a string. */
     String mString;
     String mStringName;
     GLView mTextView;
@@ -99,7 +117,7 @@ public class GLLabel extends GLObject {
 	mTextPaint.setTextSize(size);
 
 	if (mTextView != null) {
-	    tweakTextSize();
+	    setText(mString);
 	}
     }
 
@@ -110,13 +128,15 @@ public class GLLabel extends GLObject {
 	createText();
     }
 
+    /* setSize only change the size of background
+       do not change the size of text */
     @Override
     public void setSize(float width, float height) {
 	super.setSize(width, height);
-	tweakTextSize();
+	tweakTextPosition();
     }
 
-    private void tweakTextSize() {
+    private void tweakTextPosition() {
 
 	if (mTextView == null) {
 	    return;
@@ -126,6 +146,9 @@ public class GLLabel extends GLObject {
 	float ascent     = Math.abs(mTextPaint.ascent());
 	float descent    = Math.abs(mTextPaint.descent());
 	float textHeight = ascent + descent;
+
+	mTextWidthPx  = textWidth;
+	mTextHeightPx = textHeight;
 
         /* sadly, width and height should be the power of 2 */
 	/* Therefore, the size of TextView is usually larger than we seen */
@@ -137,9 +160,10 @@ public class GLLabel extends GLObject {
 	int screenHeight = ViewManager.mScreenHeight;
 	float nearWidth  = ViewManager.PROJ_WIDTH  * textureWidth / screenWidth;
 	float nearHeight = ViewManager.PROJ_HEIGHT * textureHeight/ screenHeight;
-	float w = ViewManager.convertToLevel(mLevel, nearWidth);
-	float h = ViewManager.convertToLevel(mLevel, nearHeight);
-	mTextRect = new RectF(0, 0, w, h);
+
+	mTextureWidth  = ViewManager.convertToLevel(mLevel, nearWidth);
+	mTextureHeight = ViewManager.convertToLevel(mLevel, nearHeight);
+	mTextRect = new RectF(0, 0, mTextureWidth, mTextureHeight);
 	mTextView.setSize(mTextRect);
 
 	/* If we have background, move text to the center */
@@ -150,8 +174,9 @@ public class GLLabel extends GLObject {
 	    /* User only care about the visible area or text */
 	    nearWidth  = ViewManager.PROJ_WIDTH  * textWidth / screenWidth;
 	    nearHeight = ViewManager.PROJ_HEIGHT * textHeight/ screenHeight;
-	    w = ViewManager.convertToLevel(mLevel, nearWidth);
-	    h = ViewManager.convertToLevel(mLevel, nearHeight);
+	    float w = ViewManager.convertToLevel(mLevel, nearWidth);
+	    float h = ViewManager.convertToLevel(mLevel, nearHeight);
+	    /* Put text in the center of background */
 	    mTextX = (mRect.width() - w)/ 2;
 	    mTextY = (mRect.height()- h)/ 2;
 	}
@@ -159,7 +184,7 @@ public class GLLabel extends GLObject {
 
     public void setBackground(String background) {
 	super.setDefaultTextureName(background);
-	tweakTextSize();
+	tweakTextPosition();
     }
 
     protected void createText() {
@@ -171,7 +196,7 @@ public class GLLabel extends GLObject {
 	    mTextView.setTexture(texture);
 	}
 
-	tweakTextSize();
+	tweakTextPosition();
 	mVisible = true;
     }
 
