@@ -166,19 +166,22 @@ public class GLLabel extends GLObject {
 	mTextRect = new RectF(0, 0, mTextureWidth, mTextureHeight);
 	mTextView.setSize(mTextRect);
 
+	/* User only care about the visible area or text */
+	nearWidth  = ViewManager.PROJ_WIDTH  * textWidth / screenWidth;
+	nearHeight = ViewManager.PROJ_HEIGHT * textHeight/ screenHeight;
+	float textW = ViewManager.convertToLevel(mLevel, nearWidth);
+	float textH = ViewManager.convertToLevel(mLevel, nearHeight);
+
 	/* If we have background, move text to the center */
 	if (mGLView == null) {
 	    mTextX = 0f;
 	    mTextY = 0f;
+	    // No background, GLLabel size equals to Text size
+	    super.setSize(textW, textH);
 	} else {
-	    /* User only care about the visible area or text */
-	    nearWidth  = ViewManager.PROJ_WIDTH  * textWidth / screenWidth;
-	    nearHeight = ViewManager.PROJ_HEIGHT * textHeight/ screenHeight;
-	    float w = ViewManager.convertToLevel(mLevel, nearWidth);
-	    float h = ViewManager.convertToLevel(mLevel, nearHeight);
 	    /* Put text in the center of background */
-	    mTextX = (mRect.width() - w)/ 2;
-	    mTextY = (mRect.height()- h)/ 2;
+	    mTextX = (mRect.width() - textW)/ 2;
+	    mTextY = (mRect.height()- textH)/ 2;
 	}
     }
 
