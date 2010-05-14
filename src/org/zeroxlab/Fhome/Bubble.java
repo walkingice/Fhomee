@@ -37,11 +37,19 @@ public class Bubble extends GLObject {
     public static String background = "bubble";
     private Owner mOwner;
 
+    public final static float BORDER = 10f;
+    public final static float BUTTON_WIDTH  = 80f;
+    public final static float BUTTON_HEIGHT = 20f;
+    public final static int BUTTON_TEXT_SIZE = 12;
     public final static int BUTTON_OK     = 1;
     public final static int BUTTON_CANCEL = 2;
 
     GLLabel mLabel;
     public final static int mDefaultLabelColor = 0xFF000000;
+
+    public boolean mShowOptions = false;
+    GLLabel mOk;
+    GLLabel mCancel;
 
     GLObject mClose;
     public final static String mCloseTexture = "close";
@@ -56,6 +64,19 @@ public class Bubble extends GLObject {
 	mLabel.setColor(mDefaultLabelColor);
 	addChild(mLabel);
 
+	mOk     = new GLLabel("OK");
+	mCancel = new GLLabel("Cancel");
+	mOk.setColor(mDefaultLabelColor);
+	mCancel.setColor(mDefaultLabelColor);
+	mOk.setBackground("button");
+	mCancel.setBackground("button");
+	mOk.setVisible(false);
+	mCancel.setVisible(false);
+	mOk.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+	mCancel.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+	addChild(mOk);
+	addChild(mCancel);
+
 	mClose = new GLObject(mCloseWidth, mCloseHeight);
 	mClose.setDefaultTextureName(mCloseTexture);
 	float x = this.getWidth()  - mCloseWidth;
@@ -67,20 +88,20 @@ public class Bubble extends GLObject {
     @Override
     public void setSize(float width, float height) {
 	super.setSize(width, height);
-	float x = this.getWidth()  - mCloseWidth;
-	float y = 0;
-	mClose.setXY(x, y);
+	updateLayout();
+    }
 
-	mLabel.setSize(width * 0.8f, height * 0.8f);
-	x = (this.getWidth()  - mLabel.getWidth())  / 2;
-	y = (this.getHeight() - mLabel.getHeight()) / 2;
-	mLabel.setXY(x, y);
+    public void showOptions(boolean display) {
+	mShowOptions = display;
+
+	mOk.setVisible(mShowOptions);
+	mCancel.setVisible(mShowOptions);
+	updateLayout();
     }
 
     public void setText(String text) {
 	mLabel.setText(text);
-	mLabel.setXY(0, 0);
-	//setSize(getWidth(), getHeight()); // reset text size
+	updateLayout();
     }
 
     public void addButton(int type) {
@@ -88,6 +109,34 @@ public class Bubble extends GLObject {
 
     public void clearBubble() {
 	// recycle textures
+    }
+
+    private void updateLayout() {
+	float w = getWidth();
+	float h = getHeight();
+	float center_x = w / 2;
+	float center_y = h / 2;
+
+	float x = w - mCloseWidth;
+	float y = 0;
+	mClose.setXY(x, y);
+
+	if (mShowOptions) {
+	    float bottomHeight = BUTTON_HEIGHT + BORDER * 2;
+	    x = center_x - BORDER - BUTTON_WIDTH;
+	    y = h - bottomHeight + BORDER;
+	    mOk.setXY(x, y);
+
+	    x = center_x + BORDER;
+	    mCancel.setXY(x, y);
+
+	    h = h - bottomHeight;
+	    center_y = h / 2;
+	}
+
+	x = (w - mLabel.getWidth()) / 2;
+	y = (h - mLabel.getHeight()) / 2;
+	mLabel.setXY(x, y);
     }
 
     @Override
