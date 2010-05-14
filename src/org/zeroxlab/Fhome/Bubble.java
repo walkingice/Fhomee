@@ -131,7 +131,16 @@ public class Bubble extends GLObject {
     }
 
     public void clearBubble() {
-	// recycle textures
+	this.clear();
+    }
+
+    @Override
+    public void clear() {
+	super.clear();
+	mLabel.clear();
+	mOk.clear();
+	mCancel.clear();
+	mClose.clear();
     }
 
     private void updateLayout() {
