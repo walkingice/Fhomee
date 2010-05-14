@@ -310,7 +310,24 @@ public class GLObject {
 	mHasChildren = true;
     }
 
+    public GLObject removeChild(GLObject obj) {
+	if (mChildren == null) {
+	    return null;
+	}
+
+	int index = mChildren.indexOf(obj);
+	return removeChild(index);
+    }
+
     public GLObject removeChild(int index) {
+	if (mChildren == null) {
+	    return null;
+	}
+
+	if (index < 0 || index >= mChildren.size()) {
+	    return null;
+	}
+
 	GLObject obj = mChildren.remove(index);
 
 	if (mChildren.size() == 0) {
