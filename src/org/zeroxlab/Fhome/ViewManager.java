@@ -131,7 +131,7 @@ public class ViewManager {
     GLObject wanted6;
     GLObject wanted7;
 
-    Bubble   mBubble;
+    Poster mPoster1;
 
     public static TopBar mTopBar;
     public static PetBar mPetBar;
@@ -389,9 +389,8 @@ public class ViewManager {
 	room2.addItem(wanted6, 220f, 150f, 180f);
 	room3.addItem(wanted7, 130f, 30f, 30f);
 
-	mBubble = new Bubble();
-	mBubble.setSize(250f, 80f);
-	room1.addItem(mBubble, 20f, 60f, 0f);
+	mPoster1 = new Poster(120f, 120f, "paint");
+	room1.addItem(mPoster1, 20f, 60f, 0f);
 
 	mWorld = new World();
 	mWorld.addRoom(room1);
