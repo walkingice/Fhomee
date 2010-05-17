@@ -42,6 +42,9 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
     public boolean mHasBubble = false;
     private Bubble mBubble;
 
+    protected int mNumber = 0;
+    protected GLLabel mNumberLabel;
+
     Poster(float width, float height, String textureName) {
 	super(width, height);
 	setDefaultTextureName(textureName);
@@ -71,6 +74,45 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
 	mHasBubble = false;
     }
 
+    public void resetNumber() {
+	setNumber(0);
+    }
+
+    public void setNumber(int num) {
+	if (num > 0) {
+	    mNumber = num;
+	    removeNumber();
+	    mNumberLabel = createNumber(num);
+	    mNumberLabel.setXY(-5f, -5f);
+	    addChild(mNumberLabel);
+	} else if(num <= 0 ){
+	    removeNumber();
+	}
+    }
+
+    private GLLabel createNumber(int num) {
+	mNumber = num;
+	GLLabel label = new GLLabel();
+	String text = "" + num;
+	label.setTextSize(14);
+	label.setBackground("number");
+	label.setSize(20f, 20f);
+	label.setColor(0xFFFFFFFF); // White
+	label.setText(text);
+	return label;
+    }
+
+    private void removeNumber() {
+	if (mNumberLabel == null) {
+	    return;
+	}
+
+	super.removeChild(mNumberLabel);
+	mNumberLabel.clear();
+	mNumberLabel = null;
+	mNumber = 0;
+    }
+
     @Override
     public void setSize(float width, float height) {
 	super.setSize(width, height);
@@ -94,6 +136,12 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
 
     public void onBubbleFinish(int flag) {
 	hideBubble();
+	/* Testing code */
+	if (flag == Bubble.BUTTON_OK) {
+	    setNumber(++mNumber);
+	} else if (flag == Bubble.BUTTON_CANCEL) {
+	    resetNumber();
+	}
     }
 }
 
