@@ -31,11 +31,11 @@ import java.util.LinkedList;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class Bubble extends GLObject {
+public class Bubble extends GLObject implements GLObject.ClickListener {
 
     final String TAG = "Bubble";
     public static String background = "bubble";
-    private Owner mOwner;
+    private BubbleOwner mOwner;
 
     public final static int BORDER_PX = 15;
     public final static int BUTTON_WIDTH_PX  = 80;
@@ -61,9 +61,10 @@ public class Bubble extends GLObject {
     public final static float mCloseWidth  = 25f;
     public final static float mCloseHeight = 25f;
 
-    public Bubble() {
+    public Bubble(BubbleOwner owner) {
 	super(1f, 1f);
 	setDefaultTextureName(background);
+	mOwner = owner;
 
 	mLabel = new GLLabel();
 	mLabel.setColor(mDefaultLabelColor);
@@ -86,6 +87,10 @@ public class Bubble extends GLObject {
 	float y = this.getHeight() - mCloseHeight;
 	mClose.setXY(x, y);
 	addChild(mClose);
+
+	mOk.setListener(this);
+	mCancel.setListener(this);
+	mClose.setListener(this);
 
 	setLevel(mLevel);
     }
@@ -171,16 +176,28 @@ public class Bubble extends GLObject {
 	mLabel.setXY(x, y);
     }
 
-    @Override
-    public void onClick() {
+    private void bubbleFinish(int code) {
 	if (mOwner != null) {
-	    mOwner.onBubbleFinish(1);
+	    mOwner.onBubbleFinish(code);
 	}
 
 	clearBubble();
     }
 
-    interface Owner {
+    public void onClick(GLObject obj) {
+	int id = obj.getId();
+	if (id == mClose.getId()) {
+	    bubbleFinish(BUTTON_CANCEL);
+	} else if (id == mCancel.getId()) {
+	    bubbleFinish(BUTTON_CANCEL);
+	} else if (id == mOk.getId()) {
+	    bubbleFinish(BUTTON_OK);
+	}
+
+	return;
+    }
+
+    interface BubbleOwner {
 	public void onBubbleFinish(int flag);
     }
 }
