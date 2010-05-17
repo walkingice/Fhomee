@@ -390,7 +390,7 @@ public class ViewManager {
 	room3.addItem(wanted7, 130f, 30f, 30f);
 
 	mPoster1 = new Poster(120f, 120f, "paint");
-	room1.addItem(mPoster1, 20f, 60f, 0f);
+	room1.addItem(mPoster1, 20f, 100f, 0f);
 
 	mWorld = new World();
 	mWorld.addRoom(room1);
