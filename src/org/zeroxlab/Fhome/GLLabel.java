@@ -177,6 +177,9 @@ public class GLLabel extends GLObject {
 	    mTextX = 0f;
 	    mTextY = 0f;
 	    // No background, GLLabel size equals to Text size
+	    // FIXME: it might cause problem if you setSize before
+	    // setBackground. in setSize, mGLView is null yet
+	    // so the size of GLLabe will be same as Text.
 	    super.setSize(textW, textH);
 	} else {
 	    /* Put text in the center of background */
