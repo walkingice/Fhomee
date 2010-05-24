@@ -46,8 +46,8 @@ public class GestureManager {
     public boolean mIsHDrag    = false;
     public boolean mIsVDrag    = false;
 
-    public final static long LONGCLICK_THRESHOLD = 1000;
-    public boolean mIsLongClick = false;
+    public final static long LONGPRESS_THRESHOLD = 1000;
+    public boolean mIsLongPress = false;
 
     public boolean mSnapToNext = false;
     public boolean mSnapToPrev = false;
@@ -171,7 +171,7 @@ public class GestureManager {
 
 		/* Reset flag */
 		mIsDragging = false;
-		mIsLongClick = false;
+		mIsLongPress = false;
 		mModeChange  = false;
 
 		now = PRESS;
@@ -182,7 +182,7 @@ public class GestureManager {
 		if (!mIsDragging) {
 		    now = PRESSING;
 		    long time = SystemClock.uptimeMillis();
-		    mIsLongClick = (time - mPressTime > LONGCLICK_THRESHOLD);
+		    mIsLongPress = (time - mPressTime > LONGPRESS_THRESHOLD);
 		    mIsHDrag = Math.abs(mDeltaX) > DRAG_H_THRESHOLD;
 		    mIsVDrag = Math.abs(mDeltaY) > DRAG_V_THRESHOLD;
 		    mIsDragging = mIsHDrag || mIsVDrag;
