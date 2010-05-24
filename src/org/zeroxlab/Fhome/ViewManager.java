@@ -215,16 +215,17 @@ public class ViewManager {
 		mDock.bumpObjects(-1);
 	    }
 	} else {
+	    getNearLocation(mNearPoint, screenX, screenY);
 	    if (mGestureMgr.mIsHDrag) {
-		getNearLocation(mNearPoint, screenX, screenY);
-
 		getLevelLocation(LEVEL_WORLD, mLevelPoint, mNearPoint.x, mNearPoint.y);
 		mWorld.onDragEvent(mLevelPoint, event);
 
 		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
 		mPetBar.onDragEvent(mLevelPoint, event);
 	    } else if (mGestureMgr.mIsLongPress) {
-		// do nothing yet
+		// In normal mode, pass to World. In editing mode, pass to EditLayer
+		getLevelLocation(LEVEL_WORLD, mLevelPoint, mNearPoint.x, mNearPoint.y);
+		mWorld.onLongPressEvent(mLevelPoint, event);
 	    }
 	}
     }
