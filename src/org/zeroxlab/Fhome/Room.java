@@ -89,8 +89,14 @@ public class Room extends GLObject {
 	gl.glPopMatrix();
     }
 
-    public void addItem(GLObject obj, float x, float y, float angle) {
-	mWall.addItem(obj, x, y , angle);
+    public void addPoster(Poster poster, float levelX, float levelY) {
+	mWall.addPoster(poster, levelX, levelY);
+    }
+
+    public Poster removePoster(int id) {
+	Poster poster = mWall.removePoster(id);
+	Log.i(TAG,"remove poster");
+	return poster;
     }
 
     public GLObject createThumbnail() {
@@ -106,10 +112,25 @@ public class Room extends GLObject {
 	    setDefaultTextureName(background);
 	}
 
-	public void addItem(GLObject obj, float x, float y, float angle) {
-	    obj.setAngle(angle);
-	    obj.setXY(x, y);
-	    addChild(obj);
+	public void addPoster(Poster poster, float levelX, float levelY) {
+	    poster.setXY(levelX, levelY);
+	    addChild(poster);
+	}
+
+	public Poster removePoster(int id) {
+	    if (mHasChildren == false) {
+		return null;
+	    }
+
+	    for (int i = 0; i < getChildrenCount(); i++) {
+		Poster poster = (Poster)mChildren.get(i);
+		if (poster.getId() == id) {
+		    removeChild(i);
+		    return poster;
+		}
+	    }
+
+	    return null;
 	}
     }
 
