@@ -191,7 +191,11 @@ public class GestureManager {
 		    mModeChange = ((mMiniMode && mMiniSwitchOff.contains(x, y))
 			    ||(!mMiniMode && mMiniSwitchOn.contains(x, y)));
 		    mMiniMode = mMiniSwitchOn.contains(x, y);
+		    mIsLongPress = false;
+		} else {
+		    mIsLongPress = false;
 		}
+
 		break;
 	    default:
 		now = RELEASE;
