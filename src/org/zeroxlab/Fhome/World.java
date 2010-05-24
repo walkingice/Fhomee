@@ -204,5 +204,20 @@ public class World extends GLObject implements Touchable {
 
 	return true;
     }
+
+    public boolean onLongPressEvent(PointF point, MotionEvent event) {
+	int target = pointerAt(point.x, point.y);
+	Room room = (Room)mChildren.get(getCurrentRoom());
+	if (target != -1 && target != room.getId()) {
+	    Poster poster = room.removePoster(target);
+	    if (poster != null) {
+		Room first = (Room)mChildren.get(0);
+		first.addPoster(poster, 30f, 30f);
+	    }
+	    return true;
+	}
+
+	return false;
+    }
 }
 
