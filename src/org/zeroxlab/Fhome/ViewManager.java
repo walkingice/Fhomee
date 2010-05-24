@@ -123,13 +123,13 @@ public class ViewManager {
     public final float FAREST_PUSHING_DEPTH = 10f;
 
     boolean mGLViewsCreated = false;
-    GLObject wanted1;
-    GLObject wanted2;
-    GLObject wanted3;
-    GLObject wanted4;
-    GLObject wanted5;
-    GLObject wanted6;
-    GLObject wanted7;
+    Poster wanted1;
+    Poster wanted2;
+    Poster wanted3;
+    Poster wanted4;
+    Poster wanted5;
+    Poster wanted6;
+    Poster wanted7;
 
     Poster mPoster1;
 
@@ -180,7 +180,7 @@ public class ViewManager {
 	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mPressId);
 	    obj.onClick();
 
-	    if (mReleaseId == mDock.getId() && !mGestureMgr.mIsLongClick) {
+	    if (mReleaseId == mDock.getId() && !mGestureMgr.mIsLongPress) {
 		int next = mDock.getSelectedRoom();
 		if (next != -1) {
 		    mWorld.moveToRoom(next);
@@ -223,7 +223,7 @@ public class ViewManager {
 
 		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
 		mPetBar.onDragEvent(mLevelPoint, event);
-	    } else if (mGestureMgr.mIsLongClick) {
+	    } else if (mGestureMgr.mIsLongPress) {
 		// do nothing yet
 	    }
 	}
@@ -367,30 +367,23 @@ public class ViewManager {
 	mTopBar = new TopBar(barWidth, barHeight, "topbar_background");
 	mTopBar.setXY(0, 0);
 
-	wanted1 = new GLObject(1, 1, 100, 120);
-	wanted2 = new GLObject(10, 1, 100, 100);
-	wanted3 = new GLObject(1, 9, 100, 100);
-	wanted4 = new GLObject(15, 8, 100, 100);
-	wanted5 = new GLObject(1, 1, 150, 100);
-	wanted6 = new GLObject(22, 15, 100, 100);
-	wanted7 = new GLObject(0, 0, 250, 250);
-	wanted1.setDefaultTextureName("luffy");
-	wanted2.setDefaultTextureName("nami");
-	wanted3.setDefaultTextureName("sanji");
-	wanted4.setDefaultTextureName("robin");
-	wanted5.setDefaultTextureName("buggy");
-	wanted6.setDefaultTextureName("zoro");
-	wanted7.setDefaultTextureName("bear");
-	room4.addItem(wanted1, 100f, 100f, 0f);
-	room4.addItem(wanted2, 150f, 10f, 15f);
-	room4.addItem(wanted3, 30f, 150f, 33f);
-	room5.addItem(wanted4, 150f, 210f, 3f);
-	room2.addItem(wanted5, 10f, 10f, 20f);
-	room2.addItem(wanted6, 220f, 150f, 180f);
-	room3.addItem(wanted7, 130f, 30f, 30f);
+	wanted1 = new Poster(100, 120, "luffy");
+	wanted2 = new Poster(100, 100, "nami");
+	wanted3 = new Poster(100, 100, "sanji");
+	wanted4 = new Poster(100, 100, "robin");
+	wanted5 = new Poster(150, 100, "buggy");
+	wanted6 = new Poster(100, 100, "zoro");
+	wanted7 = new Poster(250, 250, "bear");
+	room4.addPoster(wanted1, 100f, 100f);
+	room4.addPoster(wanted2, 150f, 10f);
+	room4.addPoster(wanted3, 30f, 150f);
+	room5.addPoster(wanted4, 150f, 210f);
+	room2.addPoster(wanted5, 10f, 10f);
+	room2.addPoster(wanted6, 220f, 150f);
+	room3.addPoster(wanted7, 130f, 30f);
 
 	mPoster1 = new Poster(120f, 120f, "paint");
-	room1.addItem(mPoster1, 20f, 100f, 0f);
+	room1.addPoster(mPoster1, 20f, 100f);
 
 	mWorld = new World();
 	mWorld.addRoom(room1);
