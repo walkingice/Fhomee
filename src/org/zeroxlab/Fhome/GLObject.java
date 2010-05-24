@@ -68,6 +68,7 @@ public class GLObject {
 
     protected GLAnimation mAnimation;
     protected Object mAnimationLock;
+    protected Object mChildrenLock;
 
     GLObject(float width, float height) {
 	this(0f, 0f, width, height);
@@ -77,6 +78,7 @@ public class GLObject {
 	mRect = new RectF(0, 0, width, height);
 	mPosition = new PointF();
 	mAnimationLock = new Object();
+	mChildrenLock  = new Object();
 
 	mID = ObjectManager.getInstance().register(this);
 
@@ -297,17 +299,19 @@ public class GLObject {
      * @param obj The child
      */
     public void addChild(int location, GLObject obj) {
-	int position = location;
-	if (mChildren == null) {
-	    mChildren = new LinkedList<GLObject>();
-	}
+	synchronized(mChildrenLock) {
+	    int position = location;
+	    if (mChildren == null) {
+		mChildren = new LinkedList<GLObject>();
+	    }
 
-	if (position < 0 || position > mChildren.size()) {
-	    position = mChildren.size(); // add to tail
-	}
+	    if (position < 0 || position > mChildren.size()) {
+		position = mChildren.size(); // add to tail
+	    }
 
-	mChildren.add(position, obj);
-	mHasChildren = true;
+	    mChildren.add(position, obj);
+	    mHasChildren = true;
+	}
     }
 
     public GLObject removeChild(GLObject obj) {
@@ -320,18 +324,21 @@ public class GLObject {
     }
 
     public GLObject removeChild(int index) {
-	if (mChildren == null) {
-	    return null;
-	}
+	GLObject obj;
+	synchronized(mChildrenLock) {
+	    if (mChildren == null) {
+		return null;
+	    }
 
-	if (index < 0 || index >= mChildren.size()) {
-	    return null;
-	}
+	    if (index < 0 || index >= mChildren.size()) {
+		return null;
+	    }
 
-	GLObject obj = mChildren.remove(index);
+	    obj = mChildren.remove(index);
 
-	if (mChildren.size() == 0) {
-	    mHasChildren = false;
+	    if (mChildren.size() == 0) {
+		mHasChildren = false;
+	    }
 	}
 
 	return obj;
