@@ -75,6 +75,10 @@ public class GestureManager {
     public final static int HDRAGGING    = 5; // Horizontal dragging
     public final static int DRAGGING     = 6; // Dragging except horizontal
 
+    /* Should this Event forward to ViewManager */
+    public final static int STOP_FORWARD = 0;
+    public final static int KEEP_FORWARD = 1;
+
     public int mNowX = -1;
     public int mNowY = -1;
     public int mPressX = -1;
@@ -100,14 +104,16 @@ public class GestureManager {
 	return mGestureMgr;
     }
 
+    /* It return a value that indicate should ViewManager keep processing this event.
+       For example, Long Click Event only have to send once. */
     public int processMotionEvent(MotionEvent event) {
 	if(mWhere == TOPLEVEL) {
 	    mNow = eventAtToplevel(event);
 	} else {
-	    return RELEASE;
+	    return KEEP_FORWARD;
 	}
 
-	return 0;
+	return KEEP_FORWARD;
     }
 
     public int getDeltaX() {
