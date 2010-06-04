@@ -102,14 +102,16 @@ public class Launcher extends Activity {
 
 	    int x = mGestureMgr.mNowX;
 	    int y = mGestureMgr.mNowY;
-	    int action = event.getAction();
-	    if (action == MotionEvent.ACTION_MOVE) {
+	    int state = mGestureMgr.getState();
+	    if (state == GestureManager.DRAGGING) {
 		mViewManager.onMove(x, y, event);
-	    } else if (action == MotionEvent.ACTION_UP) {
+	    } else if (state == GestureManager.RELEASE) {
 		mViewManager.onRelease(x, y, event);
-	    } else if (action == MotionEvent.ACTION_DOWN) {
+	    } else if (state == GestureManager.PRESSING) {
 		mViewManager.onPress(x, y, event);
-	    }
+	    } else if (state == GestureManager.LONGPRESSING) {
+                mViewManager.onLongPressing(x, y, event);
+            }
 	    mScreen.requestRender();
 	    return true;
 	}
