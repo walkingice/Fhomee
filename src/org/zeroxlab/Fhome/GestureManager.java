@@ -122,6 +122,10 @@ public class GestureManager {
 	return forward;
     }
 
+    public int getState() {
+        return mNow;
+    }
+
     public int getDeltaX() {
 	return mDeltaX;
     }
