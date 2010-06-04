@@ -107,13 +107,19 @@ public class GestureManager {
     /* It return a value that indicate should ViewManager keep processing this event.
        For example, Long Click Event only have to send once. */
     public int processMotionEvent(MotionEvent event) {
+        int next;
+        int forward = KEEP_FORWARD;
 	if(mWhere == TOPLEVEL) {
-	    mNow = eventAtToplevel(event);
-	} else {
-	    return KEEP_FORWARD;
+	    next = eventAtToplevel(event);
+            if (next == LONGPRESSING) {
+                /* Only send Long Press event once */
+                forward = (mNow == LONGPRESSING) ? STOP_FORWARD : KEEP_FORWARD;
+            } else if (next == DRAGGING) {
+                forward = mModeChange ? STOP_FORWARD : KEEP_FORWARD;
+            }
+            mNow = next;
 	}
-
-	return KEEP_FORWARD;
+	return forward;
     }
 
     public int getDeltaX() {
@@ -150,7 +156,7 @@ public class GestureManager {
 	mNowY = y;
 	mDeltaX = mNowX - mPressX;
 	mDeltaY = mNowY - mPressY;
-	int now = mNow;
+	int next = mNow;
 
 	switch (action) {
 	    case MotionEvent.ACTION_UP:
@@ -161,7 +167,7 @@ public class GestureManager {
 		mPressSwitch = false;
 		mModeChange = false;
 
-		now = RELEASE;
+		next = RELEASE;
 		break;
 	    case MotionEvent.ACTION_DOWN:
 		mPressTime = SystemClock.uptimeMillis();
@@ -180,34 +186,41 @@ public class GestureManager {
 		mIsLongPress = false;
 		mModeChange  = false;
 
-		now = PRESS;
+		next = PRESSING;
 		break;
 	    case MotionEvent.ACTION_MOVE:
-		// Decide the state with priority
-		// Dragging is the first, and then is HDragging, Long pressing
-		if (!mIsDragging) {
-		    now = PRESSING;
-		    long time = SystemClock.uptimeMillis();
-		    mIsLongPress = (time - mPressTime > LONGPRESS_THRESHOLD);
-		    mIsHDrag = Math.abs(mDeltaX) > DRAG_H_THRESHOLD;
+                if (mNow == PRESSING) {
+                    mIsHDrag = Math.abs(mDeltaX) > DRAG_H_THRESHOLD;
 		    mIsVDrag = Math.abs(mDeltaY) > DRAG_V_THRESHOLD;
 		    mIsDragging = mIsHDrag || mIsVDrag;
 
-		} else if (mIsVDrag && mPressSwitch) {
-		    mModeChange = ((mMiniMode && mMiniSwitchOff.contains(x, y))
-			    ||(!mMiniMode && mMiniSwitchOn.contains(x, y)));
-		    mMiniMode = mMiniSwitchOn.contains(x, y);
-		    mIsLongPress = false;
-		} else {
-		    mIsLongPress = false;
-		}
+		    long time = SystemClock.uptimeMillis();
+		    mIsLongPress = (time - mPressTime > LONGPRESS_THRESHOLD);
 
+                    if (mIsDragging) {
+                        next = DRAGGING;
+                    } else if (mIsLongPress) {
+                        next = LONGPRESSING;
+                    } else {
+                        next = PRESSING;
+                    }
+                }
+		// Decide the state with priority
+		// Dragging is the first, and then is HDragging, Long pressing
+		if (mNow == DRAGGING) {
+                    if (mIsVDrag && mPressSwitch) {
+                        mModeChange = ((mMiniMode && mMiniSwitchOff.contains(x, y))
+                                ||(!mMiniMode && mMiniSwitchOn.contains(x, y)));
+                        mMiniMode = mMiniSwitchOn.contains(x, y);
+                    }
+                    next = DRAGGING;
+		}
 		break;
 	    default:
-		now = RELEASE;
+		next = RELEASE;
 	}
 
-	return now;
+	return next;
     }
 
     public void updateScreenSize(int width, int height) {
