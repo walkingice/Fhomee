@@ -213,12 +213,14 @@ public class ViewManager {
 
 		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
 		mPetBar.onDragEvent(mLevelPoint, event);
-	    } else if (mGestureMgr.mIsLongPress) {
-		// In normal mode, pass to World. In editing mode, pass to EditLayer
-		getLevelLocation(LEVEL_WORLD, mLevelPoint, mNearPoint.x, mNearPoint.y);
-		mWorld.onLongPressEvent(mLevelPoint, event);
 	    }
 	}
+    }
+
+    public void onLongPressing(int screenX, int screenY, MotionEvent event) {
+        getNearLocation(mNearPoint, screenX, screenY);
+        getLevelLocation(LEVEL_WORLD, mLevelPoint, mNearPoint.x, mNearPoint.y);
+        mWorld.onLongPressEvent(mLevelPoint, event);
     }
 
     private int getObjectIdOfBar(float nearX, float nearY) {
