@@ -194,15 +194,6 @@ public class ViewManager {
      * This method was called while user Moving on the screen.
      */
     public void onMove(int screenX, int screenY, MotionEvent event) {
-	if(mGestureMgr.mModeChange) {
-	    if (mGestureMgr.mMiniMode) {
-		turnOnMiniMode();
-	    } else {
-		turnOffMiniMode();
-	    }
-	    return;
-	}
-
 	if (mMiniMode == true) {
 	    if (mGestureMgr.mIsVDrag) {
 		return;
