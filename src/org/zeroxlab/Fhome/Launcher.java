@@ -88,6 +88,18 @@ public class Launcher extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 	    int result = mGestureMgr.processMotionEvent(event);
+            if (result == GestureManager.STOP_FORWARD) {
+                if (mGestureMgr.mModeChange) {
+                    if (mGestureMgr.mMiniMode) {
+                        mViewManager.turnOnMiniMode();
+                    } else {
+                        mViewManager.turnOffMiniMode();
+                    }
+                    mScreen.requestRender();
+                }
+                return true;
+            }
+
 	    int x = mGestureMgr.mNowX;
 	    int y = mGestureMgr.mNowY;
 	    int action = event.getAction();
