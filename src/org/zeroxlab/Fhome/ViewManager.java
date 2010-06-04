@@ -176,7 +176,7 @@ public class ViewManager {
 	    mReleaseId = getObjectIdOfWorld(mNearPoint.x, mNearPoint.y);
 	}
 
-	if (mPressId != -1 && mReleaseId == mPressId) {
+	if (mPressId != -1 && mReleaseId == mPressId && !mGestureMgr.mIsDragging) {
 	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mPressId);
 	    obj.onClick();
 
