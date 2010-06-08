@@ -417,60 +417,6 @@ public class ViewManager {
 	mTouchSurface = new TouchSurface();
     }
 
-    private void drawDock(GL10 gl) {
-	/* only draw Dock at mini mode*/
-	if (!mMiniMode) {
-	    return;
-	}
-
-	gl.glPushMatrix();
-	gl.glTranslatef(
-		convertToLevel(LEVEL_BAR, PROJ_LEFT)
-		, convertToLevel(LEVEL_BAR, PROJ_BOTTOM)
-		, 0f);// move to Left-Top
-
-	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
-
-	mDock.draw(gl);
-	gl.glPopMatrix();
-    }
-
-    private void drawTopBar(GL10 gl) {
-	/* only draw Top Bar at mini mode*/
-	if (!mMiniMode) {
-	    return;
-	}
-
-	gl.glPushMatrix();
-	gl.glTranslatef(
-		convertToLevel(LEVEL_BAR, PROJ_LEFT)
-		, convertToLevel(LEVEL_BAR, PROJ_BOTTOM)
-		, 0f);// move to Left-Top
-
-	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
-
-	mTopBar.draw(gl);
-	gl.glPopMatrix();
-    }
-
-    private void drawPetBar(GL10 gl) {
-	/* We do not draw Bottom Bar at Mini mode */
-	if (mMiniMode) {
-	    return;
-	}
-
-	gl.glPushMatrix();
-	gl.glTranslatef(
-		convertToLevel(LEVEL_BAR, PROJ_LEFT)
-		, convertToLevel(LEVEL_BAR, PROJ_BOTTOM )
-		, 0f);// move to Left-Top
-
-	gl.glTranslatef(0f, 0f, LEVEL_1);   // after rotating, the Z-axis upside down
-
-	mPetBar.draw(gl);
-	gl.glPopMatrix();
-    }
-
     private void drawTouchSurface(GL10 gl) {
 	gl.glPushMatrix();
 	gl.glTranslatef(
