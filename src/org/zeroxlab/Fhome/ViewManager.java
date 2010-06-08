@@ -264,21 +264,25 @@ public class ViewManager {
     }
 
     public void turnOnMiniMode() {
-	if (mMiniMode == true) {
-	    return;
-	} else {
-	    mMiniMode = true;
-	    mWorld.setMiniMode();
-	}
+        mMiniMode = true;
+        mDock.setVisible(true);
+        mDock.setChildrenVisible(true);
+        mTopBar.setVisible(true);
+        mTopBar.setChildrenVisible(true);
+        mPetBar.setVisible(false);
+        mPetBar.setChildrenVisible(false);
+        mWorld.setMiniMode();
     }
 
     public void turnOffMiniMode() {
-	if (mMiniMode == false) {
-	    return;
-	} else {
-	    mMiniMode = false;
-	    mWorld.setNormalMode();
-	}
+        mMiniMode = false;
+        mDock.setVisible(false);
+        mDock.setChildrenVisible(false);
+        mTopBar.setVisible(false);
+        mTopBar.setChildrenVisible(false);
+        mPetBar.setVisible(true);
+        mPetBar.setChildrenVisible(true);
+        mWorld.setNormalMode();
     }
 
     /**
@@ -409,6 +413,7 @@ public class ViewManager {
         mBarLayer.addChild(mDock, true);
         mBarLayer.addChild(mPetBar, true);
         mBarLayer.addChild(mTopBar, false);
+        turnOffMiniMode();
 	mTouchSurface = new TouchSurface();
     }
 
