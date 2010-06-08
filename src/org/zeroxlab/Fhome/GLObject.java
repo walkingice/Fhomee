@@ -166,6 +166,14 @@ public class GLObject {
 	return mVisible;
     }
 
+    public void setChildrenVisible(boolean visible) {
+        mChildrenVisible = visible;
+    }
+
+    public boolean getChildrenVisible(boolean visible) {
+        return mChildrenVisible;
+    }
+
     public void setSize(float width, float height) {
 	mRect.set(0, 0, width, height);
 	if (mGLView != null) {
