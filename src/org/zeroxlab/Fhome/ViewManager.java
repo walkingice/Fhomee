@@ -122,6 +122,9 @@ public class ViewManager {
 
     public final float FAREST_PUSHING_DEPTH = 10f;
 
+    Layer mWorldLayer;
+    Layer mBarLayer;
+
     boolean mGLViewsCreated = false;
     Poster wanted1;
     Poster wanted2;
@@ -330,6 +333,15 @@ public class ViewManager {
 
 	mNearPoint = new PointF();
 	mLevelPoint = new PointF();
+
+        Layer.sProjNear   = PROJ_NEAR;
+        Layer.sProjLeft   = PROJ_LEFT;
+        Layer.sProjBottom = PROJ_BOTTOM;
+        Layer.sProjNearWidth  = PROJ_WIDTH;
+        Layer.sProjNearHeight = PROJ_HEIGHT;
+
+        mWorldLayer = new Layer(LEVEL_3);
+        mBarLayer = new Layer(LEVEL_1);
     }
 
     public static ViewManager getInstance() {
@@ -393,6 +405,10 @@ public class ViewManager {
 	mDock.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
 	mDock.readThumbnails(mWorld);
 
+        mWorldLayer.addChild(mWorld, true);
+        mBarLayer.addChild(mDock, true);
+        mBarLayer.addChild(mPetBar, true);
+        mBarLayer.addChild(mTopBar, false);
 	mTouchSurface = new TouchSurface();
     }
 
@@ -475,24 +491,10 @@ public class ViewManager {
 	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
 					//         +y is heading for bottom
 
-	/* Draw Level 3, the Rooms of World */
-	gl.glPushMatrix();
-	gl.glTranslatef(
-		convertToLevel(LEVEL_WORLD, PROJ_LEFT)
-		, convertToLevel(LEVEL_WORLD, PROJ_BOTTOM )
-		, 0f);// move to Left-Top
-
-	gl.glTranslatef(0f, 0f, LEVEL_3);   // after rotating, the Z-axis upside down
-	if (mMiniMode) {
-	    gl.glTranslatef(0f, 0f, World.MINIMODE_DEPTH_OFFSET);
-	}
-	mWorld.draw(gl);
-	gl.glPopMatrix();
+        mWorldLayer.onDraw(gl);
 
 	/* Draw Level 1, the Bar and Pets */
-	drawTopBar(gl);
-	drawDock(gl);
-	drawPetBar(gl);
+        mBarLayer.onDraw(gl);
 
 	/* Draw the TouchSurface */
 	drawTouchSurface(gl);
