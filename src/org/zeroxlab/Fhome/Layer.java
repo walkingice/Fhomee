@@ -82,13 +82,13 @@ public class Layer {
     }
 
     public void onDraw(GL10 gl) {
-        gl.glPushMatrix();
-        gl.glTranslatef(mLayerLeft, mLayerTop, 0f);
-        gl.glTranslatef(0f, 0f, mDepth);
         for (int i = 0; i < mChildren.size(); i++) {
+            gl.glPushMatrix();
+            gl.glTranslatef(mLayerLeft, mLayerTop, 0f);
+            gl.glTranslatef(0f, 0f, mDepth);
             mChildren.get(i).draw(gl);
+            gl.glPopMatrix();
         }
-        gl.glPopMatrix();
     }
 
     public boolean onPressEvent(PointF nearPoint, MotionEvent event) {
