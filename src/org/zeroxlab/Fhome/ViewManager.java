@@ -144,16 +144,15 @@ public class ViewManager {
      */
     public void onPress(int screenX, int screenY, MotionEvent event) {
 	getNearLocation(mNearPoint, screenX, screenY);
+
 	if (mMiniMode == true) {
-	    mPressId = getObjectIdOfBar(mNearPoint.x, mNearPoint.y);
-	    if (mPressId == mDock.getId()) {
-		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
-		mDock.onPressEvent(mLevelPoint, event);
-	    }
+            mBarLayer.onPressEvent(mNearPoint, event, mDock);
 	} else {
-	    getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
-	    mPetBar.onPressEvent(mLevelPoint, event);
-	    mPressId = getObjectIdOfWorld(mNearPoint.x, mNearPoint.y);
+            mPressId = mBarLayer.getIdContains(mNearPoint, mPetBar);
+            mBarLayer.onPressEvent(mNearPoint, event, mPetBar);
+            if (mPressId == -1) {
+	        mPressId = mWorldLayer.getIdContains(mNearPoint);
+            }
 	}
     }
 
@@ -164,32 +163,19 @@ public class ViewManager {
 	getNearLocation(mNearPoint, screenX, screenY);
 
 	if (mMiniMode == true) {
-	    mReleaseId = getObjectIdOfBar(mNearPoint.x, mNearPoint.y);
-	    if (mReleaseId == -1 && mGestureMgr.mIsVDrag) {
-		turnOffMiniMode();
-	    } else if (mReleaseId == mDock.getId()) {
-		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
-		mDock.onReleaseEvent(mLevelPoint, event);
-	    }
+            mBarLayer.onReleaseEvent(mNearPoint, event, mDock);
 	} else {
-	    getLevelLocation(LEVEL_WORLD, mLevelPoint, mNearPoint.x, mNearPoint.y);
-	    mWorld.onReleaseEvent(mLevelPoint, event);
-	    getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
-	    mPetBar.onReleaseEvent(mLevelPoint, event);
-	    mReleaseId = getObjectIdOfWorld(mNearPoint.x, mNearPoint.y);
+            mWorldLayer.onReleaseEvent(mNearPoint, event, mWorld);
+            mBarLayer.onReleaseEvent(mNearPoint, event, mPetBar);
+	    mReleaseId = mBarLayer.getIdContains(mNearPoint, mPetBar);
+            if (mReleaseId == -1) {
+	        mReleaseId = mWorldLayer.getIdContains(mNearPoint);
+            }
 	}
 
 	if (mPressId != -1 && mReleaseId == mPressId && !mGestureMgr.mIsDragging) {
 	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mPressId);
 	    obj.onClick();
-
-	    if (mReleaseId == mDock.getId() && !mGestureMgr.mIsLongPress) {
-		int next = mDock.getSelectedRoom();
-		if (next != -1) {
-		    mWorld.moveToRoom(next);
-		    turnOffMiniMode();
-		}
-	    }
 	}
     }
 
@@ -197,25 +183,21 @@ public class ViewManager {
      * This method was called while user Moving on the screen.
      */
     public void onMove(int screenX, int screenY, MotionEvent event) {
+	getNearLocation(mNearPoint, screenX, screenY);
 	if (mMiniMode == true) {
 	    if (mGestureMgr.mIsVDrag) {
 		return;
 	    }
-	    getNearLocation(mNearPoint, screenX, screenY);
-	    getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
-	    if (mDock.contains(mLevelPoint.x, mLevelPoint.y)) {
-		mDock.onDragEvent(mLevelPoint, event);
+	    if (mBarLayer.getIdContains(mNearPoint, mDock) != -1) {
+		mBarLayer.onDragEvent(mNearPoint, event, mDock);
 	    } else {
 		mDock.bumpObjects(-1);
 	    }
 	} else {
-	    getNearLocation(mNearPoint, screenX, screenY);
 	    if (mGestureMgr.mIsHDrag) {
 		getLevelLocation(LEVEL_WORLD, mLevelPoint, mNearPoint.x, mNearPoint.y);
-		mWorld.onDragEvent(mLevelPoint, event);
-
-		getLevelLocation(LEVEL_BAR, mLevelPoint, mNearPoint.x, mNearPoint.y);
-		mPetBar.onDragEvent(mLevelPoint, event);
+		mWorldLayer.onDragEvent(mNearPoint, event, mWorld);
+		mBarLayer.onDragEvent(mNearPoint, event, mPetBar);
 	    }
 	}
     }
