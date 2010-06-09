@@ -54,6 +54,17 @@ public class GLObject {
     RectF  mRect;
     float  mAngle = 0f;
 
+    /* Stores the position, size of this GLObject
+     * These data represent in Pixel-base of Screen.
+     * Once method measure was called, reset position
+     * and size according to these data
+     */
+    public final static float UNDEFINE = -1f;
+    protected float mXPx = UNDEFINE;
+    protected float mYPx = UNDEFINE;
+    protected float mWidthPx  = UNDEFINE;
+    protected float mHeightPx = UNDEFINE;
+
     protected boolean mVisible = false;
 
     Matrix mInvert;
@@ -174,6 +185,11 @@ public class GLObject {
         return mChildrenVisible;
     }
 
+    public void setSizePx(float widthPx, float heightPx) {
+        mWidthPx  = widthPx;
+        mHeightPx = heightPx;
+    }
+
     public void setSize(float width, float height) {
 	mRect.set(0, 0, width, height);
 	if (mGLView != null) {
@@ -188,6 +204,14 @@ public class GLObject {
 
     public float getAngle() {
 	return mAngle;
+    }
+
+    public float getWidthPx() {
+        return mWidthPx;
+    }
+
+    public float getHeightPx() {
+        return mHeightPx;
     }
 
     public float getWidth() {
@@ -206,10 +230,46 @@ public class GLObject {
 	return mRect.height();
     }
 
+    public void setXYPx(float xPx, float yPx) {
+        mXPx = xPx;
+        mYPx = yPx;
+    }
+
     public void setXY(float x, float y) {
 	mPosition.x = x;
 	mPosition.y = y;
 	resetInvertMatrix();
+    }
+
+    public boolean measure(float ratioX, float ratioY) {
+        boolean updated = false;
+
+        if (mXPx != UNDEFINE && mYPx != UNDEFINE) {
+            setXY(ratioX * mXPx, ratioY * mYPx);
+            updated = true;
+        }
+
+        if (mWidthPx != UNDEFINE && mHeightPx != UNDEFINE) {
+            setSize(ratioX * mWidthPx, ratioY * mHeightPx);
+            updated = true;
+        }
+
+        if (mHasChildren) {
+            updated = measureChildren(ratioX, ratioY);
+        }
+
+        return updated;
+    }
+
+    protected boolean measureChildren(float ratioX, float ratioY) {
+	GLObject obj;
+        boolean updated = false;
+	for (int i = 0; i < mChildren.size(); i++) {
+            obj = mChildren.get(i);
+            boolean childUpdated = obj.measure(ratioX, ratioY);
+            updated = (updated || childUpdated);
+        }
+        return updated;
     }
 
     public void setAnimation(GLAnimation animation) {
