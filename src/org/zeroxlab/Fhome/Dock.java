@@ -169,6 +169,10 @@ public class Dock extends GLObject implements Touchable {
 	return true;
     }
 
+    public boolean onLongPressEvent(PointF point, MotionEvent event) {
+        return false;
+    }
+
     public void bumpObjects(int press) {
 	int x = press;
 

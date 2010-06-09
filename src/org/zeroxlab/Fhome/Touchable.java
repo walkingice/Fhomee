@@ -28,5 +28,6 @@ interface Touchable {
     public boolean onPressEvent(PointF point, MotionEvent event);
     public boolean onReleaseEvent(PointF point, MotionEvent event);
     public boolean onDragEvent(PointF point, MotionEvent event);
+    public boolean onLongPressEvent(PointF point, MotionEvent event);
 }
 

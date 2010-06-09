@@ -190,5 +190,9 @@ public class PetBar extends GLObject implements Touchable {
 
 	return true;
     }
+
+    public boolean onLongPressEvent(PointF point, MotionEvent event) {
+        return false;
+    }
 }
 
