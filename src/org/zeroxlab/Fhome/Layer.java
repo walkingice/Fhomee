@@ -144,9 +144,7 @@ public class Layer {
     public boolean onLongPressEvent(PointF nearPoint, MotionEvent event, Touchable specificTarget) {
         if (mTouchableItems.contains(specificTarget)) {
             pointNearToLayer(mZn, nearPoint, mPoint);
-            /* Not define yet */
-            //return specificTarget.onLongPressEvent(mPoint, event);
-            return true;
+            return specificTarget.onLongPressEvent(mPoint, event);
         }
 
         return false;
