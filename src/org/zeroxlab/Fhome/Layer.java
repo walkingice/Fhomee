@@ -91,6 +91,29 @@ public class Layer {
         }
     }
 
+    /* if the specificTarget is at this Layer,
+     * return the id of the object which contains the point
+     */
+    public int getIdContains(PointF nearPoint, GLObject specificTarget) {
+        pointNearToLayer(mZn, nearPoint, mPoint);
+        if (mChildren.contains(specificTarget)) {
+            return specificTarget.pointerAt(mPoint.x, mPoint.y);
+        }
+        return -1;
+    }
+
+    public int getIdContains(PointF nearPoint) {
+        for (int i = 0; i < mChildren.size(); i++) {
+            GLObject obj = mChildren.get(i);
+            int id = getIdContains(nearPoint, obj);
+            if (id != -1) {
+                return id;
+            }
+        }
+
+        return -1;
+    }
+
     public boolean onPressEvent(PointF nearPoint, MotionEvent event) {
         return true;
     }
