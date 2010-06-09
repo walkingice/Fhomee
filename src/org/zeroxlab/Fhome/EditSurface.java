@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.view.MotionEvent;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -33,25 +34,109 @@ import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
 
-public class EditSurface extends GLObject {
+public class EditSurface extends GLObject implements Touchable, GLObject.ClickListener {
 
     final String TAG = "EditSurface";
 
-    Timeline mTimeline;
+    Timeline    mTimeline;
+    ViewManager mViewManager;
+
+    public static String sTexBackground = "editlayer_background";
+    public static String sTexDelete = "editlayer_delete";
+    public static String sTexCreate = "editlayer_create_pet";
+    public static final float sButtonWidth  = 100f;
+    public static final float sButtonHeight = 100f;
 
     private static float sWidth  = ViewManager.mScreenWidth;
     private static float sHeight = ViewManager.mScreenHeight;
 
-    TouchSurface() {
-        super(0, 0, Width, Height);
+    private Poster mTarget;
+    private GLObject mEditing;
+    private GLObject mCreate;
+    private GLObject mDelete;
+
+    EditSurface() {
+        super(0, 0, sWidth, sHeight);
 
         mTimeline = Timeline.getInstance();
-        setDefaultTextureName("sight00");
-
+        mViewManager = ViewManager.getInstance();
+        setDefaultTextureName(sTexBackground);
+        mCreate = new GLObject(100, 100);
+        mDelete = new GLObject(100, 100);
+        mEditing = new GLObject(100, 100);
+        mCreate.setDefaultTextureName(sTexCreate);
+        mDelete.setDefaultTextureName(sTexDelete);
     }
 
-    public void reSize(int screenWidth, int screenHeight) {
+    public void edit(Poster target) {
+        if (mTarget != null) {
+            Log.i(TAG, "ooops, there is existing a target");
+        }
+
+        mTarget = target;
+        mEditing.setTexture(mTarget.getDefaultTexture());
+        mEditing.setXYPx(mTarget.getXPx(), mTarget.getYPx());
+        mEditing.setSizePx(mTarget.getWidthPx(), mTarget.getHeightPx());
     }
 
+    public void finish() {
+        // ViewManager.add Target to current room (x, y)
+        // ViewManager.WorldLayer.measure
+
+        mTarget = null;
+    }
+
+    public boolean isEditing() {
+        if (mTarget == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void resize(int screenWidth, int screenHeight) {
+        sWidth = screenWidth;
+        sHeight = screenHeight;
+        resize();
+    }
+
+    private void resize() {
+        setXYPx(0, 0);
+        setSizePx(sWidth, sHeight);
+        mCreate.setSizePx(sButtonWidth, sButtonHeight);
+        mDelete.setSizePx(sButtonWidth, sButtonHeight);
+        float height = sHeight - sButtonHeight;
+        mCreate.setXYPx(0, height);
+        mDelete.setXYPx(sWidth - sButtonWidth, height);
+    }
+
+    @Override
+    protected void drawMyself(GL10 gl) {
+        gl.glColor4f(1f, 1f, 1f, 0.5f);
+        super.drawMyself(gl);
+        gl.glColor4f(1f, 1f, 1f, 1f);
+    }
+
+    public boolean onPressEvent(PointF point, MotionEvent event) {
+        return false;
+    }
+
+    public boolean onReleaseEvent(PointF point, MotionEvent event) {
+        return false;
+    }
+
+    public boolean onDragEvent(PointF point, MotionEvent event) {
+        return false;
+    }
+
+    public boolean onLongPressEvent(PointF point, MotionEvent event) {
+        return false;
+    }
+
+    public void onClick(GLObject obj) {
+        if (obj == mEditing) {
+            finish();
+        }
+    }
 }
 
