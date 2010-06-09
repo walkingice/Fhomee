@@ -114,19 +114,82 @@ public class Layer {
         return -1;
     }
 
+    public boolean onPressEvent(PointF nearPoint, MotionEvent event, Touchable specificTarget) {
+        if (mTouchableItems.contains(specificTarget)) {
+            pointNearToLayer(mZn, nearPoint, mPoint);
+            return specificTarget.onPressEvent(mPoint, event);
+        }
+
+        return false;
+    }
+
+    public boolean onReleaseEvent(PointF nearPoint, MotionEvent event, Touchable specificTarget) {
+        if (mTouchableItems.contains(specificTarget)) {
+            pointNearToLayer(mZn, nearPoint, mPoint);
+            return specificTarget.onReleaseEvent(mPoint, event);
+        }
+
+        return false;
+    }
+
+    public boolean onDragEvent(PointF nearPoint, MotionEvent event, Touchable specificTarget) {
+        if (mTouchableItems.contains(specificTarget)) {
+            pointNearToLayer(mZn, nearPoint, mPoint);
+            return specificTarget.onDragEvent(mPoint, event);
+        }
+
+        return false;
+    }
+
+    public boolean onLongPressEvent(PointF nearPoint, MotionEvent event, Touchable specificTarget) {
+        if (mTouchableItems.contains(specificTarget)) {
+            pointNearToLayer(mZn, nearPoint, mPoint);
+            /* Not define yet */
+            //return specificTarget.onLongPressEvent(mPoint, event);
+            return true;
+        }
+
+        return false;
+    }
+
+
     public boolean onPressEvent(PointF nearPoint, MotionEvent event) {
-        return true;
+        for (int i = 0; i < mTouchableItems.size(); i++) {
+            Touchable touchable = mTouchableItems.get(i);
+            if (onPressEvent(nearPoint, event, touchable)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean onReleaseEvent(PointF nearPoint, MotionEvent event) {
-        return true;
+        for (int i = 0; i < mTouchableItems.size(); i++) {
+            Touchable touchable = mTouchableItems.get(i);
+            if (onReleaseEvent(nearPoint, event, touchable)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean onDragEvent(PointF nearPoint, MotionEvent event) {
+        for (int i = 0; i < mTouchableItems.size(); i++) {
+            Touchable touchable = mTouchableItems.get(i);
+            if (onDragEvent(nearPoint, event, touchable)) {
+                return true;
+            }
+        }
         return false;
     }
 
     public boolean onLongPress(PointF nearPoint, MotionEvent event) {
+        for (int i = 0; i < mTouchableItems.size(); i++) {
+            Touchable touchable = mTouchableItems.get(i);
+            if (onLongPressEvent(nearPoint, event, touchable)) {
+                return true;
+            }
+        }
         return false;
     }
 
