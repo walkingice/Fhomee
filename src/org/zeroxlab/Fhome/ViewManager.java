@@ -442,6 +442,9 @@ public class ViewManager {
 	    mScreenWidth  = w;
 	    mScreenHeight = h;
 
+            Layer.sRatioH = PROJ_WIDTH / mScreenWidth;
+            Layer.sRatioV = PROJ_HEIGHT / mScreenHeight;
+
 	    GestureManager.getInstance().updateScreenSize(mScreenWidth, mScreenHeight);
 
 	    gl.glLoadIdentity();
