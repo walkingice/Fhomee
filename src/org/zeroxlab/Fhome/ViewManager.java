@@ -147,7 +147,10 @@ public class ViewManager {
     public void onPress(int screenX, int screenY, MotionEvent event) {
 	getNearLocation(mNearPoint, screenX, screenY);
 
-	if (mMiniMode == true) {
+        if (mEditSurface.isEditing()) {
+            mEditLayer.onPressEvent(mNearPoint, event, mEditSurface);
+            mPressId = mEditLayer.getIdContains(mNearPoint, mEditSurface);
+        } else if (mMiniMode == true) {
             mBarLayer.onPressEvent(mNearPoint, event, mDock);
 	    mPressId = mBarLayer.getIdContains(mNearPoint, mDock);
 	} else {
@@ -165,7 +168,10 @@ public class ViewManager {
     public void onRelease(int screenX, int screenY, MotionEvent event) {
 	getNearLocation(mNearPoint, screenX, screenY);
 
-	if (mMiniMode == true) {
+        if (mEditSurface.isEditing()) {
+            mEditLayer.onReleaseEvent(mNearPoint, event, mEditSurface);
+            mReleaseId = mEditLayer.getIdContains(mNearPoint, mEditSurface);
+        } else if (mMiniMode == true) {
             mBarLayer.onReleaseEvent(mNearPoint, event, mDock);
 	    mReleaseId = mBarLayer.getIdContains(mNearPoint, mDock);
 	} else {
@@ -188,6 +194,12 @@ public class ViewManager {
      */
     public void onMove(int screenX, int screenY, MotionEvent event) {
 	getNearLocation(mNearPoint, screenX, screenY);
+
+        if (mEditSurface.isEditing()) {
+            mEditLayer.onDragEvent(mNearPoint, event, mEditSurface);
+            return;
+        }
+
 	if (mMiniMode == true) {
 	    if (mGestureMgr.mIsVDrag) {
 		return;
