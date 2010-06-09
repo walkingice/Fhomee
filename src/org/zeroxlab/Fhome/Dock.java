@@ -220,6 +220,15 @@ public class Dock extends GLObject implements Touchable {
     }
 
     @Override
+    public int pointerAt(float x, float y) {
+        boolean tmp = mHasChildren;
+        mHasChildren = false;
+        int id = super.pointerAt(x, y);
+        mHasChildren = tmp;
+        return id;
+    }
+
+    @Override
     public void onClick() {
 	if (mReleaseObj == mPressObj && mPressObj != -1) {
 	    mSelectRoom = mReleaseObj;
