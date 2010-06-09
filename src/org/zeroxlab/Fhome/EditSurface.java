@@ -72,6 +72,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mDelete.setDefaultTextureName(sTexDelete);
         addChild(mCreate);
         addChild(mDelete);
+        mEditing.setListener(this);
     }
 
     public void edit(Poster target) {
