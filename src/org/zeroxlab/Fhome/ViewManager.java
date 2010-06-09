@@ -117,6 +117,7 @@ public class ViewManager {
     private boolean mMiniMode = false;
 
     private TouchSurface mTouchSurface;
+    private EditSurface mEditSurface;
     private World mWorld;
     private Room room1, room2, room3, room4, room5, room6;
 
@@ -124,6 +125,7 @@ public class ViewManager {
 
     Layer mWorldLayer;
     Layer mBarLayer;
+    Layer mEditLayer;
 
     boolean mGLViewsCreated = false;
     Poster wanted1;
@@ -283,6 +285,16 @@ public class ViewManager {
 	mViewMgr = null; // reset
     }
 
+    public void editPoster(Poster poster) {
+        mEditSurface.edit(poster);
+        mEditLayer.measure();
+    }
+
+    public void addPosterToCurrentRoom(Poster poster) {
+        mWorld.addPoster(poster, 0, 0);
+        mWorldLayer.measure();
+    }
+
     private ViewManager() {
 	mRenderer = new WallRenderer();
 	mSurfaceView.setEGLConfigChooser(false);
@@ -305,6 +317,7 @@ public class ViewManager {
 
         mWorldLayer = new Layer(LEVEL_3);
         mBarLayer = new Layer(LEVEL_1);
+        mEditLayer = new Layer(LEVEL_0);
     }
 
     public static ViewManager getInstance() {
@@ -374,6 +387,10 @@ public class ViewManager {
         mBarLayer.addChild(mTopBar, false);
         turnOffMiniMode();
 	mTouchSurface = new TouchSurface();
+        mEditSurface = new EditSurface();
+        mEditSurface.resize(mScreenWidth, mScreenHeight);
+        mEditLayer.addChild(mEditSurface, true);
+        mEditLayer.measure();
     }
 
     private void drawTouchSurface(GL10 gl) {
@@ -406,6 +423,7 @@ public class ViewManager {
 	/* Draw Level 1, the Bar and Pets */
         mBarLayer.onDraw(gl);
 
+        mEditLayer.onDraw(gl);
 	/* Draw the TouchSurface */
 	drawTouchSurface(gl);
     }
@@ -444,6 +462,11 @@ public class ViewManager {
 
             Layer.sRatioH = PROJ_WIDTH / mScreenWidth;
             Layer.sRatioV = PROJ_HEIGHT / mScreenHeight;
+
+            if (mEditSurface != null) {
+                mEditSurface.resize(mScreenWidth, mScreenHeight);
+                mEditLayer.measure();
+            }
 
 	    GestureManager.getInstance().updateScreenSize(mScreenWidth, mScreenHeight);
 
