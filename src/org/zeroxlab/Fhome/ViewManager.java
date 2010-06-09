@@ -208,31 +208,6 @@ public class ViewManager {
         mWorld.onLongPressEvent(mLevelPoint, event);
     }
 
-    private int getObjectIdOfBar(float nearX, float nearY) {
-	getLevelLocation(LEVEL_BAR, mLevelPoint, nearX, nearY);
-
-	if (mDock.contains(mLevelPoint.x, mLevelPoint.y)) {
-	    return mDock.getId();
-	}
-
-	if (mTopBar.contains(mLevelPoint.x, mLevelPoint.y)) {
-	    return mTopBar.pointerAt(mLevelPoint.x, mLevelPoint.y);
-	}
-
-	return -1;
-    }
-
-    private int getObjectIdOfWorld(float nearX, float nearY) {
-	getLevelLocation(LEVEL_BAR, mLevelPoint, nearX, nearY);
-	int id = mPetBar.pointerAt(mLevelPoint.x, mLevelPoint.y);
-	if (id == -1) {
-	    getLevelLocation(LEVEL_WORLD, mLevelPoint, nearX, nearY);
-	    id = mWorld.pointerAt(mLevelPoint.x, mLevelPoint.y);
-	}
-
-	return id;
-    }
-
     /* Convert location from Screen to Near and store in PointF near */
     private void getNearLocation(PointF near, int screenX, int screenY) {
 	near.x = PROJ_WIDTH  * screenX / mScreenWidth;
