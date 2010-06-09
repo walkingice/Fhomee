@@ -52,6 +52,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     private static float sWidth  = ViewManager.mScreenWidth;
     private static float sHeight = ViewManager.mScreenHeight;
 
+    private boolean mIsEditing = false;
+
     private Poster mTarget;
     private GLObject mEditing;
     private GLObject mCreate;
@@ -77,6 +79,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
             Log.i(TAG, "ooops, there is existing a target");
         }
 
+        mIsEditing = true;
         mTarget = target;
         TextureObj texture = mTarget.getDefaultTexture();
         float x = mTarget.getXPx();
@@ -105,14 +108,11 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mViewManager.addPosterToCurrentRoom(mTarget);
         mTarget = null;
         removeChild(mEditing);
+        mIsEditing = false;
     }
 
     public boolean isEditing() {
-        if (mTarget == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return mIsEditing;
     }
 
     public void resize(int screenWidth, int screenHeight) {
