@@ -42,6 +42,13 @@ public class Layer {
     public static float sProjLeft   = -1;
     public static float sProjBottom = -1;
 
+    /* ratio of ScreenSize:Near
+     * they will be used in measuring.
+     * Horizontal Ratio = Project width / Screen Width
+     */
+    public static float sRatioH = 1;
+    public static float sRatioV = 1;
+
     private float mDepth = 0;
     private float mZn = 0;
     private float mLayerLeft = 0;
@@ -71,6 +78,11 @@ public class Layer {
     }
 
     public void measure() {
+        GLObject obj;
+        for (int i = 0; i < mChildren.size(); i++) {
+            obj = mChildren.get(i);
+            obj.measure(mZn * sRatioH, mZn * sRatioV);
+        }
     }
 
     public void addChild(GLObject obj, boolean isTouchable) {
