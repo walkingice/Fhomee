@@ -147,6 +147,7 @@ public class ViewManager {
 
 	if (mMiniMode == true) {
             mBarLayer.onPressEvent(mNearPoint, event, mDock);
+	    mPressId = mBarLayer.getIdContains(mNearPoint, mDock);
 	} else {
             mPressId = mBarLayer.getIdContains(mNearPoint, mPetBar);
             mBarLayer.onPressEvent(mNearPoint, event, mPetBar);
@@ -164,6 +165,7 @@ public class ViewManager {
 
 	if (mMiniMode == true) {
             mBarLayer.onReleaseEvent(mNearPoint, event, mDock);
+	    mReleaseId = mBarLayer.getIdContains(mNearPoint, mDock);
 	} else {
             mWorldLayer.onReleaseEvent(mNearPoint, event, mWorld);
             mBarLayer.onReleaseEvent(mNearPoint, event, mPetBar);
