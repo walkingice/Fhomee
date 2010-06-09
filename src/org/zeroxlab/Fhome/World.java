@@ -83,6 +83,15 @@ public class World extends GLObject implements Touchable {
 	resetRoomPosition();
     }
 
+    public void addPoster(Poster poster, float x, float y) {
+        addPoster(getCurrentRoom(), poster, x, y);
+    }
+
+    public void addPoster(int targetRoom, Poster poster, float x, float y) {
+        Room room = (Room)mChildren.get(targetRoom);
+        room.addPoster(poster, x, y);
+    }
+
     private void resetRoomPosition() {
 	for (int i = 0; i < mChildren.size(); i++) {
 	    Room room = (Room)mChildren.get(i);
@@ -211,8 +220,7 @@ public class World extends GLObject implements Touchable {
 	if (target != -1 && target != room.getId()) {
 	    Poster poster = room.removePoster(target);
 	    if (poster != null) {
-		Room first = (Room)mChildren.get(0);
-		first.addPoster(poster, 30f, 30f);
+                ViewManager.getInstance().editPoster(poster);
 	    }
 	    return true;
 	}
