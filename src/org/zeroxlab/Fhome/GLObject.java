@@ -161,6 +161,14 @@ public class GLObject {
 	return mID;
     }
 
+    public float getXPx() {
+        return mXPx;
+    }
+
+    public float getYPx() {
+        return mYPx;
+    }
+
     public float getX() {
 	return mPosition.x;
     }
