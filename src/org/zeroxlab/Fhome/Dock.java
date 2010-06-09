@@ -236,6 +236,11 @@ public class Dock extends GLObject implements Touchable {
 	    mSelectRoom = -1;
 	}
 
+        if (mSelectRoom != -1) {
+            mWorld.moveToRoom(mSelectRoom);
+            ViewManager.getInstance().turnOffMiniMode();
+        }
+
 	mReleaseObj = -1;
 	mPressObj   = -1;
     }
