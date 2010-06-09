@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
 
+import org.zeroxlab.Fhome.TextureManager.TextureObj;
+
 public class EditSurface extends GLObject implements Touchable, GLObject.ClickListener {
 
     final String TAG = "EditSurface";
@@ -66,6 +68,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mEditing = new GLObject(100, 100);
         mCreate.setDefaultTextureName(sTexCreate);
         mDelete.setDefaultTextureName(sTexDelete);
+        addChild(mCreate);
+        addChild(mDelete);
     }
 
     public void edit(Poster target) {
@@ -74,16 +78,33 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         }
 
         mTarget = target;
-        mEditing.setTexture(mTarget.getDefaultTexture());
-        mEditing.setXYPx(mTarget.getXPx(), mTarget.getYPx());
-        mEditing.setSizePx(mTarget.getWidthPx(), mTarget.getHeightPx());
+        TextureObj texture = mTarget.getDefaultTexture();
+        float x = mTarget.getXPx();
+        float y = mTarget.getYPx();
+        float width  = mTarget.getWidthPx();
+        float height = mTarget.getHeightPx();
+        if (x == GLObject.UNDEFINE || y == GLObject.UNDEFINE) {
+            x = 0f;
+            y = 0f;
+        }
+        if (width == GLObject.UNDEFINE || height == GLObject.UNDEFINE) {
+            width  = 150f;
+            height = 150f;
+        }
+
+        mEditing.setDefaultTextureName(texture.getName());
+        mEditing.setTexture(texture);
+        mEditing.setXYPx(x, y);
+        mEditing.setSizePx(width, height);
+        addChild(mEditing);
     }
 
     public void finish() {
-        // ViewManager.add Target to current room (x, y)
-        // ViewManager.WorldLayer.measure
-
+        mTarget.setXYPx(mEditing.getXPx(), mEditing.getYPx());
+        mTarget.setSizePx(mEditing.getWidthPx(), mEditing.getHeightPx());
+        mViewManager.addPosterToCurrentRoom(mTarget);
         mTarget = null;
+        removeChild(mEditing);
     }
 
     public boolean isEditing() {
@@ -106,8 +127,17 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mCreate.setSizePx(sButtonWidth, sButtonHeight);
         mDelete.setSizePx(sButtonWidth, sButtonHeight);
         float height = sHeight - sButtonHeight;
-        mCreate.setXYPx(0, height);
-        mDelete.setXYPx(sWidth - sButtonWidth, height);
+        mDelete.setXYPx(0, height);
+        mCreate.setXYPx(sWidth - sButtonWidth, height);
+    }
+
+    @Override
+    public void draw(GL10 gl) {
+        if (isEditing()) {
+            super.draw(gl);
+        }
+
+        return;
     }
 
     @Override
