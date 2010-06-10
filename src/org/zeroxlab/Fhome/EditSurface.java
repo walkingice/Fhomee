@@ -41,7 +41,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     final String TAG = "EditSurface";
 
     Timeline    mTimeline;
-    ViewManager mViewManager;
+    ViewManager mViewMgr;
+    GestureManager mGestureMgr;
 
     public static String sTexBackground = "editlayer_background";
     public static String sTexDelete = "editlayer_delete";
@@ -74,7 +75,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         super(0, 0, sWidth, sHeight);
 
         mTimeline = Timeline.getInstance();
-        mViewManager = ViewManager.getInstance();
+        mViewMgr= ViewManager.getInstance();
+        mGestureMgr = GestureManager.getInstance();
         setDefaultTextureName(sTexBackground);
         mCreate = new GLObject(100, 100);
         mDelete = new GLObject(100, 100);
@@ -118,7 +120,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     public void finish() {
         mTarget.setXYPx(mEditing.getXPx(), mEditing.getYPx());
         mTarget.setSizePx(mEditing.getWidthPx(), mEditing.getHeightPx());
-        mViewManager.addPosterToCurrentRoom(mTarget);
+        mViewMgr.addPosterToCurrentRoom(mTarget);
         mTarget = null;
         removeChild(mEditing);
         mIsEditing = false;
