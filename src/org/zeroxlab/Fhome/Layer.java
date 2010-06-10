@@ -203,6 +203,11 @@ public class Layer {
         return false;
     }
 
+    public static void pointLayerToNear(float zN, PointF layerPoint, PointF nearPoint) {
+        nearPoint.x = layerPoint.x / zN;
+        nearPoint.y = layerPoint.y / zN;
+    }
+
     public static void pointNearToLayer(float zN, PointF nearPoint, PointF layerPoint) {
         layerPoint.x = zN * nearPoint.x;
         layerPoint.y = zN * nearPoint.y;
