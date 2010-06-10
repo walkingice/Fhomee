@@ -133,9 +133,11 @@ public class GLObject {
 	    id = mID;
 	}
 
+        /*
 	if (id != -1) {
 	    Log.i(TAG,"Pointer at "+ id);
 	}
+        */
 
 	return id;
     }
