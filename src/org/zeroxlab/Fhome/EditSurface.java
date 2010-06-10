@@ -59,6 +59,17 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     private GLObject mCreate;
     private GLObject mDelete;
 
+    /* Stored the initial value of Editing Target */
+    private float mStartX;
+    private float mStartY;
+    private float mStartWidth;
+    private float mStartHeight;
+    private float mStartXPx;
+    private float mStartYPx;
+    private float mStartWidthPx;
+    private float mStartHeightPx;
+
+
     EditSurface() {
         super(0, 0, sWidth, sHeight);
 
@@ -83,23 +94,24 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mIsEditing = true;
         mTarget = target;
         TextureObj texture = mTarget.getDefaultTexture();
-        float x = mTarget.getXPx();
-        float y = mTarget.getYPx();
-        float width  = mTarget.getWidthPx();
-        float height = mTarget.getHeightPx();
-        if (x == GLObject.UNDEFINE || y == GLObject.UNDEFINE) {
-            x = 0f;
-            y = 0f;
+        float mStartXPx = mTarget.getXPx();
+        float mStartY = mTarget.getYPx();
+        float mStartWidthPx  = mTarget.getWidthPx();
+        float mStartHeightPx = mTarget.getHeightPx();
+
+        if (mStartXPx == GLObject.UNDEFINE || mStartYPx == GLObject.UNDEFINE) {
+            mStartXPx = 0f;
+            mStartYPx = 0f;
         }
-        if (width == GLObject.UNDEFINE || height == GLObject.UNDEFINE) {
-            width  = 150f;
-            height = 150f;
+        if (mStartWidthPx == GLObject.UNDEFINE || mStartHeightPx == GLObject.UNDEFINE) {
+            mStartWidthPx  = 150f;
+            mStartHeightPx = 150f;
         }
 
         mEditing.setDefaultTextureName(texture.getName());
         mEditing.setTexture(texture);
-        mEditing.setXYPx(x, y);
-        mEditing.setSizePx(width, height);
+        mEditing.setXYPx(mStartXPx, mStartYPx);
+        mEditing.setSizePx(mStartWidthPx, mStartHeightPx);
         addChild(mEditing);
     }
 
