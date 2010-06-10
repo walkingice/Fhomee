@@ -164,7 +164,7 @@ public class GestureManager {
 
 	switch (action) {
 	    case MotionEvent.ACTION_UP:
-		mReleaseTime = SystemClock.uptimeMillis();
+		mReleaseTime = event.getEventTime();
 		mReleaseX = x;
 		mReleaseY = y;
 		updateSnappingState();
@@ -174,7 +174,7 @@ public class GestureManager {
 		next = RELEASE;
 		break;
 	    case MotionEvent.ACTION_DOWN:
-		mPressTime = SystemClock.uptimeMillis();
+		mPressTime = event.getDownTime();
 		mPressX = x;
 		mPressY = y;
 		mReleaseX = -1;
@@ -198,7 +198,7 @@ public class GestureManager {
 		    mIsVDrag = Math.abs(mDeltaY) > DRAG_V_THRESHOLD;
 		    mIsDragging = mIsHDrag || mIsVDrag;
 
-		    long time = SystemClock.uptimeMillis();
+		    long time = event.getEventTime();
 		    mIsLongPress = (time - mPressTime > LONGPRESS_THRESHOLD);
 
                     if (mIsDragging) {
