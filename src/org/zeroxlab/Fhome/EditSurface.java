@@ -60,6 +60,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     private GLObject mCreate;
     private GLObject mDelete;
 
+    private GLObject mPressing;
+
     /* Stored the initial value of Editing Target */
     private float mStartX;
     private float mStartY;
@@ -69,6 +71,9 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     private float mStartYPx;
     private float mStartWidthPx;
     private float mStartHeightPx;
+
+    private float mDeltaX;
+    private float mDeltaY;
 
 
     EditSurface() {
@@ -97,7 +102,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mTarget = target;
         TextureObj texture = mTarget.getDefaultTexture();
         float mStartXPx = mTarget.getXPx();
-        float mStartY = mTarget.getYPx();
+        float mStartYPx = mTarget.getYPx();
         float mStartWidthPx  = mTarget.getWidthPx();
         float mStartHeightPx = mTarget.getHeightPx();
 
@@ -163,14 +168,31 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     }
 
     public boolean onPressEvent(PointF point, MotionEvent event) {
+        if (mEditing.contains(point.x, point.y)) {
+            mPressing = mEditing;
+            mStartX = mEditing.getX();
+            mStartY = mEditing.getY();
+            mDeltaX = mStartX - point.x;
+            mDeltaY = mStartY - point.y;
+        }
         return false;
     }
 
     public boolean onReleaseEvent(PointF point, MotionEvent event) {
+        if (mPressing == mEditing) {
+            float ratioX = mEditing.getX() / getWidth();
+            float ratioY = mEditing.getY() / getHeight();
+            mEditing.setXYPx(ratioX * sWidth, ratioY * sHeight);
+        }
+
+        mPressing = null;
         return false;
     }
 
     public boolean onDragEvent(PointF point, MotionEvent event) {
+        if (mPressing == mEditing) {
+            mEditing.setXY(point.x + mDeltaX, point.y + mDeltaY);
+        }
         return false;
     }
 
