@@ -46,7 +46,7 @@ public class GestureManager {
     public boolean mIsHDrag    = false;
     public boolean mIsVDrag    = false;
 
-    public final static long LONGPRESS_THRESHOLD = 1000;
+    public final static long LONGPRESS_THRESHOLD = 500;
     public boolean mIsLongPress = false;
 
     public boolean mSnapToNext = false;
