@@ -48,6 +48,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     public static String sTexDelete = "editlayer_delete";
     public static String sTexCreate = "editlayer_create_pet";
     public static String sTexRotate = "editlayer_rotate";
+    public static String sTexResize = "editlayer_resize";
     public static final float sButtonWidth  = 100f;
     public static final float sButtonHeight = 100f;
 
@@ -61,6 +62,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     private GLObject mCreate;
     private GLObject mDelete;
     private GLObject mRotate;
+    private GLObject mResize;
 
     private GLObject mPressing;
 
@@ -77,6 +79,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
 
     private float mDeltaX;
     private float mDeltaY;
+    private static float[] mTmp = new float[2];
+    private static Matrix mInvert = new Matrix();
 
 
     EditSurface() {
@@ -89,14 +93,18 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mCreate = new GLObject(100, 100);
         mDelete = new GLObject(100, 100);
         mRotate = new GLObject(100, 100);
+        mResize = new GLObject(100, 100);
         mEditing = new GLObject(100, 100);
         mCreate.setDefaultTextureName(sTexCreate);
         mDelete.setDefaultTextureName(sTexDelete);
         mRotate.setDefaultTextureName(sTexRotate);
+        mResize.setDefaultTextureName(sTexResize);
         mRotate.setSizePx(60f, 60f);
+        mResize.setSizePx(60f, 60f);
         addChild(mCreate);
         addChild(mDelete);
         mEditing.addChild(mRotate);
+        mEditing.addChild(mResize);
         mEditing.setListener(this);
     }
 
@@ -128,7 +136,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mEditing.setSizePx(mStartWidthPx, mStartHeightPx);
         mEditing.setAngle(mTarget.getAngle());
 
-        mRotate.setXYPx(mStartWidthPx - 30f, 0f);
+        mRotate.setXYPx(mStartWidthPx * 0.8f, 0f);
+        mResize.setXYPx(mStartWidthPx * 0.8f, mStartHeightPx * 0.8f);
         addChild(mEditing);
     }
 
@@ -184,6 +193,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
             mPressing = mEditing;
         } else if (id == mRotate.getId()) {
             mPressing = mRotate;
+        } else if (id == mResize.getId()) {
+            mPressing = mResize;
         }
 
         mStartX = mEditing.getX();
@@ -200,6 +211,10 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
             float ratioY = mEditing.getY() / getHeight();
             mEditing.setXYPx(ratioX * sWidth, ratioY * sHeight);
         } else if (mPressing == mRotate) {
+        } else if (mPressing == mResize) {
+            float ratioW = mEditing.getWidth() / getWidth();
+            float ratioH = mEditing.getHeight() / getHeight();
+            mEditing.setSizePx(ratioW * sWidth, ratioH * sHeight);
         }
 
         mPressing = null;
@@ -222,6 +237,15 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
                 degrees = 360 - degrees;
             }
             mEditing.setAngle((float)degrees);
+        } else if (mPressing == mResize) {
+            mTmp[0] = point.x - mStartX;
+            mTmp[1] = point.y - mStartY;
+            mInvert.reset();
+            mInvert.postRotate(-1 * mEditing.getAngle());
+            mInvert.mapPoints(mTmp);
+            mEditing.setSize(mTmp[0], mTmp[1]);
+            mRotate.setXY(mTmp[0] * 0.8f, 0f);
+            mResize.setXY(mTmp[0] * 0.8f, mTmp[1] * 0.8f);
         }
 
         return false;
