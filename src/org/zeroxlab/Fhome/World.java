@@ -203,7 +203,8 @@ public class World extends GLObject implements Touchable {
 		|| (current == rooms - 1 && dx < 0)) {
 	    levelX = levelX / ViewManager.PROJ_WIDTH;
 	} else {
-	    levelX = levelX * 3 / ViewManager.PROJ_WIDTH;
+            /* the multiplier effects the scrolling behavior of draging room */
+	    levelX = levelX * 4 / ViewManager.PROJ_WIDTH;
 	}
 
 	float endX = -1 * current * Room.WIDTH + levelX;

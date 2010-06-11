@@ -142,7 +142,7 @@ public class GestureManager {
     }
 
     private void updateSnappingState() {
-	int threshold = (int) (mScreenWidth / 2);
+	int threshold = (int) (mScreenWidth / 2.5);
 	if (Math.abs(mDeltaX) < threshold) {
 	    mSnapToNext = false;
 	    mSnapToPrev = false;
