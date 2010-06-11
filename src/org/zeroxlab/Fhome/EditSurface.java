@@ -189,12 +189,12 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
 
     public boolean onPressEvent(PointF point, MotionEvent event) {
         int id = pointerAt(point.x, point.y);
-        if (id == mEditing.getId()) {
-            mPressing = mEditing;
+        if (id == mResize.getId()) {
+            mPressing = mResize;
         } else if (id == mRotate.getId()) {
             mPressing = mRotate;
-        } else if (id == mResize.getId()) {
-            mPressing = mResize;
+        } else if (id == mEditing.getId()) {
+            mPressing = mEditing;
         }
 
         mStartX = mEditing.getX();
