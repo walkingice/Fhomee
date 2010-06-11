@@ -107,7 +107,7 @@ public class Launcher extends Activity {
 		mViewManager.onMove(x, y, event);
 	    } else if (state == GestureManager.RELEASE) {
 		mViewManager.onRelease(x, y, event);
-	    } else if (state == GestureManager.PRESSING) {
+	    } else if (state == GestureManager.PRESS) {
 		mViewManager.onPress(x, y, event);
 	    } else if (state == GestureManager.LONGPRESSING) {
                 mViewManager.onLongPressing(x, y, event);

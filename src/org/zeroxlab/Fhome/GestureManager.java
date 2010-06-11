@@ -111,7 +111,10 @@ public class GestureManager {
         int forward = KEEP_FORWARD;
 	if(mWhere == TOPLEVEL) {
 	    next = eventAtToplevel(event);
-            if (next == LONGPRESSING) {
+            if (next == PRESSING) {
+                /* Only send Press Event once */
+                forward = (mNow == PRESS) ? STOP_FORWARD : KEEP_FORWARD;
+            } if (next == LONGPRESSING) {
                 /* Only send Long Press event once */
                 forward = (mNow == LONGPRESSING) ? STOP_FORWARD : KEEP_FORWARD;
             } else if (next == DRAGGING) {
@@ -190,10 +193,10 @@ public class GestureManager {
 		mIsLongPress = false;
 		mModeChange  = false;
 
-		next = PRESSING;
+		next = PRESS;
 		break;
 	    case MotionEvent.ACTION_MOVE:
-                if (mNow == PRESSING) {
+                if (mNow == PRESS || mNow == PRESSING) {
                     mIsHDrag = Math.abs(mDeltaX) > DRAG_H_THRESHOLD;
 		    mIsVDrag = Math.abs(mDeltaY) > DRAG_V_THRESHOLD;
 		    mIsDragging = mIsHDrag || mIsVDrag;
