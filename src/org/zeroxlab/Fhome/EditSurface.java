@@ -47,6 +47,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     public static String sTexBackground = "editlayer_background";
     public static String sTexDelete = "editlayer_delete";
     public static String sTexCreate = "editlayer_create_pet";
+    public static String sTexRotate = "editlayer_rotate";
     public static final float sButtonWidth  = 100f;
     public static final float sButtonHeight = 100f;
 
@@ -59,6 +60,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     private GLObject mEditing;
     private GLObject mCreate;
     private GLObject mDelete;
+    private GLObject mRotate;
 
     private GLObject mPressing;
 
@@ -71,6 +73,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     private float mStartYPx;
     private float mStartWidthPx;
     private float mStartHeightPx;
+    private float mStartAngle;
 
     private float mDeltaX;
     private float mDeltaY;
@@ -85,11 +88,15 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         setDefaultTextureName(sTexBackground);
         mCreate = new GLObject(100, 100);
         mDelete = new GLObject(100, 100);
+        mRotate = new GLObject(100, 100);
         mEditing = new GLObject(100, 100);
         mCreate.setDefaultTextureName(sTexCreate);
         mDelete.setDefaultTextureName(sTexDelete);
+        mRotate.setDefaultTextureName(sTexRotate);
+        mRotate.setSizePx(60f, 60f);
         addChild(mCreate);
         addChild(mDelete);
+        mEditing.addChild(mRotate);
         mEditing.setListener(this);
     }
 
@@ -119,12 +126,16 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mEditing.setTexture(texture);
         mEditing.setXYPx(mStartXPx, mStartYPx);
         mEditing.setSizePx(mStartWidthPx, mStartHeightPx);
+        mEditing.setAngle(mTarget.getAngle());
+
+        mRotate.setXYPx(mStartWidthPx - 30f, 0f);
         addChild(mEditing);
     }
 
     public void finish() {
         mTarget.setXYPx(mEditing.getXPx(), mEditing.getYPx());
         mTarget.setSizePx(mEditing.getWidthPx(), mEditing.getHeightPx());
+        mTarget.setAngle(mEditing.getAngle());
         mViewMgr.addPosterToCurrentRoom(mTarget);
         mTarget = null;
         removeChild(mEditing);
@@ -168,13 +179,18 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     }
 
     public boolean onPressEvent(PointF point, MotionEvent event) {
-        if (mEditing.contains(point.x, point.y)) {
+        int id = pointerAt(point.x, point.y);
+        if (id == mEditing.getId()) {
             mPressing = mEditing;
-            mStartX = mEditing.getX();
-            mStartY = mEditing.getY();
-            mDeltaX = mStartX - point.x;
-            mDeltaY = mStartY - point.y;
+        } else if (id == mRotate.getId()) {
+            mPressing = mRotate;
         }
+
+        mStartX = mEditing.getX();
+        mStartY = mEditing.getY();
+        mDeltaX = mStartX - point.x;
+        mDeltaY = mStartY - point.y;
+
         return false;
     }
 
@@ -183,6 +199,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
             float ratioX = mEditing.getX() / getWidth();
             float ratioY = mEditing.getY() / getHeight();
             mEditing.setXYPx(ratioX * sWidth, ratioY * sHeight);
+        } else if (mPressing == mRotate) {
         }
 
         mPressing = null;
@@ -192,7 +209,21 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     public boolean onDragEvent(PointF point, MotionEvent event) {
         if (mPressing == mEditing) {
             mEditing.setXY(point.x + mDeltaX, point.y + mDeltaY);
+        } else if (mPressing == mRotate) {
+            /* Assume vector a = (x, y), vector b = (1, 0)
+             * theta = arc cos (x / length of a)
+             */
+            float x = point.x - mStartX;
+            float y = point.y - mStartY;
+            double length  = Math.hypot(x, y);
+            double radians = Math.acos(x / length);
+            double degrees = Math.toDegrees(radians);
+            if (y < 0) {
+                degrees = 360 - degrees;
+            }
+            mEditing.setAngle((float)degrees);
         }
+
         return false;
     }
 
