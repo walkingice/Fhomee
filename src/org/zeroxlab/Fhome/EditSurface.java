@@ -65,6 +65,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     private GLObject mResize;
 
     private GLObject mPressing;
+    private GLObject mHover;
 
     /* Stored the initial value of Editing Target */
     private float mStartX;
@@ -218,12 +219,30 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         }
 
         mPressing = null;
+        onHoverOut(mHover);
+        mHover = null;
         return false;
     }
 
     public boolean onDragEvent(PointF point, MotionEvent event) {
         if (mPressing == mEditing) {
             mEditing.setXY(point.x + mDeltaX, point.y + mDeltaY);
+            if (mDelete.contains(point.x, point.y)) {
+                if (mHover != mDelete) {
+                    onHoverOut(mHover);
+                    mHover = mDelete;
+                    onHoverIn(mHover);
+                }
+            } else if (mCreate.contains(point.x, point.y)) {
+                if (mHover != mCreate) {
+                    onHoverOut(mHover);
+                    mHover = mCreate;
+                    onHoverIn(mHover);
+                }
+            } else if (mHover != null){
+                onHoverOut(mHover);
+                mHover = null;
+            }
         } else if (mPressing == mRotate) {
             /* Assume vector a = (x, y), vector b = (1, 0)
              * theta = arc cos (x / length of a)
@@ -258,6 +277,30 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     public void onClick(GLObject obj) {
         if (obj == mEditing) {
             finish();
+        }
+    }
+
+    public void onHoverIn(GLObject obj) {
+        if (obj == null) {
+            return;
+        }
+
+        if (obj == mDelete) {
+            mDelete.setDepth(1f);
+        } else if (obj == mCreate) {
+            mCreate.setDepth(1f);
+        }
+    }
+
+    public void onHoverOut(GLObject obj) {
+        if (obj == null) {
+            return;
+        }
+
+        if (obj == mDelete) {
+            mDelete.setDepth(0f);
+        } else if (obj == mCreate) {
+            mCreate.setDepth(0f);
         }
     }
 }
