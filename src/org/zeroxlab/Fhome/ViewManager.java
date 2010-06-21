@@ -307,6 +307,10 @@ public class ViewManager {
         mWorldLayer.measure();
     }
 
+    public void addPet(Pet pet) {
+        mPetBar.addPet(pet);
+    }
+
     private ViewManager() {
 	mRenderer = new WallRenderer();
 	mSurfaceView.setEGLConfigChooser(false);
