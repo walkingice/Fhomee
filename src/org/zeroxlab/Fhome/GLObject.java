@@ -309,7 +309,12 @@ public class GLObject {
     public void setTexture(TextureObj obj) {
 	if (mGLView == null) {
 	    createGLView();
-	}
+	} else {
+            TextureObj old = mGLView.getTexture();
+            if (old != null) {
+                TextureMgr.removeTextureObj(old);
+            }
+        }
 
 	mGLView.setTexture(obj);
     }
