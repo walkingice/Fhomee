@@ -309,12 +309,13 @@ public class GLObject {
     public void setTexture(TextureObj obj) {
 	if (mGLView == null) {
 	    createGLView();
-	} else {
-            TextureObj old = mGLView.getTexture();
-            if (old != null) {
-                TextureMgr.removeTextureObj(old);
-            }
-        }
+	}
+        /*FIXME
+         * If we set a texture and there is already a old texture obj
+         * The old one should be recycled. However, it cause some problem
+         * if we recycle it. need improve the maintenance strategy of Texture.
+         * Let GLView to recycle the texture
+         */
 
 	mGLView.setTexture(obj);
     }
