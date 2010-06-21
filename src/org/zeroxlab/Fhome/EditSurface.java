@@ -139,7 +139,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
 
         mRotate.setXYPx(mStartWidthPx * 0.8f, 0f);
         mResize.setXYPx(mStartWidthPx * 0.8f, mStartHeightPx * 0.8f);
-        addChild(mEditing);
+        addChild(0, mEditing);
     }
 
     public void finish() {
