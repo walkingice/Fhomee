@@ -117,6 +117,10 @@ public class Pet extends GLObject{
 	super.setXY(x, y);
     }
 
+    public Poster getPoster() {
+        return mPoster;
+    }
+
     @Override
     public void drawMyself(GL10 gl) {
 	super.drawMyself(gl);
