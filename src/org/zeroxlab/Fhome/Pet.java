@@ -53,6 +53,8 @@ public class Pet extends GLObject{
     protected RectF mBorderRect;
     protected RectF mFootRect;
 
+    protected Poster mPoster;
+
     protected int[]    mWalkingFootID;
     protected String[] mWalkingFoot = {
 	"elf_walk1"
@@ -62,11 +64,20 @@ public class Pet extends GLObject{
     };
 
     Pet() {
+        this(null);
+    }
+
+    Pet(Poster poster) {
 	super(0, 0, 20, 20);
 	int footNum = mWalkingFoot.length;
 	mWalkingFootID = new int[footNum];
 
+        mPoster = poster;
+
 	setDefaultTextureName("elf_body");
+        if (mPoster != null) {
+            setTexture(mPoster.getDefaultTexture());
+        }
 
 	mBorderRect = new RectF();
 	mFootRect   = new RectF();
