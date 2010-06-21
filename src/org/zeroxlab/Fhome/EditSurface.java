@@ -211,6 +211,13 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
             float ratioX = mEditing.getX() / getWidth();
             float ratioY = mEditing.getY() / getHeight();
             mEditing.setXYPx(ratioX * sWidth, ratioY * sHeight);
+            if(mCreate.contains(point.x, point.y)) {
+                Pet pet = new Pet(mTarget);
+                mViewMgr.addPet(pet);
+                mTarget = null;
+                removeChild(mEditing);
+                mIsEditing = false;
+            }
         } else if (mPressing == mRotate) {
         } else if (mPressing == mResize) {
             float ratioW = mEditing.getWidth() / getWidth();
