@@ -192,6 +192,17 @@ public class PetBar extends GLObject implements Touchable {
     }
 
     public boolean onLongPressEvent(PointF point, MotionEvent event) {
+        int id = pointerAt(point.x, point.y);
+        /* The first one is elf, ignore it */
+        for (int i = 1; i < mChildren.size(); i++) {
+	    Pet child = (Pet)mChildren.get(i);
+            if (id  == child.getId()) {
+                Pet pet = removePet(i);
+                Poster poster = pet.getPoster();
+                ViewManager.getInstance().editPoster(poster);
+                return true;
+            }
+        }
         return false;
     }
 }
