@@ -220,8 +220,18 @@ public class ViewManager {
 
     public void onLongPressing(int screenX, int screenY, MotionEvent event) {
         getNearLocation(mNearPoint, screenX, screenY);
-        getLevelLocation(LEVEL_WORLD, mLevelPoint, mNearPoint.x, mNearPoint.y);
-        mWorld.onLongPressEvent(mLevelPoint, event);
+        if (mEditSurface.isEditing()) {
+            mEditLayer.onLongPressEvent(mNearPoint, event, mEditSurface);
+        } else if (mMiniMode == true) {
+            mBarLayer.onLongPressEvent(mNearPoint, event, mDock);
+	} else {
+            int id = mBarLayer.getIdContains(mNearPoint, mPetBar);
+            if (id == -1) {
+                mWorldLayer.onLongPressEvent(mNearPoint, event, mWorld);
+            } else {
+                mBarLayer.onLongPressEvent(mNearPoint, event, mPetBar);
+            }
+	}
     }
 
     /* Convert location from Screen to Near and store in PointF near */
