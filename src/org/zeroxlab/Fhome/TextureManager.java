@@ -128,19 +128,20 @@ public class TextureManager {
 	return obj;
     }
 
+    /* Get a texture object with specify name and bitmap.
+     * If the texture already exists, just return it.
+     */
     public TextureObj getTextureObj(Bitmap bitmap, String name) {
 
 	TextureObj obj;
 
 	obj = mTextureMap.get(name);
 	if (obj != null) {
-	    obj.increaseBinding(); // one more GLObject bind to this texture
 	    return obj;
 	}
 
 	obj = mPendingMap.get(name);
 	if (obj != null) {
-	    obj.increaseBinding(); // one more GLObject bind to this texture
 	    return obj;
 	}
 
@@ -153,8 +154,10 @@ public class TextureManager {
 	return obj;
     }
 
+    /* Remove a texture object if user doesn't need it.
+     * The object will be removed really if the counter is zero.
+     */
     public void removeTextureObj(TextureObj obj) {
-	obj.decreaseBinding();
 	if (obj.bindingCount() == 0) {
 	    synchronized(mLocker) {
 		mPendingMap.put(obj.getName(), obj);
@@ -263,12 +266,19 @@ public class TextureManager {
 	    return mName;
 	}
 
+        /* If there is a GLObject trying to use this texture
+           It should call this method*/
 	void increaseBinding() {
 	    mBinding++;
 	}
 
+        /* If a GLObject will not use this texture
+           It should call this method */
 	void decreaseBinding() {
 	    mBinding--;
+            /* If there is no GLObject using this texture
+               the counter should be zero */
+            manager.removeTextureObj(this);
 	}
 
 	int bindingCount() {
