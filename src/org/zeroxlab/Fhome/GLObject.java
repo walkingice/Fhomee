@@ -70,8 +70,6 @@ public class GLObject {
     Matrix mInvert;
     float mPts[];
 
-    protected String mDefaultTextureName;
-
     private int mID = -1;
     protected boolean mChildrenVisible = true;
     protected boolean mHasChildren = false;
@@ -156,6 +154,7 @@ public class GLObject {
      */
     public void clear() {
 	ObjectManager.getInstance().unregister(this);
+        setTexture(null);
 	destroyGLView();
     }
 
@@ -300,27 +299,36 @@ public class GLObject {
     }
 
     /**
-     * Set a texture id to this GLObject.
+     * Set texture to this GLObject.
      * The GLObject will draw itself with this texture.
-     * But this method NEVER change the Default Texture ID
-     *
-     * @param id The id of texture which will be drawed.
+     * @param name The name of the Drawable of the texture
      */
+    public void setTextureByName(String name) {
+        TextureObj texture;
+        Bitmap bitmap;
+        bitmap  = ResourcesMgr.getBitmapByName(name);
+        texture = TextureMgr.getTextureObj(bitmap, name);
+        bitmap.recycle();
+        this.setTexture(texture);
+    }
+
     public void setTexture(TextureObj obj) {
 	if (mGLView == null) {
 	    createGLView();
 	}
-        /*FIXME
-         * If we set a texture and there is already a old texture obj
-         * The old one should be recycled. However, it cause some problem
-         * if we recycle it. need improve the maintenance strategy of Texture.
-         * Let GLView to recycle the texture
-         */
 
+        TextureObj old = mGLView.getTexture();
 	mGLView.setTexture(obj);
+
+        if (obj != null) {
+            obj.increaseBinding();
+        }
+        if (old != null) {
+            old.decreaseBinding();
+        }
     }
 
-    public TextureObj getDefaultTexture() {
+    public TextureObj getTexture() {
 	if (mGLView != null) {
 	    return mGLView.getTexture();
 	}
@@ -328,31 +336,10 @@ public class GLObject {
 	return null;
     }
 
-    /**
-     * Reset the Default Texture name *ONLY*.
-     * The GL Context of TextureManager might change.
-     * TextureMgr will assign the Texture Id to TextureObj
-     *
-     * @param name The Default texture name.
-     */
-    public void setDefaultTextureName(String name) {
-	destroyGLView();
-	mDefaultTextureName = name;
-	createGLView();
-    }
-
     protected void createGLView() {
-	/* This GLObjew is visible and has texture, create a GLView */
 	if (mGLView == null) {
 	    mGLView = new GLView();
 	    mGLView.setSize(mRect);
-
-	    TextureObj texture;
-	    Bitmap bitmap;
-	    bitmap = ResourcesMgr.getBitmapByName(mDefaultTextureName);
-	    texture= TextureMgr.getTextureObj(bitmap, mDefaultTextureName);
-	    bitmap.recycle();
-	    mGLView.setTexture(texture);
 	}
 
 	mVisible = true;
