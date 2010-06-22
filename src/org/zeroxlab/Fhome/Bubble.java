@@ -63,7 +63,7 @@ public class Bubble extends GLObject implements GLObject.ClickListener {
 
     public Bubble(BubbleOwner owner) {
 	super(1f, 1f);
-	setDefaultTextureName(background);
+	setTextureByName(background);
 	mOwner = owner;
 
 	mLabel = new GLLabel();
@@ -82,7 +82,7 @@ public class Bubble extends GLObject implements GLObject.ClickListener {
 	addChild(mCancel);
 
 	mClose = new GLObject(mCloseWidth, mCloseHeight);
-	mClose.setDefaultTextureName(mCloseTexture);
+	mClose.setTextureByName(mCloseTexture);
 	float x = this.getWidth()  - mCloseWidth;
 	float y = this.getHeight() - mCloseHeight;
 	mClose.setXY(x, y);

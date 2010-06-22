@@ -61,7 +61,7 @@ public class Room extends GLObject {
 	mWall.setXY(0f, 0f);
 	mGround.setXY(0f, 0f);
 
-	mGround.setDefaultTextureName(mGroundTexture);
+	mGround.setTextureByName(mGroundTexture);
 
 	addChild(mWall);
 	addChild(mGround);
@@ -101,7 +101,7 @@ public class Room extends GLObject {
 
     public GLObject createThumbnail() {
 	GLObject obj = new GLObject(1f, 1f);
-	obj.setDefaultTextureName(mWallTexture);
+	obj.setTextureByName(mWallTexture);
 	return obj;
     }
 
@@ -109,7 +109,7 @@ public class Room extends GLObject {
 
 	public Wall(float width, float height, String background) {
 	    super(0, 0, width, height);
-	    setDefaultTextureName(background);
+	    setTextureByName(background);
 	}
 
 	public void addPoster(Poster poster, float levelX, float levelY) {
@@ -138,7 +138,7 @@ public class Room extends GLObject {
 
 	public Ground(float width, float height, String background) {
 	    super(0, 0, width, height);
-	    setDefaultTextureName(background);
+	    setTextureByName(background);
 	}
 
 	protected void drawChildren(GL10 gl) {

@@ -52,7 +52,7 @@ public class TopBar extends GLObject {
 	super(0, 0, width, height);
 
 	if (background != null) {
-	    super.setDefaultTextureName(background);
+	    super.setTextureByName(background);
 	}
 
 	resetSizeParameters();

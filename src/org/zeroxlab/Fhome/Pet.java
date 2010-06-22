@@ -74,9 +74,9 @@ public class Pet extends GLObject{
 
         mPoster = poster;
 
-	setDefaultTextureName("elf_body");
+	setTextureByName("elf_body");
         if (mPoster != null) {
-            setTexture(mPoster.getDefaultTexture());
+            setTexture(mPoster.getTexture());
         }
 
 	mBorderRect = new RectF();

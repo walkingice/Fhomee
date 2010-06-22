@@ -60,7 +60,7 @@ public class Dock extends GLObject implements Touchable {
 	super(0, 0, width, height);
 
 	if (background != null) {
-	    super.setDefaultTextureName(background);
+	    super.setTextureByName(background);
 	}
     }
 

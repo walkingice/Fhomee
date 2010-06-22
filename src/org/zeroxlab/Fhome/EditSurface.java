@@ -90,16 +90,16 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
         mTimeline = Timeline.getInstance();
         mViewMgr= ViewManager.getInstance();
         mGestureMgr = GestureManager.getInstance();
-        setDefaultTextureName(sTexBackground);
+        setTextureByName(sTexBackground);
         mCreate = new GLObject(100, 100);
         mDelete = new GLObject(100, 100);
         mRotate = new GLObject(100, 100);
         mResize = new GLObject(100, 100);
         mEditing = new GLObject(100, 100);
-        mCreate.setDefaultTextureName(sTexCreate);
-        mDelete.setDefaultTextureName(sTexDelete);
-        mRotate.setDefaultTextureName(sTexRotate);
-        mResize.setDefaultTextureName(sTexResize);
+        mCreate.setTextureByName(sTexCreate);
+        mDelete.setTextureByName(sTexDelete);
+        mRotate.setTextureByName(sTexRotate);
+        mResize.setTextureByName(sTexResize);
         mRotate.setSizePx(60f, 60f);
         mResize.setSizePx(60f, 60f);
         addChild(mCreate);
@@ -116,7 +116,7 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
 
         mIsEditing = true;
         mTarget = target;
-        TextureObj texture = mTarget.getDefaultTexture();
+        TextureObj texture = mTarget.getTexture();
         float mStartXPx = mTarget.getXPx();
         float mStartYPx = mTarget.getYPx();
         float mStartWidthPx  = mTarget.getWidthPx();
@@ -131,7 +131,6 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
             mStartHeightPx = 150f;
         }
 
-        mEditing.setDefaultTextureName(texture.getName());
         mEditing.setTexture(texture);
         mEditing.setXYPx(mStartXPx, mStartYPx);
         mEditing.setSizePx(mStartWidthPx, mStartHeightPx);

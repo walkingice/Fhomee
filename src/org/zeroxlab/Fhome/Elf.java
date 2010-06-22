@@ -42,7 +42,7 @@ public class Elf extends Pet{
 
     Elf() {
 	super();
-	setDefaultTextureName(DEFAULT_TEXTURE);
+	setTextureByName(DEFAULT_TEXTURE);
     }
 
     public void setPetBar(PetBar bar) {

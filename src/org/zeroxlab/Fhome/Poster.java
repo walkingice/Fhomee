@@ -47,7 +47,7 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
 
     Poster(float width, float height, String textureName) {
 	super(width, height);
-	setDefaultTextureName(textureName);
+	setTextureByName(textureName);
     }
 
     public void showBubble(String text, boolean showOption) {

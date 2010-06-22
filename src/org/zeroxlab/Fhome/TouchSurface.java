@@ -55,7 +55,7 @@ public class TouchSurface extends GLObject {
 	mTimeline = Timeline.getInstance();
 
 	mSight = new GLObject(0f, 0f, mSightWidth, mSightHeight);
-	mSight.setDefaultTextureName("sight00");
+	mSight.setTextureByName("sight00");
 
 	String name[] = new String[] {"sight01", "sight02", "sight03", "sight04"};
 	long time[] = new long[] {80, 50, 50, 50};

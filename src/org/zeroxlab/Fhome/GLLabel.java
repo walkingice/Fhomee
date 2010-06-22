@@ -189,7 +189,7 @@ public class GLLabel extends GLObject {
     }
 
     public void setBackground(String background) {
-	super.setDefaultTextureName(background);
+	super.setTextureByName(background);
 	tweakTextPosition();
     }
 

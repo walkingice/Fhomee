@@ -44,7 +44,7 @@ public class GLTransAni extends GLAnimation {
     /* This method was called iff this Animation complete but not be interrupted.*/
     public void complete() {
 	if (mObject != null) {
-	    TextureObj obj = mObject.getDefaultTexture();
+	    TextureObj obj = mObject.getTexture();
 	    mObject.setTexture(obj);
 	}
 	super.complete();
