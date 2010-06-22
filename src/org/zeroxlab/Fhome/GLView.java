@@ -185,8 +185,6 @@ public class GLView {
 
     //FIXME: should we have to perform any clear to ByteBuffer? I am not sure
     public void clear() {
-	TextureObj obj = getTexture();
-	TextureMgr.removeTextureObj(obj);
     }
 
     public void hide() {
