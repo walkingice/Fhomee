@@ -199,6 +199,7 @@ public class PetBar extends GLObject implements Touchable {
             if (id  == child.getId()) {
                 Pet pet = removePet(i);
                 Poster poster = pet.getPoster();
+                pet.clear();
                 ViewManager.getInstance().editPoster(poster);
                 return true;
             }
