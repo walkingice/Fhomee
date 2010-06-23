@@ -147,7 +147,8 @@ public class Pet extends GLObject{
 	    float percentOfTick = (float)(elapse % mRoutine) / mRoutine;
 	    float percentOfAll  = (float)(elapse / mLife);
 	    double radians = Math.toRadians(360 * percentOfTick);
-	    float offset = (float) Math.abs(Math.sin(radians)) * mHeight * (1 - percentOfAll);
+            /* 5f is a dirty hack cause PetBar setXY(x, -5f) to this one */
+	    float offset = (float) Math.abs(Math.sin(radians)) * mHeight * (1 - percentOfAll) - 5f;
 	    mObject.setXY(mObject.getX(), offset);
 	    return glObjectDrawItself;
 	}

@@ -89,7 +89,7 @@ public class PetBar extends GLObject implements Touchable {
 
 	PET_MARGIN  = w * 0.02f;
 	CELL_WIDTH  = (w / mPetMax) - PET_MARGIN;
-	CELL_HEIGHT = h;
+	CELL_HEIGHT = h * 1.3f;
 	PET_WIDTH   = CELL_WIDTH  - PET_MARGIN * 2;
 	PET_HEIGHT  = CELL_HEIGHT - PET_MARGIN * 2;
     }
@@ -139,11 +139,11 @@ public class PetBar extends GLObject implements Touchable {
 	float ratio = PET_WIDTH / elf.getWidth();
 	float finalWidth  = PET_WIDTH;
 	float finalHeight = ratio * elf.getHeight();
-	elf.setSize(finalWidth, finalHeight);
+	elf.setSize(PET_WIDTH, PET_HEIGHT);
     }
 
     private float getXByIndex(int index) {
-	return index * (PET_MARGIN + CELL_WIDTH + PET_MARGIN) + PET_MARGIN;
+	return index * (PET_MARGIN + CELL_WIDTH) + PET_MARGIN * 2;
     }
 
     private void resetPetsPosition() {
@@ -151,7 +151,7 @@ public class PetBar extends GLObject implements Touchable {
 	for (int i = 0; i < mChildren.size(); i++) {
 	    float x = getXByIndex(i);
 	    child = (Pet)mChildren.get(i);
-	    child.setXY(x, 0);
+	    child.setXY(x, -5f);
 	}
     }
 
