@@ -118,11 +118,16 @@ public class GLObject {
 
 	if (mHasChildren) {
 	    GLObject obj;
-	    for (int i = 0; i < mChildren.size(); i++) {
+            /* ask the children by inverse ordering.
+             * The last child will be drawed lastest
+             * therefore it will be top than other children.
+             * so we have to ask the last one first.
+             */
+	    for (int i = mChildren.size() - 1; i >= 0; i--) {
 		obj = mChildren.get(i);
 		id  = obj.pointerAt(mPts[0], mPts[1]);
 		if (id != -1) {
-		    i = mChildren.size(); // break the loop
+		    i = -1; // break the loop
 		}
 	    }
 	}
