@@ -151,7 +151,7 @@ public class PetBar extends GLObject implements Touchable {
 	for (int i = 0; i < mChildren.size(); i++) {
 	    float x = getXByIndex(i);
 	    child = (Pet)mChildren.get(i);
-	    child.setXY(x, -5f);
+	    child.setPosition(x, -5f);
 	}
     }
 

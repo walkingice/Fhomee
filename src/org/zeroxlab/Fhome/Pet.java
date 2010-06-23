@@ -109,6 +109,12 @@ public class Pet extends GLObject{
         }
     }
 
+    public void setPosition(float x, float y) {
+        mPositionX = x;
+        mPositionY = y;
+        this.setXY(mPositionX, mPositionY);
+    }
+
     public int pointerAt(float x, float y) {
         float id = super.pointerAt(x, y);
         if (id != -1) {
@@ -123,7 +129,7 @@ public class Pet extends GLObject{
 
     @Override
     public void onClick() {
-	mJumpAni.setDestination(getX(), getY());
+	mJumpAni.setDestination(mPositionX, mPositionY);
 	setAnimation(mJumpAni);
 	Timeline.getInstance().addAnimation(mJumpAni);
     }
