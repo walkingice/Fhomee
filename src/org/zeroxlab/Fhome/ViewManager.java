@@ -148,6 +148,10 @@ public class ViewManager {
     Poster demo10;
     Poster demo11;
 
+    Pet pet01;
+    Pet pet02;
+    Pet pet03;
+
     public static TopBar mTopBar;
     public static PetBar mPetBar;
     public static Dock mDock;
@@ -422,6 +426,16 @@ public class ViewManager {
 	room3.addPoster(demo09, 17f, 0f);
 	room3.addPoster(demo10, 160f, 30f);
 	room3.addPoster(demo11, 19f, 288f);
+
+        Poster p1 = new Poster(10f, 10f, "icon_phone");
+        Poster p2 = new Poster(10f, 10f, "icon_camera");
+        Poster p3 = new Poster(10f, 10f, "icon_music");
+        pet01 = new Pet(p1);
+        pet02 = new Pet(p2);
+        pet03 = new Pet(p3);
+        mPetBar.addPet(pet01);
+        mPetBar.addPet(pet02);
+        mPetBar.addPet(pet03);
 
 	mWorld = new World();
 	mWorld.addRoom(room1);
