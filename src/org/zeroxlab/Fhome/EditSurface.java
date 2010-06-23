@@ -216,6 +216,11 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
                 mTarget = null;
                 removeChild(mEditing);
                 mIsEditing = false;
+            } else if (mDelete.contains(point.x, point.y)) {
+                removeChild(mEditing);
+                mTarget.clear();
+                mTarget = null;
+                mIsEditing = false;
             }
         } else if (mPressing == mRotate) {
         } else if (mPressing == mResize) {
