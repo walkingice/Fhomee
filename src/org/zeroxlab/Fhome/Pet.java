@@ -43,15 +43,14 @@ public class Pet extends GLObject{
     protected float mPositionY;
     protected Jump mJumpAni;
 
-    protected TextureObj mBorderTexture;
-    protected String mBorderName = "elf_border";
-    protected TextureObj mStandTexture;
-    protected String mStandName  = "elf_stand";
+    protected String mBorderName = "pet_border";
+    protected String mStandName  = "pet_stand";
 
-    protected GLView mBorder;
-    protected GLView mFoot;
-    protected RectF mBorderRect;
-    protected RectF mFootRect;
+    protected GLObject mBorder;
+    protected GLObject mFoot;
+    /* Offset between the Left-top of Icon to Left-top of Border*/
+    protected float offsetX;
+    protected float offsetY;
 
     protected Poster mPoster;
 
@@ -79,42 +78,43 @@ public class Pet extends GLObject{
             setTexture(mPoster.getTexture());
         }
 
-	mBorderRect = new RectF();
-	mFootRect   = new RectF();
+	mBorder = new GLObject(10, 10);
+	mFoot   = new GLObject(10, 10);
 
-	mBorder = new GLView();
-	mFoot   = new GLView();
+	mBorder.setTextureByName(mBorderName);
+	mFoot.setTextureByName(mStandName);
+        addChild(mBorder);
+        addChild(mFoot);
 
-	Bitmap bitmap;
-	bitmap    = ResourcesMgr.getBitmapByName(mBorderName);
-	mBorderTexture = TextureMgr.getTextureObj(bitmap, mBorderName);
-	bitmap.recycle();
-	bitmap    = ResourcesMgr.getBitmapByName(mStandName);
-	mStandTexture  = TextureMgr.getTextureObj(bitmap, mStandName);
-	bitmap.recycle();
-	mBorder.setTexture(mBorderTexture);
-	mFoot.setTexture(mStandTexture);
-
-	mJumpAni = new Jump(1000, mPositionX, mPositionY);
+	mJumpAni = new Jump(1000, 0, 0);
     }
 
     @Override
     public void setSize(float width, float height) {
-	float bodyH = height * 0.75f; // 75%
+        float bodyW = width;
+        float bodyH = height * 0.8f;
+        float iconW = bodyW * 0.7f;
+        float iconH = bodyH * 0.7f; // 70%
 
-	super.setSize(bodyH, bodyH);
+        super.setSize(iconW, iconH);
 
-	mBorderRect.set(0, 0, bodyH, bodyH);
-	mFootRect.set(0, 0, bodyH, height - bodyH);
+        if (mBorder != null && mFoot != null) {
+            mBorder.setSize(bodyW, bodyH);
+            mFoot.setSize(bodyW, height - bodyH);
 
-	mBorder.setSize(mBorderRect);
-	mFoot.setSize(mFootRect);
+            offsetX = mBorder.getWidth() * 0.15f;
+            offsetY = mBorder.getHeight() * 0.27f;
+            mBorder.setXY(-offsetX, -offsetY);
+            mFoot.setXY(mBorder.getX(), mBorder.getY() + mBorder.getHeight());
+        }
     }
 
-    public void setPosition(float x, float y) {
-	mPositionX = x;
-	mPositionY = y;
-	super.setXY(x, y);
+    public int pointerAt(float x, float y) {
+        float id = super.pointerAt(x, y);
+        if (id != -1) {
+            return this.getId();
+        }
+        return -1;
     }
 
     public Poster getPoster() {
@@ -122,16 +122,8 @@ public class Pet extends GLObject{
     }
 
     @Override
-    public void drawMyself(GL10 gl) {
-	super.drawMyself(gl);
-	mBorder.drawGLView(gl);
-	gl.glTranslatef(0f, mBorderRect.height(), 0f);
-	mFoot.drawGLView(gl);
-    }
-
-    @Override
     public void onClick() {
-	mJumpAni.setDestination(mPositionX, mPositionY);
+	mJumpAni.setDestination(getX(), getY());
 	setAnimation(mJumpAni);
 	Timeline.getInstance().addAnimation(mJumpAni);
     }
