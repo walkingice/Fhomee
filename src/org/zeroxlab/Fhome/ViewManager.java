@@ -136,7 +136,17 @@ public class ViewManager {
     Poster wanted6;
     Poster wanted7;
 
-    Poster mPoster1;
+    Poster demo01;
+    Poster demo02;
+    Poster demo03;
+    Poster demo04;
+    Poster demo05;
+    Poster demo06;
+    Poster demo07;
+    Poster demo08;
+    Poster demo09;
+    Poster demo10;
+    Poster demo11;
 
     public static TopBar mTopBar;
     public static PetBar mPetBar;
@@ -384,14 +394,34 @@ public class ViewManager {
 	wanted7 = new Poster(250, 250, "bear");
 	room4.addPoster(wanted1, 100f, 100f);
 	room4.addPoster(wanted2, 150f, 10f);
-	room4.addPoster(wanted3, 30f, 150f);
+	room5.addPoster(wanted3, 30f, 150f);
 	room5.addPoster(wanted4, 150f, 210f);
-	room2.addPoster(wanted5, 10f, 10f);
-	room2.addPoster(wanted6, 220f, 150f);
-	room3.addPoster(wanted7, 130f, 30f);
+	room6.addPoster(wanted5, 10f, 10f);
+	room6.addPoster(wanted6, 220f, 150f);
+	room6.addPoster(wanted7, 130f, 30f);
 
-	mPoster1 = new Poster(120f, 120f, "paint");
-	room1.addPoster(mPoster1, 20f, 100f);
+	demo01 = new Poster(183f, 181f, "shelf");
+	demo02 = new Poster(123f, 185f, "window");
+	demo03 = new Poster(100f, 120f, "plant");
+	demo04 = new Poster(120f, 140f, "paint");
+	demo05 = new Poster(75f, 75f, "clock");
+	demo06 = new Poster(94f, 78f, "picture");
+	demo07 = new Poster(67f, 54f, "frame");
+	demo08 = new Poster(256f, 128f, "desk");
+	demo09 = new Poster(86f, 156f, "light");
+	demo10 = new Poster(123f, 188f, "window");
+	demo11 = new Poster(240f, 125f, "sofa");
+	room1.addPoster(demo01, 34f, 230f);
+	room1.addPoster(demo02, 160f, 30f);
+	room1.addPoster(demo03, 200f, 292f);
+	room2.addPoster(demo04, 32f, 27f);
+	room2.addPoster(demo05, 205f, 70f);
+	room2.addPoster(demo06, 90f, 194f);
+	room2.addPoster(demo07, 212f, 230f);
+	room2.addPoster(demo08, 64f, 286f);
+	room3.addPoster(demo09, 17f, 0f);
+	room3.addPoster(demo10, 160f, 30f);
+	room3.addPoster(demo11, 19f, 288f);
 
 	mWorld = new World();
 	mWorld.addRoom(room1);
