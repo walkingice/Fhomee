@@ -44,6 +44,9 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
     ViewManager mViewMgr;
     GestureManager mGestureMgr;
 
+    /* The minimal size of scaling  */
+    final static float MINIMAL_SIZE = 1f;
+
     public static String sTexBackground = "editlayer_background";
     public static String sTexDelete = "editlayer_delete";
     public static String sTexCreate = "editlayer_create_pet";
@@ -273,6 +276,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
             mInvert.reset();
             mInvert.postRotate(-1 * mEditing.getAngle());
             mInvert.mapPoints(mTmp);
+            mTmp[0] = Math.max(mTmp[0], MINIMAL_SIZE);
+            mTmp[1] = Math.max(mTmp[1], MINIMAL_SIZE);
             mEditing.setSize(mTmp[0], mTmp[1]);
             mRotate.setXY(mTmp[0] * 0.8f, 0f);
             mResize.setXY(mTmp[0] * 0.8f, mTmp[1] * 0.8f);
