@@ -45,6 +45,10 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
     protected int mNumber = 0;
     protected GLLabel mNumberLabel;
 
+    Poster(float w, float h) {
+        super(w, h);
+    }
+
     Poster(float width, float height, String textureName) {
 	super(width, height);
 	setTextureByName(textureName);
