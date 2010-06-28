@@ -23,9 +23,13 @@ import android.util.Log;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.view.View;
+import android.appwidget.*;
+import android.content.ComponentName;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -33,22 +37,50 @@ import android.content.res.Resources;
 
 import org.zeroxlab.Fhome.TextureManager.TextureObj;
 
-public class GLAppWidget extends GLObject{
+public class GLAppWidget extends Poster {
 
     final String TAG = "GLAppWidget";
     private static Context sContext = null;
+
+    private final static String WIDGET_CLASSNAME = "com.android.alarmclock";
+    private final static String WIDGET_PROVIDER  = "com.android.alarmclock.AnalogAppWidgetProvider";
 
     public static void setContext(Context context) {
         sContext = context;
     }
 
-    GLAppWidget() {
-	super(0, 0, 20, 20);
+    private final int size = 256;
+
+    private FhomeAppWidget mWidget;
+    public Bitmap mBitmap;
+    public Canvas mCanvas;
+    private int mId;
+
+    GLAppWidget(int id) {
+	super(200, 200);
         if (sContext == null) {
             Log.i(TAG, "GLAppWidget needs Context");
             this.clear();
             return;
         }
+
+        mBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_4444);
+        mCanvas = new Canvas(mBitmap);
+
+        mId = id;
+        AppWidgetManager mgr       = Launcher.getWidgetManager();
+        ComponentName component    = new ComponentName(WIDGET_CLASSNAME, WIDGET_PROVIDER);
+        AppWidgetProviderInfo info = mgr.getAppWidgetInfo(mId);
+
+        mWidget = (FhomeAppWidget)Launcher.getWidgetHost().createView(sContext, mId, info);
+        mWidget.setAppWidget(mId, info);
+        mWidget.setGLParent(this);
+        mWidget.measure(size, size);
+        mWidget.layout(0, 0, size, size);
+        mWidget.draw(mCanvas);
+        mCanvas.drawARGB(10, 10, 10, 10);
+        TextureObj obj = TextureMgr.getTextureObj(mBitmap, "hehehe");
+        setTexture(obj);
     }
 }
 

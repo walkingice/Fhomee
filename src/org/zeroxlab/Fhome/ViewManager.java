@@ -24,6 +24,7 @@ import android.util.Log;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +44,7 @@ import java.io.IOException;
 import android.content.res.Resources;
 
 import android.graphics.RectF;
+import android.appwidget.AppWidgetManager;
 
 import java.nio.*;
 
@@ -335,6 +337,15 @@ public class ViewManager {
         mPetBar.addPet(pet);
     }
 
+    public void addAppWidget(Intent intent) {
+        int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+        //AppWidgetProviderInfo appWidget = Launcher.getWidgetManager().getAppWidgetInfo(appWidgetId);
+
+        GLAppWidget w = new GLAppWidget(appWidgetId);
+        room1.addPoster(w, 10f, 10f);
+        Log.i(TAG, "appwidget added");
+    }
+
     private ViewManager() {
 	mRenderer = new WallRenderer();
 	mSurfaceView.setEGLConfigChooser(false);
@@ -461,6 +472,7 @@ public class ViewManager {
         mEditSurface.resize(mScreenWidth, mScreenHeight);
         mEditLayer.addChild(mEditSurface, true);
         mEditLayer.measure();
+        mGLViewsCreated = true;
     }
 
     private void drawTouchSurface(GL10 gl) {

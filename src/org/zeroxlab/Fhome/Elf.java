@@ -32,6 +32,12 @@ import java.util.LinkedList;
 import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
+import android.content.Intent;
+import android.appwidget.*;
+import android.app.Activity;
+import android.content.ComponentName;
+import android.os.Bundle;
+import java.util.ArrayList;
 
 public class Elf extends Pet{
 
@@ -39,6 +45,8 @@ public class Elf extends Pet{
 
     final String DEFAULT_TEXTURE = "mario";
     private PetBar mPetBar;
+
+    private static Activity sActivity;
 
     Elf() {
 	super();
@@ -49,9 +57,19 @@ public class Elf extends Pet{
 	mPetBar = bar;
     }
 
+    public static void setActivity(Activity a) {
+        sActivity = a;
+    }
+
     @Override
     public void onClick() {
 	super.onClick();
+
+        int appWidgetId = Launcher.getWidgetHost().allocateAppWidgetId();
+        Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
+        pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        AppWidgetProviderInfo info = new AppWidgetProviderInfo();
+        sActivity.startActivityForResult(pickIntent, Launcher.REQUEST_PICK_APPWIDGET);
     }
 }
 

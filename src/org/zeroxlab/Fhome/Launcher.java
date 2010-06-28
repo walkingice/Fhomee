@@ -23,6 +23,7 @@ import android.util.Log;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
@@ -30,6 +31,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import android.graphics.*;
+
+import android.appwidget.*;
 
 /* Arty Wall (Temporary Name) is the Launcher of 0xLab for Android.  *\
 \* This Launcher is disigned by CMLab of National Taiwan University. */
@@ -42,9 +45,22 @@ public class Launcher extends Activity {
     public static int mDefaultWidth  = 320;
     public static int mDefaultHeight = 480;
 
+    public static AppWidgetManager sAppWidgetMgr;
+    public static FhomeAppWidgetHost    sAppWidgetHost;
+    public final static int FHOME_APPWIDGET_HOST_ID = 1024;
+    public final static int REQUEST_PICK_APPWIDGET = 9;
+    static final String EXTRA_CUSTOM_WIDGET = "custom_widget";
+    static final String SEARCH_WIDGET = "search_widget";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
+        sAppWidgetMgr  = AppWidgetManager.getInstance(this);
+        sAppWidgetHost = new FhomeAppWidgetHost(this, FHOME_APPWIDGET_HOST_ID);
+        sAppWidgetHost.startListening();
+        GLAppWidget.setContext(this);
+        Elf.setActivity(this);
+
 	LinearLayout layout = new LinearLayout(this);
 	mScreen = new TotalScreen(this);
 	//mScreen.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR
@@ -52,6 +68,14 @@ public class Launcher extends Activity {
 	mGestureMgr = GestureManager.getInstance();
 	layout.addView(mScreen);
 	setContentView(layout);
+    }
+
+    public static AppWidgetManager getWidgetManager() {
+        return sAppWidgetMgr;
+    }
+
+    public static AppWidgetHost getWidgetHost() {
+        return sAppWidgetHost;
     }
 
     @Override
@@ -64,6 +88,16 @@ public class Launcher extends Activity {
     protected void onResume() {
 	super.onResume();
 	mScreen.onResume();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_PICK_APPWIDGET:
+                    mScreen.mViewManager.addAppWidget(data);
+            }
+        }
     }
 
     class TotalScreen extends GLSurfaceView implements View.OnClickListener {
