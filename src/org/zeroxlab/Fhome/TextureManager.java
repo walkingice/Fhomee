@@ -233,6 +233,9 @@ public class TextureManager {
 	String mName;
 	Bitmap mBitmap;
 
+        int mWidthPx;
+        int mHeightPx;
+
 	TextureObj(String name, Bitmap bitmap) {
 	    this(name, bitmap, -1);
 	}
@@ -246,6 +249,8 @@ public class TextureManager {
 		config = Bitmap.Config.ARGB_4444;
 	    }
 	    mBitmap = bitmap.copy(config, true);
+            mWidthPx  = mBitmap.getWidth();
+            mHeightPx = mBitmap.getHeight();
 
 	    mBinding = 1;
 	}
@@ -261,6 +266,14 @@ public class TextureManager {
 	int getTextureId() {
 	    return mId;
 	}
+
+        int getTextureWidth() {
+            return mWidthPx;
+        }
+
+        int getTextureHeight() {
+            return mHeightPx;
+        }
 
 	String getName() {
 	    return mName;
