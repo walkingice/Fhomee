@@ -227,6 +227,14 @@ public class TextureManager {
 	mGLContext.glDeleteTextures(length, textures, 0);
     }
 
+    public static int getPowerOfTwo(int npot) {
+        int temp = 16;
+        while (temp < npot) {
+            temp = temp * 2;
+        }
+        return temp;
+    }
+
     class TextureObj {
 	int    mId;
 	int    mBinding;
