@@ -241,6 +241,7 @@ public class TextureManager {
 	String mName;
 	Bitmap mBitmap;
 
+        float[] mBitmapCoord = new float[8];
         int mWidthPx;
         int mHeightPx;
 
@@ -256,12 +257,34 @@ public class TextureManager {
 		Log.i(TAG, "could not get bitmap config from " + name);
 		config = Bitmap.Config.ARGB_4444;
 	    }
-	    mBitmap = bitmap.copy(config, true);
-            mWidthPx  = mBitmap.getWidth();
-            mHeightPx = mBitmap.getHeight();
+
+            mWidthPx  = bitmap.getWidth();
+            mHeightPx = bitmap.getHeight();
+            int width  = getPowerOfTwo(mWidthPx);
+            int height = getPowerOfTwo(mHeightPx);
+            float ratioW = mWidthPx / (float)width;
+            float ratioH = mHeightPx / (float)height;
+
+            mBitmapCoord[0] = 0f;
+            mBitmapCoord[1] = 0f;
+            mBitmapCoord[2] = ratioW;
+            mBitmapCoord[3] = 0f;
+            mBitmapCoord[4] = ratioW;
+            mBitmapCoord[5] = ratioH;
+            mBitmapCoord[6] = 0f;
+            mBitmapCoord[7] = ratioH;
+
+            mBitmap = Bitmap.createBitmap(width, height, config);
+            mBitmap.eraseColor(Color.TRANSPARENT);
+            Canvas canvas = new Canvas(mBitmap);
+            canvas.drawBitmap(bitmap, 0, 0, null);
 
 	    mBinding = 1;
 	}
+
+        float[] getBitmapCoord() {
+            return mBitmapCoord;
+        }
 
 	Bitmap getBitmap() {
 	    return mBitmap;

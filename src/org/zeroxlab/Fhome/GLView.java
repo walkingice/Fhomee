@@ -128,6 +128,11 @@ public class GLView {
 
     public void setTexture(TextureObj obj) {
 	mTextureObj = obj;
+        if (mTextureObj != null) {
+            mTextureBuf.position(0);
+            mTextureBuf.put(mTextureObj.getBitmapCoord());
+            mTextureBuf.position(0);
+        }
     }
 
     public void setSize(RectF rect) {
