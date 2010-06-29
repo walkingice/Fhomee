@@ -461,6 +461,9 @@ public class ViewManager {
         mEditSurface.resize(mScreenWidth, mScreenHeight);
         mEditLayer.addChild(mEditSurface, true);
         mEditLayer.measure();
+
+        /* Do not create GLViews twice */
+        mGLViewsCreated = true;
     }
 
     private void drawTouchSurface(GL10 gl) {
