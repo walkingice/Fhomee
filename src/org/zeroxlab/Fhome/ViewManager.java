@@ -343,6 +343,7 @@ public class ViewManager {
 
         GLAppWidget w = new GLAppWidget(appWidgetId);
         room1.addPoster(w, 10f, 10f);
+        Launcher.addWidget(w.mWidget);
         Log.i(TAG, "appwidget added");
     }
 

@@ -40,7 +40,7 @@ import android.appwidget.*;
 public class Launcher extends Activity {
 
     final String TAG="Launcher";
-    TotalScreen mScreen;
+    static TotalScreen mScreen;
     GestureManager mGestureMgr;
     public static int mDefaultWidth  = 320;
     public static int mDefaultHeight = 480;
@@ -52,6 +52,8 @@ public class Launcher extends Activity {
     static final String EXTRA_CUSTOM_WIDGET = "custom_widget";
     static final String SEARCH_WIDGET = "search_widget";
 
+    static LinearLayout mHide;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -62,12 +64,24 @@ public class Launcher extends Activity {
         Elf.setActivity(this);
 
 	LinearLayout layout = new LinearLayout(this);
+        mHide = new LinearLayout(this);
+        android.view.ViewGroup.LayoutParams params = new android.view.ViewGroup.LayoutParams(256, 40);
 	mScreen = new TotalScreen(this);
 	//mScreen.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR
 	//	| GLSurfaceView.DEBUG_LOG_GL_CALLS);
 	mGestureMgr = GestureManager.getInstance();
 	layout.addView(mScreen);
 	setContentView(layout);
+        mHide.setVisibility(android.view.View.VISIBLE);
+        addContentView(mHide, params);
+    }
+
+    public static void redraw() {
+        mScreen.requestRender();
+    }
+
+    public static void addWidget(View view) {
+        mHide.addView(view);
     }
 
     public static AppWidgetManager getWidgetManager() {

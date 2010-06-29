@@ -51,7 +51,7 @@ public class GLAppWidget extends Poster {
 
     private final int size = 256;
 
-    private FhomeAppWidget mWidget;
+    public FhomeAppWidget mWidget;
     public Bitmap mBitmap;
     public Canvas mCanvas;
     private int mId;
@@ -78,9 +78,13 @@ public class GLAppWidget extends Poster {
         mWidget.measure(size, size);
         mWidget.layout(0, 0, size, size);
         mWidget.draw(mCanvas);
-        mCanvas.drawARGB(10, 10, 10, 10);
+        mWidget.setVisibility(View.VISIBLE);
         TextureObj obj = TextureMgr.getTextureObj(mBitmap, "hehehe");
         setTexture(obj);
+    }
+
+    public void onClick() {
+        mWidget.invalidate();
     }
 }
 
