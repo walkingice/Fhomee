@@ -130,8 +130,8 @@ public class EditSurface extends GLObject implements Touchable, GLObject.ClickLi
             mStartYPx = 0f;
         }
         if (mStartWidthPx == GLObject.UNDEFINE || mStartHeightPx == GLObject.UNDEFINE) {
-            mStartWidthPx  = 150f;
-            mStartHeightPx = 150f;
+            mStartWidthPx  = texture.getTextureWidth();
+            mStartHeightPx = texture.getTextureHeight();
         }
 
         mEditing.setTexture(texture);
