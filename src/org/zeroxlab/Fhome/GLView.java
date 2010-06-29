@@ -175,7 +175,7 @@ public class GLView {
 	gl.glFrontFace(gl.GL_CW);
 	gl.glVertexPointer(VERTEX_DIMENSION, GL10.GL_FLOAT, 0, mVertexBuf);
 	if (mTextureObj != null) {
-	    gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureObj.getTexture());
+	    gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureObj.getTextureId());
 	} else {
 	    Log.i(TAG, "Oooops, texture object is null");
 	}

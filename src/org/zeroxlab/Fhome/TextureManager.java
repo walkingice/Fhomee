@@ -217,13 +217,13 @@ public class TextureManager {
 		GL10.GL_REPLACE);
 	GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, obj.getBitmap(), 0);
 
-	obj.setTexture(textures[0]);
+	obj.setTextureId(textures[0]);
     }
 
     private void deleteTexture(TextureObj obj) {
 	int length     = 1;
 	int[] textures = new int[length];
-	textures[0] = obj.getTexture();
+	textures[0] = obj.getTextureId();
 	mGLContext.glDeleteTextures(length, textures, 0);
     }
 
@@ -254,11 +254,11 @@ public class TextureManager {
 	    return mBitmap;
 	}
 
-	void setTexture(int id) {
+	void setTextureId(int id) {
 	    mId = id;
 	}
 
-	int getTexture() {
+	int getTextureId() {
 	    return mId;
 	}
 
