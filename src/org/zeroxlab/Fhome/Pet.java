@@ -149,6 +149,11 @@ public class Pet extends GLObject{
 
     @Override
     public void onClick() {
+        if (mPoster != null && mPoster.invokable()) {
+            mPoster.invoke();
+            return;
+        }
+
 	mJumpAni.setDestination(mPositionX, mPositionY);
 	setAnimation(mJumpAni);
 	Timeline.getInstance().addAnimation(mJumpAni);
