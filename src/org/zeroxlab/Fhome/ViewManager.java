@@ -261,6 +261,10 @@ public class ViewManager {
     }
 
     public void turnOnMiniMode() {
+        if(mEditSurface.isEditing()) {
+            /* no mini mode when editing */
+            return;
+        }
         mMiniMode = true;
         mDock.setVisible(true);
         mDock.setChildrenVisible(true);
