@@ -32,7 +32,7 @@ public class Invoker {
     final String TAG = "Invoker";
 
     Invoker(String packageName, String className) {
-        mComponentName = new ComponentName(packageName, packageName + "." + className);
+        mComponentName = new ComponentName(packageName, className);
         mIntent = new Intent(Intent.ACTION_MAIN);
         mIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         mIntent.setComponent(mComponentName);
