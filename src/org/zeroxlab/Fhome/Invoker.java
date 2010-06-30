@@ -27,20 +27,22 @@ import java.util.LinkedList;
 
 public class Invoker {
 
-    ComponentName mComponentName;
     Intent mIntent;
     final String TAG = "Invoker";
 
     Invoker(String packageName, String className) {
-        mComponentName = new ComponentName(packageName, className);
+        ComponentName component = new ComponentName(packageName, className);
         mIntent = new Intent(Intent.ACTION_MAIN);
         mIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        mIntent.setComponent(mComponentName);
+        mIntent.setComponent(component);
+    }
+
+    Invoker(Intent intent) {
+        mIntent = intent;
     }
 
     public boolean invoke() {
         if (mIntent != null) {
-            Log.i(TAG, "Launch Component:" + mComponentName.toString());
             Launcher.getActivity().startActivity(mIntent);
         } else {
             Log.i(TAG, "Invoke nothing");
