@@ -37,7 +37,7 @@ public class Elf extends Pet{
 
     final String TAG = "Elf";
 
-    final String DEFAULT_TEXTURE = "mario";
+    final String DEFAULT_TEXTURE = "goodman";
     private PetBar mPetBar;
 
     Elf() {
