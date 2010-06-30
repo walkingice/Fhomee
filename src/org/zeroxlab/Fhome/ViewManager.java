@@ -24,6 +24,7 @@ import android.util.Log;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -440,6 +441,16 @@ public class ViewManager {
         mPetBar.addPet(pet01);
         mPetBar.addPet(pet02);
         mPetBar.addPet(pet03);
+
+        Invoker invoker01 = new Invoker("com.android.contacts", "com.android.contacts.DialtactsActivity");
+        p1.setInvoker(invoker01);
+        Invoker invoker02 = new Invoker("com.google.android.music", "com.android.music.AlbumBrowserActivity");
+        p3.setInvoker(invoker02);
+        Invoker invoker03 = new Invoker("com.google.android.deskclock", "com.android.deskclock.DeskClock");
+        demo05.setInvoker(invoker03);
+
+        Invoker invoker04 = new Invoker(new Intent(Intent.ACTION_DIAL));
+        demo02.setInvoker(invoker04);
 
 	mWorld = new World();
 	mWorld.addRoom(room1);
