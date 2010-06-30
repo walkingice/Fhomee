@@ -42,9 +42,12 @@ public class Launcher extends Activity {
     public static int mDefaultWidth  = 320;
     public static int mDefaultHeight = 480;
 
+    private static Activity mActivity = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
+        mActivity = this;
 	LinearLayout layout = new LinearLayout(this);
 	mScreen = new TotalScreen(this);
 	//mScreen.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR
@@ -52,6 +55,10 @@ public class Launcher extends Activity {
 	mGestureMgr = GestureManager.getInstance();
 	layout.addView(mScreen);
 	setContentView(layout);
+    }
+
+    public static Activity getActivity() {
+        return mActivity;
     }
 
     @Override
