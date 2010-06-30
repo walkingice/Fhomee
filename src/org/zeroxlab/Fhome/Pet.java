@@ -45,9 +45,11 @@ public class Pet extends GLObject{
 
     protected String mBorderName = "pet_border";
     protected String mStandName  = "pet_stand";
+    protected String mBackgroundName = "white";
 
     protected GLObject mBorder;
     protected GLObject mFoot;
+    protected GLView mBackground;
     /* Offset between the Left-top of Icon to Left-top of Border*/
     protected float offsetX;
     protected float offsetY;
@@ -80,6 +82,11 @@ public class Pet extends GLObject{
 
 	mBorder = new GLObject(10, 10);
 	mFoot   = new GLObject(10, 10);
+        mBackground = new GLView();
+        mBackground.setSize(super.mRect);
+        TextureObj obj = TextureMgr.getTextureObj(
+                ResourcesMgr.getBitmapByName(mBackgroundName), mBackgroundName);
+        mBackground.setTexture(obj);
 
 	mBorder.setTextureByName(mBorderName);
 	mFoot.setTextureByName(mStandName);
@@ -97,6 +104,7 @@ public class Pet extends GLObject{
         float iconH = bodyH * 0.7f; // 70%
 
         super.setSize(iconW, iconH);
+        mBackground.setSize(super.mRect);
 
         if (mBorder != null && mFoot != null) {
             mBorder.setSize(bodyW, bodyH);
@@ -113,6 +121,18 @@ public class Pet extends GLObject{
         mPositionX = x;
         mPositionY = y;
         this.setXY(mPositionX, mPositionY);
+    }
+
+    @Override
+    protected void destroyGLView() {
+        super.destroyGLView();
+        mBackground.clear();
+    }
+
+    @Override
+    protected void drawMyself(GL10 gl) {
+        mBackground.drawGLView(gl);
+        super.drawMyself(gl);
     }
 
     public int pointerAt(float x, float y) {
