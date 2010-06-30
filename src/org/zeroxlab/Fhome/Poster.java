@@ -44,10 +44,25 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
 
     protected int mNumber = 0;
     protected GLLabel mNumberLabel;
+    protected Invoker mInvoker;
 
     Poster(float width, float height, String textureName) {
 	super(width, height);
 	setTextureByName(textureName);
+    }
+
+    public boolean invokable() {
+        return (mInvoker != null);
+    }
+
+    public void invoke() {
+        if (invokable()) {
+            mInvoker.invoke();
+        }
+    }
+
+    public void setInvoker(Invoker invoker) {
+        mInvoker = invoker;
     }
 
     public void showBubble(String text, boolean showOption) {
@@ -128,6 +143,11 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
 
     @Override
     public void onClick() {
+        if (mInvoker != null) {
+            mInvoker.invoke();
+            return;
+        }
+
 	if(mHasBubble) {
 	} else {
 	    showBubble("Hi", true);
