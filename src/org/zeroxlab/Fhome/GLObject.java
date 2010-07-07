@@ -72,6 +72,7 @@ public class GLObject {
     Matrix mTranslate;
     Matrix mInvert;
     float mPts[];
+    float mViewport[];
 
     private int mID = -1;
     protected boolean mChildrenVisible = true;
@@ -100,6 +101,7 @@ public class GLObject {
         mTranslate = new Matrix();
 	mInvert = new Matrix();
 	mPts    = new float[2];
+        mViewport = new float[8];
 	setXY(x, y);
 	resetInvertMatrix();
         resetTranslateMatrix();
@@ -110,6 +112,51 @@ public class GLObject {
 	mPts[1] = y;
 	mInvert.mapPoints(mPts);
 	return mRect.contains(mPts[0], mPts[1]);
+    }
+
+    public void check(float[] viewport) {
+        inViewport(viewport);
+        if (getTexture() != null) {
+            if (inViewport(viewport)) {
+                Log.i(TAG, getTexture().getName() + " in viewport "
+                        +"("+ mViewport[0]+","+mViewport[1] +")"
+                        +"("+ mViewport[2]+","+mViewport[3] +")"
+                        +"("+ mViewport[4]+","+mViewport[5] +")"
+                        +"("+ mViewport[6]+","+mViewport[7] +")"
+                        );
+                Log.i(TAG, "my coverage (" + mCoverage.left
+                        +","+mCoverage.top+") ("+ mCoverage.right+","+mCoverage.bottom+")...");
+            } else {
+
+            }
+        }
+
+        if (mHasChildren) {
+            GLObject obj;
+            for (int i = mChildren.size() - 1; i >= 0; i--) {
+                obj = mChildren.get(i);
+                obj.check(mViewport);
+            }
+        }
+    }
+
+    public boolean inViewport(float[] viewport) {
+        mViewport[0] = viewport[0];
+        mViewport[1] = viewport[1];
+        mViewport[2] = viewport[2];
+        mViewport[3] = viewport[3];
+        mViewport[4] = viewport[4];
+        mViewport[5] = viewport[5];
+        mViewport[6] = viewport[6];
+        mViewport[7] = viewport[7];
+        mInvert.mapPoints(mViewport);
+        mTmpRect.setEmpty();
+        mTmpRect.offset(mViewport[0], mViewport[1]);
+        mTmpRect.union(mViewport[2], mViewport[3]);
+        mTmpRect.union(mViewport[4], mViewport[5]);
+        mTmpRect.union(mViewport[6], mViewport[7]);
+        Log.i(TAG, "after translate: "+mTmpRect.toString());
+        return RectF.intersects(mCoverage, mTmpRect);
     }
 
     public int pointerAt(float x, float y) {
