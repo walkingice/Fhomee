@@ -73,6 +73,7 @@ public class GLObject {
     private int mID = -1;
     protected boolean mChildrenVisible = true;
     protected boolean mHasChildren = false;
+    protected GLObject mParent = null;
     LinkedList<GLObject> mChildren;
 
     protected GLAnimation mAnimation;
@@ -361,6 +362,18 @@ public class GLObject {
 	mVisible = false;
     }
 
+    public GLObject getParent() {
+        return mParent;
+    }
+
+    public void setParent(GLObject parent) {
+        if (mParent != null) {
+            mParent.removeChild(this);
+        }
+
+        mParent = parent;
+    }
+
     /**
      * Add a GLObject as a child to tail of the list
      *
@@ -387,6 +400,7 @@ public class GLObject {
 		position = mChildren.size(); // add to tail
 	    }
 
+            obj.setParent(this);
 	    mChildren.add(position, obj);
 	    mHasChildren = true;
 	}
