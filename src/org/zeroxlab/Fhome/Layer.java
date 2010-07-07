@@ -54,6 +54,7 @@ public class Layer {
     private float mLayerLeft = 0;
     private float mLayerTop  = 0;
     private PointF mPoint;
+    private float mViewport[];
     private LinkedList<GLObject>  mChildren;
     private LinkedList<Touchable> mTouchableItems;
 
@@ -73,8 +74,36 @@ public class Layer {
         mLayerLeft = mZn * sProjLeft;
         mLayerTop  = mZn * sProjBottom;
         mPoint = new PointF();
+        mViewport = new float[8];
         mChildren = new LinkedList<GLObject>();
         mTouchableItems = new LinkedList<Touchable>();
+
+        RectF nearViewport = new RectF(0, 0
+                ,sProjNearWidth
+                ,sProjNearHeight);
+        setViewport(nearViewport);
+    }
+
+    public void setViewport(RectF nearViewport) {
+        PointF tmp = new PointF();
+
+        tmp.set(nearViewport.left, nearViewport.top);
+        pointNearToLayer(mZn, tmp, mPoint);
+        mViewport[0] = mPoint.x;
+        mViewport[1] = mPoint.y;
+
+        tmp.set(nearViewport.right, nearViewport.top);
+        pointNearToLayer(mZn, tmp, mPoint);
+        mViewport[2] = mPoint.x;
+        mViewport[3] = mPoint.y;
+        tmp.set(nearViewport.right, nearViewport.bottom);
+        pointNearToLayer(mZn, tmp, mPoint);
+        mViewport[4] = mPoint.x;
+        mViewport[5] = mPoint.y;
+        tmp.set(nearViewport.left, nearViewport.bottom);
+        pointNearToLayer(mZn, tmp, mPoint);
+        mViewport[6] = mPoint.x;
+        mViewport[7] = mPoint.y;
     }
 
     public void measure() {
