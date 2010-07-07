@@ -52,6 +52,8 @@ public class GLObject {
     GLView mGLView;
     PointF mPosition;
     RectF  mRect;
+    RectF  mCoverage;
+    RectF  mTmpRect;
     float  mAngle = 0f;
 
     /* Stores the position, size of this GLObject
@@ -67,6 +69,7 @@ public class GLObject {
 
     protected boolean mVisible = false;
 
+    Matrix mTranslate;
     Matrix mInvert;
     float mPts[];
 
@@ -86,16 +89,20 @@ public class GLObject {
 
     GLObject(float x, float y, float width, float height) {
 	mRect = new RectF(0, 0, width, height);
+        mCoverage = new RectF(mRect);
+        mTmpRect  = new RectF();
 	mPosition = new PointF();
 	mAnimationLock = new Object();
 	mChildrenLock  = new Object();
 
 	mID = ObjectManager.getInstance().register(this);
 
+        mTranslate = new Matrix();
 	mInvert = new Matrix();
 	mPts    = new float[2];
 	setXY(x, y);
 	resetInvertMatrix();
+        resetTranslateMatrix();
     }
 
     public boolean contains(float x, float y) {
@@ -144,6 +151,40 @@ public class GLObject {
         */
 
 	return id;
+    }
+
+    public void updateCoverage() {
+        mCoverage.set(mRect);
+        if (mHasChildren) {
+            GLObject obj;
+            for (int i = mChildren.size() - 1; i >= 0; i--) {
+                obj = mChildren.get(i);
+                obj.getTranslatedCoverage(mTmpRect);
+                mCoverage.union(mTmpRect);
+            }
+        }
+
+        if (mParent != null) {
+            mParent.updateCoverage();
+        }
+    }
+
+    public void getCoverage(RectF dst) {
+        dst.set(mCoverage);
+    }
+
+    public void getTranslatedCoverage(RectF dst) {
+        mTranslate.mapRect(dst, mCoverage);
+    }
+
+    public Matrix getTranslateMatrix() {
+        return mTranslate;
+    }
+
+    private void resetTranslateMatrix() {
+        mTranslate.reset();
+        mTranslate.postTranslate(mPosition.x, mPosition.y);
+        mTranslate.postRotate(mAngle);
     }
 
     /* A GLObject may be Translated or Rotated from Origin.
@@ -210,11 +251,14 @@ public class GLObject {
 	if (mGLView != null) {
 	    mGLView.setSize(mRect);
 	}
+
+        updateCoverage();
     }
 
     public void setAngle(float angle) {
 	mAngle = angle % 360;
 	resetInvertMatrix();
+        resetTranslateMatrix();
     }
 
     public float getAngle() {
@@ -254,6 +298,7 @@ public class GLObject {
 	mPosition.x = x;
 	mPosition.y = y;
 	resetInvertMatrix();
+        resetTranslateMatrix();
     }
 
     public boolean measure(float ratioX, float ratioY) {
