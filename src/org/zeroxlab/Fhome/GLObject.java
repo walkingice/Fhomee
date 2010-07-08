@@ -114,32 +114,6 @@ public class GLObject {
 	return mRect.contains(mPts[0], mPts[1]);
     }
 
-    public void check(float[] viewport) {
-        inViewport(viewport);
-        if (getTexture() != null) {
-            if (inViewport(viewport)) {
-                Log.i(TAG, getTexture().getName() + " in viewport "
-                        +"("+ mViewport[0]+","+mViewport[1] +")"
-                        +"("+ mViewport[2]+","+mViewport[3] +")"
-                        +"("+ mViewport[4]+","+mViewport[5] +")"
-                        +"("+ mViewport[6]+","+mViewport[7] +")"
-                        );
-                Log.i(TAG, "my coverage (" + mCoverage.left
-                        +","+mCoverage.top+") ("+ mCoverage.right+","+mCoverage.bottom+")...");
-            } else {
-
-            }
-        }
-
-        if (mHasChildren) {
-            GLObject obj;
-            for (int i = mChildren.size() - 1; i >= 0; i--) {
-                obj = mChildren.get(i);
-                obj.check(mViewport);
-            }
-        }
-    }
-
     public boolean inViewport(float[] viewport) {
         mViewport[0] = viewport[0];
         mViewport[1] = viewport[1];
