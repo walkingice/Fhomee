@@ -124,6 +124,8 @@ public class ViewManager {
 
     public final float FAREST_PUSHING_DEPTH = 10f;
 
+    Camera mCamera;
+
     Layer mWorldLayer;
     Layer mBarLayer;
     Layer mEditLayer;
@@ -360,9 +362,13 @@ public class ViewManager {
         Layer.sProjNearWidth  = PROJ_WIDTH;
         Layer.sProjNearHeight = PROJ_HEIGHT;
 
+        mCamera = new Camera();
         mWorldLayer = new Layer(LEVEL_3);
         mBarLayer = new Layer(LEVEL_1);
         mEditLayer = new Layer(LEVEL_0);
+        mCamera.addLayer(0, mEditLayer);
+        mCamera.addLayer(1, mBarLayer);
+        mCamera.addLayer(2, mWorldLayer);
     }
 
     public static ViewManager getInstance() {
@@ -494,24 +500,7 @@ public class ViewManager {
     }
 
     public void drawGLViews(GL10 gl) {
-	GLObject obj;
-
-	gl.glMatrixMode(gl.GL_MODELVIEW);
-
-	gl.glLoadIdentity();
-
-	/* the coordinate of OpenGL is different from normal computer system
-	 * We may rotate the coordinate so we don't have to worry about that.
-	 */
-	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
-					//         +y is heading for bottom
-
-        mWorldLayer.onDraw(gl);
-
-	/* Draw Level 1, the Bar and Pets */
-        mBarLayer.onDraw(gl);
-
-        mEditLayer.onDraw(gl);
+        mCamera.onDraw(gl);
 	/* Draw the TouchSurface */
 	drawTouchSurface(gl);
     }
