@@ -124,7 +124,14 @@ public class GLObject {
         mTmpRect.union(mViewport[4], mViewport[5]);
         mTmpRect.union(mViewport[6], mViewport[7]);
 
-        inViewport = RectF.intersects(mCoverage, mTmpRect);
+        boolean tmp = RectF.intersects(mCoverage, mTmpRect);
+        if (tmp != inViewport) {
+            if (mGLView != null) {
+                Log.i(TAG,mGLView.getTexture().getName() + " change visible to "+tmp);
+            }
+        }
+
+        inViewport = tmp;
 
         if (inViewport && mHasChildren) {
             GLObject obj;

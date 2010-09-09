@@ -124,6 +124,7 @@ public class Layer {
 
     public void onDraw(GL10 gl) {
         for (int i = 0; i < mChildren.size(); i++) {
+            mChildren.get();
             gl.glPushMatrix();
             gl.glTranslatef(mLayerLeft, mLayerTop, 0f);
             gl.glTranslatef(0f, 0f, mDepth);
