@@ -72,6 +72,8 @@ public class GLObject {
     Matrix mTranslate;
     Matrix mInvert;
     float mPts[];
+    float mViewport[];
+    protected boolean inViewport = true;
 
     private int mID = -1;
     protected boolean mChildrenVisible = true;
@@ -100,9 +102,39 @@ public class GLObject {
         mTranslate = new Matrix();
 	mInvert = new Matrix();
 	mPts    = new float[2];
+        mViewport = new float[8];
 	setXY(x, y);
 	resetInvertMatrix();
         resetTranslateMatrix();
+    }
+
+    public void checkViewport(float[] viewport) {
+        mViewport[0] = viewport[0];
+        mViewport[1] = viewport[1];
+        mViewport[2] = viewport[2];
+        mViewport[3] = viewport[3];
+        mViewport[4] = viewport[4];
+        mViewport[5] = viewport[5];
+        mViewport[6] = viewport[6];
+        mViewport[7] = viewport[7];
+        mInvert.mapPoints(mViewport);
+        mTmpRect.setEmpty();
+        mTmpRect.offset(mViewport[0], mViewport[1]);
+        mTmpRect.union(mViewport[2], mViewport[3]);
+        mTmpRect.union(mViewport[4], mViewport[5]);
+        mTmpRect.union(mViewport[6], mViewport[7]);
+
+        inViewport = RectF.intersects(mCoverage, mTmpRect);
+
+        if (inViewport && mHasChildren) {
+            GLObject obj;
+            for (int i = mChildren.size() - 1; i >= 0; i--) {
+                obj = mChildren.get(i);
+                obj.checkViewport(mViewport);
+            }
+        }
+
+        return;
     }
 
     public boolean contains(float x, float y) {
