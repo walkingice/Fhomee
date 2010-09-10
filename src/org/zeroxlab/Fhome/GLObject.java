@@ -206,6 +206,8 @@ public class GLObject {
         if (mParent != null) {
             mParent.updateCoverage();
         }
+
+        Camera.sRefresh = true;
     }
 
     public void getCoverage(RectF dst) {
