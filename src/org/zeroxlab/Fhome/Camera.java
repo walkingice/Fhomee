@@ -41,6 +41,8 @@ public class Camera {
     public float NEAR   = ViewManager.PROJ_NEAR;
     public float FAR    = ViewManager.PROJ_FAR;
 
+    public static boolean sRefresh = true;
+
     protected RectF mNearViewport;
     protected LinkedList<Layer> mLayers;
 
@@ -65,6 +67,15 @@ public class Camera {
 
     public void onDraw(GL10 gl) {
         Layer layer;
+
+        if (sRefresh) {
+            for (int i = mLayers.size() - 1; i >= 0; i--) {
+                layer = mLayers.get(i);
+                layer.checkViewport();
+            }
+
+            sRefresh = false;
+        }
 
 	gl.glMatrixMode(gl.GL_MODELVIEW);
 
