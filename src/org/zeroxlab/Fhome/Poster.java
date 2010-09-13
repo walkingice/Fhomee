@@ -47,7 +47,11 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
     protected Invoker mInvoker;
 
     Poster(float width, float height, String textureName) {
-	super(width, height);
+        this(0, 0, width, height, textureName);
+    }
+
+    Poster(float x, float y, float width, float height, String textureName) {
+        super(x, y, width, height);
 	setTextureByName(textureName);
     }
 
