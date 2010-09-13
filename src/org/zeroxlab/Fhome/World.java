@@ -124,23 +124,6 @@ public class World extends GLObject implements Touchable {
 	return room.pointerAt(x + current * ROOM_WIDTH , y);
     }
 
-    @Override
-    protected void drawChildren(GL10 gl) {
-	Room room;
-	int current = getCurrentRoom();
-	int count   = getChildrenCount();
-	int start = current - ROOM_VISIBLE_LEFT;
-	int end   = count   + ROOM_VISIBLE_RIGHT;
-	start = Math.max(start, 0);
-	end   = Math.min(end, count);
-	for (int i = start; i < end; i++) {
-	    room = (Room)mChildren.get(i);
-	    gl.glPushMatrix();
-	    room.draw(gl);
-	    gl.glPopMatrix();
-	}
-    }
-
     public int getRoomNumber() {
 	return mChildren.size();
     }
