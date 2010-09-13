@@ -127,6 +127,7 @@ public class ViewManager {
     Camera mCamera;
 
     Layer mWorldLayer;
+    Layer mPosterLayer;
     Layer mBarLayer;
     Layer mEditLayer;
 
@@ -336,6 +337,7 @@ public class ViewManager {
     public void addPosterToCurrentRoom(Poster poster) {
         mWorld.addPoster(poster, 0, 0);
         mWorldLayer.measure();
+        mPosterLayer.measure();
     }
 
     public void addPet(Pet pet) {
@@ -364,11 +366,13 @@ public class ViewManager {
 
         mCamera = new Camera();
         mWorldLayer = new Layer(LEVEL_3);
+        mPosterLayer = new Layer(LEVEL_3);
         mBarLayer = new Layer(LEVEL_1);
         mEditLayer = new Layer(LEVEL_0);
         mCamera.addLayer(0, mEditLayer);
         mCamera.addLayer(1, mBarLayer);
-        mCamera.addLayer(2, mWorldLayer);
+        mCamera.addLayer(2, mPosterLayer);
+        mCamera.addLayer(3, mWorldLayer);
     }
 
     public static ViewManager getInstance() {
@@ -415,28 +419,28 @@ public class ViewManager {
 	room6.addPoster(wanted6, 220f, 150f);
 	room6.addPoster(wanted7, 130f, 30f);
 
-	demo01 = new Poster(183f, 181f, "shelf");
-	demo02 = new Poster(123f, 185f, "window");
-	demo03 = new Poster(100f, 120f, "plant");
-	demo04 = new Poster(120f, 140f, "paint");
-	demo05 = new Poster(75f, 75f, "clock");
-	demo06 = new Poster(94f, 78f, "picture");
-	demo07 = new Poster(67f, 54f, "frame");
-	demo08 = new Poster(256f, 128f, "desk");
-	demo09 = new Poster(86f, 156f, "light");
-	demo10 = new Poster(123f, 188f, "window");
-	demo11 = new Poster(240f, 125f, "sofa");
-	room1.addPoster(demo01, 34f, 230f);
-	room1.addPoster(demo02, 160f, 30f);
-	room1.addPoster(demo03, 200f, 292f);
-	room2.addPoster(demo04, 32f, 27f);
-	room2.addPoster(demo05, 205f, 70f);
-	room2.addPoster(demo06, 90f, 194f);
-	room2.addPoster(demo07, 212f, 230f);
-	room2.addPoster(demo08, 64f, 286f);
-	room3.addPoster(demo09, 17f, 0f);
-	room3.addPoster(demo10, 160f, 30f);
-	room3.addPoster(demo11, 19f, 288f);
+	demo01 = new Poster( 34f, 230f, 183f, 181f, "shelf");
+	demo02 = new Poster(160f,  30f, 123f, 185f, "window");
+	demo03 = new Poster(200f, 292f, 100f, 120f, "plant");
+	demo04 = new Poster( 32f,  27f, 120f, 140f, "paint");
+	demo05 = new Poster(205f,  70f,  75f,  75f, "clock");
+	demo06 = new Poster( 90f, 194f,  94f,  78f, "picture");
+	demo07 = new Poster(212f, 230f,  67f,  54f, "frame");
+	demo08 = new Poster( 64f, 286f, 256f, 128f, "desk");
+	demo09 = new Poster( 17f,   0f,  86f, 156f, "light");
+	demo10 = new Poster(160f,  30f, 123f, 188f, "window");
+	demo11 = new Poster( 19f, 288f, 240f, 125f, "sofa");
+	mPosterLayer.addChild(demo01, false);
+	mPosterLayer.addChild(demo02, false);
+	mPosterLayer.addChild(demo03, false);
+	mPosterLayer.addChild(demo04, false);
+	mPosterLayer.addChild(demo05, false);
+	mPosterLayer.addChild(demo06, false);
+	mPosterLayer.addChild(demo07, false);
+	mPosterLayer.addChild(demo08, false);
+	mPosterLayer.addChild(demo09, false);
+	mPosterLayer.addChild(demo10, false);
+	mPosterLayer.addChild(demo11, false);
 
         Poster p1 = new Poster(10f, 10f, "icon_phone");
         Poster p2 = new Poster(10f, 10f, "icon_camera");
