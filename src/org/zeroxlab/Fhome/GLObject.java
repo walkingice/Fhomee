@@ -69,6 +69,7 @@ public class GLObject {
 
     protected boolean mVisible = false;
 
+    Matrix mAbsTranslate;
     Matrix mTranslate;
     Matrix mInvert;
     float mPts[];
@@ -99,6 +100,7 @@ public class GLObject {
 
 	mID = ObjectManager.getInstance().register(this);
 
+        mAbsTranslate = new Matrix();
         mTranslate = new Matrix();
 	mInvert = new Matrix();
 	mPts    = new float[2];
@@ -218,6 +220,10 @@ public class GLObject {
         mTranslate.mapRect(dst, mCoverage);
     }
 
+    public Matrix getAbsTranslateMatrix() {
+        return mAbsTranslate;
+    }
+
     public Matrix getTranslateMatrix() {
         return mTranslate;
     }
@@ -226,6 +232,23 @@ public class GLObject {
         mTranslate.reset();
         mTranslate.postTranslate(mPosition.x, mPosition.y);
         mTranslate.postRotate(mAngle);
+        resetAbsTranslateMatrix();
+    }
+
+    private void resetAbsTranslateMatrix() {
+        mAbsTranslate.reset();
+        if (mParent != null) {
+            mAbsTranslate.preConcat(mParent.getAbsTranslateMatrix());
+        }
+        mAbsTranslate.preTranslate(mPosition.x, mPosition.y);
+        mAbsTranslate.preRotate(mAngle);
+
+        if (mHasChildren) {
+            for (int i = 0; i < mChildren.size(); i++) {
+                GLObject obj = mChildren.get(i);
+                obj.resetAbsTranslateMatrix();
+            }
+        }
     }
 
     /* A GLObject may be Translated or Rotated from Origin.
