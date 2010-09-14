@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.view.MotionEvent;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -41,12 +42,15 @@ public class Camera {
     public float BOTTOM = ViewManager.PROJ_BOTTOM;
     public float NEAR   = ViewManager.PROJ_NEAR;
     public float FAR    = ViewManager.PROJ_FAR;
+    public float WIDTH  = Math.abs(RIGHT - LEFT);
+    public float HEIGHT = Math.abs(BOTTOM - TOP);
 
     public static boolean sRefresh = true;
 
     protected RectF mNearViewport;
     protected LinkedList<Layer> mLayers;
     protected PointF mCenter;
+    protected PointF mEventPoint;
 
     protected Object mChildrenLock;
 
@@ -55,6 +59,7 @@ public class Camera {
         mNearViewport = new RectF();
         mLayers = new LinkedList<Layer>();
         mCenter = new PointF(0f, 0f);
+        mEventPoint = new PointF(0f, 0f);
         setNearViewport();
     }
 
@@ -65,6 +70,8 @@ public class Camera {
         BOTTOM = b;
         NEAR = n;
         FAR = f;
+        WIDTH  = Math.abs(RIGHT - LEFT);
+        HEIGHT = Math.abs(BOTTOM - TOP);
         setNearViewport();
     }
 
@@ -156,8 +163,53 @@ public class Camera {
         }
     }
 
+    public Layer onPressEvent(PointF nearPoint, MotionEvent event) {
+        for (int i = 0; i < mLayers.size(); i++) {
+            if(onPressEvent(nearPoint, event, mLayers.get(i)) != null) {
+                return mLayers.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    public Layer onPressEvent(PointF nearPoint, MotionEvent event, Layer layer) {
+        mEventPoint.set(nearPoint.x + mNearViewport.left, nearPoint.y + mNearViewport.top);
+        if(layer.onPressEvent(mEventPoint, event)) {
+            return layer;
+        }
+
+        return null;
+    }
+
+    public Layer onReleaseEvent(PointF nearPoint, MotionEvent event) {
+        for (int i = 0; i < mLayers.size(); i++) {
+            if(onReleaseEvent(nearPoint, event, mLayers.get(i)) != null) {
+                return mLayers.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    public Layer onReleaseEvent(PointF nearPoint, MotionEvent event, Layer layer) {
+        mEventPoint.set(nearPoint.x + mCenter.x + LEFT, nearPoint.y + mCenter.y + TOP);
+        if(layer.onReleaseEvent(mEventPoint, event)) {
+            return layer;
+        }
+
+        return null;
+    }
+
+    public int getIdContains(PointF nearPoint, Layer layer) {
+        mEventPoint.set(nearPoint.x + mNearViewport.left, nearPoint.y + mNearViewport.top);
+        return layer.getIdContains(mEventPoint);
+    }
+
     private void setNearViewport() {
-        mNearViewport.set(LEFT, TOP, RIGHT, BOTTOM);
+        /* we rotate the matrix, left-top is (0, 0)*/
+        mNearViewport.set(mCenter.x - WIDTH / 2, mCenter.y - HEIGHT / 2
+                , mCenter.x + WIDTH / 2, mCenter.y + HEIGHT / 2);
     }
 }
 
