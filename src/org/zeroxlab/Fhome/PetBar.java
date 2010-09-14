@@ -103,7 +103,7 @@ public class PetBar extends GLObject implements Touchable {
     }
 
     public void backToCenter() {
-	float x = 0;
+	float x = 0 - getWidth() / 2;
 	float y = super.getY();
 	mShiftAnimation.setDestination(x, y);
 	this.setAnimation(mShiftAnimation);
@@ -183,9 +183,9 @@ public class PetBar extends GLObject implements Touchable {
 	float dx = point.x - mPressPoint.x;
 	int current = mWorld.getCurrentRoom();
 	if (current == 0 && dx > 0) {
-	    setXY(dx / 3, getY());
+	    setXY((dx / 3) - getWidth() / 2, getY());
 	} else if (current == (mWorld.getChildrenCount() - 1) && dx < 0) {
-	    setXY(dx / 3, getY());
+	    setXY((dx / 3) - getWidth() / 2, getY());
 	}
 
 	return true;

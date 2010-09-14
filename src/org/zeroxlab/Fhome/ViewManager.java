@@ -398,11 +398,14 @@ public class ViewManager {
 
 	float barWidth  = convertToLevel(LEVEL_BAR, PROJ_WIDTH);
 	float barHeight = convertToLevel(LEVEL_BAR, PROJ_HEIGHT * BAR_HEIGHT_RATIO);
+        float bar_layer_workaround_offset_x = convertToLevel(LEVEL_BAR, PROJ_WIDTH) / 2;
+        float bar_layer_workaround_offset_y = convertToLevel(LEVEL_BAR, PROJ_HEIGHT) / 2;
 	mPetBar = new PetBar(barWidth, barHeight);
-	mPetBar.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
+	mPetBar.setXY(0 - bar_layer_workaround_offset_x
+                , convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f) - bar_layer_workaround_offset_y);
 
 	mTopBar = new TopBar(barWidth, barHeight, "topbar_background");
-	mTopBar.setXY(0, 0);
+	mTopBar.setXY(0 - bar_layer_workaround_offset_x, 0 - bar_layer_workaround_offset_y);
 
 	wanted1 = new Poster(100, 120, "luffy");
 	wanted2 = new Poster(100, 100, "nami");
@@ -419,17 +422,19 @@ public class ViewManager {
 	room6.addPoster(wanted6, 220f, 150f);
 	room6.addPoster(wanted7, 130f, 30f);
 
-	demo01 = new Poster( 34f, 230f, 183f, 181f, "shelf");
-	demo02 = new Poster(160f,  30f, 123f, 185f, "window");
-	demo03 = new Poster(200f, 292f, 100f, 120f, "plant");
-	demo04 = new Poster( 32f,  27f, 120f, 140f, "paint");
-	demo05 = new Poster(205f,  70f,  75f,  75f, "clock");
-	demo06 = new Poster( 90f, 194f,  94f,  78f, "picture");
-	demo07 = new Poster(212f, 230f,  67f,  54f, "frame");
-	demo08 = new Poster( 64f, 286f, 256f, 128f, "desk");
-	demo09 = new Poster( 17f,   0f,  86f, 156f, "light");
-	demo10 = new Poster(160f,  30f, 123f, 188f, "window");
-	demo11 = new Poster( 19f, 288f, 240f, 125f, "sofa");
+        float workaround_x = convertToLevel(LEVEL_WORLD, PROJ_WIDTH) / 2;
+        float workaround_y = convertToLevel(LEVEL_WORLD, PROJ_HEIGHT) / 2;
+        demo01 = new Poster( 34f - workaround_x, 230f - workaround_y, 183f, 181f, "shelf");
+        demo02 = new Poster(160f - workaround_x,  30f - workaround_y, 123f, 185f, "window");
+        demo03 = new Poster(200f - workaround_x, 292f - workaround_y, 100f, 120f, "plant");
+        demo04 = new Poster( 32f - workaround_x,  27f - workaround_y, 120f, 140f, "paint");
+        demo05 = new Poster(405f - workaround_x,  70f - workaround_y,  75f,  75f, "clock");
+        demo06 = new Poster( 90f - workaround_x, 194f - workaround_y,  94f,  78f, "picture");
+        demo07 = new Poster(212f - workaround_x, 230f - workaround_y,  67f,  54f, "frame");
+        demo08 = new Poster( 64f - workaround_x, 286f - workaround_y, 256f, 128f, "desk");
+        demo09 = new Poster(317f - workaround_x,   0f - workaround_y,  86f, 156f, "light");
+        demo10 = new Poster(360f - workaround_x,  30f - workaround_y, 123f, 188f, "window");
+        demo11 = new Poster(219f - workaround_x, 288f - workaround_y, 240f, 125f, "sofa");
 	mPosterLayer.addChild(demo01, false);
 	mPosterLayer.addChild(demo02, false);
 	mPosterLayer.addChild(demo03, false);
@@ -473,7 +478,7 @@ public class ViewManager {
 	mPetBar.setWorld(mWorld);
 
 	mDock = new Dock(barWidth, barHeight, "topbar_background");
-	mDock.setXY(0, convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f));
+	mDock.setXY(bar_layer_workaround_offset_x , convertToLevel(LEVEL_BAR, PROJ_HEIGHT * 0.85f) -bar_layer_workaround_offset_y);
 	mDock.readThumbnails(mWorld);
 
         mWorldLayer.addChild(mWorld, true);

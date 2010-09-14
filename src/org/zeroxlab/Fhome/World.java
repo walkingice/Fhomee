@@ -95,7 +95,7 @@ public class World extends GLObject implements Touchable {
     private void resetRoomPosition() {
 	for (int i = 0; i < mChildren.size(); i++) {
 	    Room room = (Room)mChildren.get(i);
-	    room.setXY(i * ROOM_WIDTH, 0f);
+	    room.setXY(i * ROOM_WIDTH - ROOM_WIDTH / 2, 0f - ROOM_HEIGHT / 2);
 	}
     }
 
