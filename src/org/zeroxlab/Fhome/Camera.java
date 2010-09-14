@@ -34,6 +34,7 @@ import java.io.IOException;
 import android.content.res.Resources;
 
 public class Camera {
+    public final static boolean USE_ORTHO = ViewManager.USE_ORTHO;
     public float LEFT   = ViewManager.PROJ_LEFT;
     public float RIGHT  = ViewManager.PROJ_RIGHT;
     public float TOP    = ViewManager.PROJ_TOP;
@@ -45,6 +46,7 @@ public class Camera {
 
     protected RectF mNearViewport;
     protected LinkedList<Layer> mLayers;
+    protected PointF mCenter;
 
     protected Object mChildrenLock;
 
@@ -52,6 +54,7 @@ public class Camera {
         mChildrenLock = new Object();
         mNearViewport = new RectF();
         mLayers = new LinkedList<Layer>();
+        mCenter = new PointF(0f, 0f);
         setNearViewport();
     }
 
@@ -66,6 +69,18 @@ public class Camera {
     }
 
     public void onDraw(GL10 gl) {
+        gl.glMatrixMode(gl.GL_PROJECTION);
+        gl.glLoadIdentity();
+        if (USE_ORTHO) {
+            gl.glOrthof(mCenter.x + LEFT, mCenter.x + RIGHT
+                    , mCenter.y - BOTTOM, mCenter.y + TOP
+                    , NEAR, FAR);
+        } else {
+            gl.glFrustumf(mCenter.x + LEFT, mCenter.x + RIGHT
+                    , mCenter.y + BOTTOM, mCenter.y + TOP
+                    , NEAR, FAR);
+        }
+
         Layer layer;
 
         if (sRefresh) {
@@ -86,10 +101,11 @@ public class Camera {
 	 */
 	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
 					//         +y is heading for bottom
-
         for (int i = mLayers.size() - 1; i >= 0; i--) {
+            gl.glPushMatrix();
             layer = mLayers.get(i);
             layer.onDraw(gl);
+            gl.glPopMatrix();
         }
     }
 
