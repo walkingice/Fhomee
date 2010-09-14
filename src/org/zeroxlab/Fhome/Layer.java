@@ -51,8 +51,6 @@ public class Layer {
 
     private float mDepth = 0;
     private float mZn = 0;
-    private float mLayerLeft = 0;
-    private float mLayerTop  = 0;
     private PointF mPoint;
     private float mViewport[];
     private LinkedList<GLObject>  mChildren;
@@ -71,8 +69,6 @@ public class Layer {
         mZn = mDepth / sProjNear;
         /* We rotate the coordinate to make Z-axis upside down
            (0, 0) is at Left-Top */
-        mLayerLeft = mZn * sProjLeft;
-        mLayerTop  = mZn * sProjBottom;
         mPoint = new PointF();
         mViewport = new float[8];
         mChildren = new LinkedList<GLObject>();
@@ -131,7 +127,6 @@ public class Layer {
     public void onDraw(GL10 gl) {
         for (int i = 0; i < mChildren.size(); i++) {
             gl.glPushMatrix();
-            gl.glTranslatef(mLayerLeft, mLayerTop, 0f);
             gl.glTranslatef(0f, 0f, mDepth);
             mChildren.get(i).draw(gl);
             gl.glPopMatrix();
