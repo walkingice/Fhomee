@@ -164,7 +164,19 @@ public class ViewManager {
      */
     public void onPress(int screenX, int screenY, MotionEvent event) {
 	getNearLocation(mNearPoint, screenX, screenY);
+        Layer layer = mCamera.onPressEvent(mNearPoint, event);
+        if (layer != null) {
+            mPressId = mCamera.getIdContains(mNearPoint, layer);
+        } else {
+            mPressId = -1;
+        }
 
+        Log.i(TAG,"Press, id = " + mPressId + " layer is " + layer);
+        Log.i(TAG,"Paint object *" + demo04.getX() + ","+ demo04.getY()
+                +" w=" +demo04.getWidth()+" h="+demo04.getHeight());
+
+        Log.i(TAG,"mPetBar is at" +mPetBar.getX() + " " + mPetBar.getY() + " w:"+mPetBar.getWidth());
+        /*
         if (mEditSurface.isEditing()) {
             mEditLayer.onPressEvent(mNearPoint, event, mEditSurface);
             mPressId = mEditLayer.getIdContains(mNearPoint, mEditSurface);
@@ -178,6 +190,7 @@ public class ViewManager {
 	        mPressId = mWorldLayer.getIdContains(mNearPoint);
             }
 	}
+        */
     }
 
     /**
@@ -185,7 +198,16 @@ public class ViewManager {
      */
     public void onRelease(int screenX, int screenY, MotionEvent event) {
 	getNearLocation(mNearPoint, screenX, screenY);
+        Layer layer = mCamera.onReleaseEvent(mNearPoint, event);
+        if (layer != null) {
+            mReleaseId = mCamera.getIdContains(mNearPoint, layer);
+        } else {
+            mReleaseId = -1;
+        }
 
+        Log.i(TAG,"Release, id = " + mReleaseId + " layer is " + layer);
+
+        /*
         if (mEditSurface.isEditing()) {
             mEditLayer.onReleaseEvent(mNearPoint, event, mEditSurface);
             mReleaseId = mEditLayer.getIdContains(mNearPoint, mEditSurface);
@@ -200,6 +222,7 @@ public class ViewManager {
 	        mReleaseId = mWorldLayer.getIdContains(mNearPoint);
             }
 	}
+        */
 
 	if (mPressId != -1 && mReleaseId == mPressId && !mGestureMgr.mIsDragging) {
 	    GLObject obj = ObjectManager.getInstance().getGLObjectById(mPressId);
@@ -211,6 +234,7 @@ public class ViewManager {
      * This method was called while user Moving on the screen.
      */
     public void onMove(int screenX, int screenY, MotionEvent event) {
+        /*
 	getNearLocation(mNearPoint, screenX, screenY);
 
         if (mEditSurface.isEditing()) {
@@ -234,9 +258,11 @@ public class ViewManager {
 		mBarLayer.onDragEvent(mNearPoint, event, mPetBar);
 	    }
 	}
+        */
     }
 
     public void onLongPressing(int screenX, int screenY, MotionEvent event) {
+        /*
         getNearLocation(mNearPoint, screenX, screenY);
         if (mEditSurface.isEditing()) {
             mEditLayer.onLongPressEvent(mNearPoint, event, mEditSurface);
@@ -250,6 +276,7 @@ public class ViewManager {
                 mBarLayer.onLongPressEvent(mNearPoint, event, mPetBar);
             }
 	}
+        */
     }
 
     /* Convert location from Screen to Near and store in PointF near */
