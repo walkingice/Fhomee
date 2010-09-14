@@ -554,18 +554,6 @@ public class ViewManager {
 	    gl.glLoadIdentity();
 	    gl.glViewport(0, 0, w, h);
 
-	    gl.glMatrixMode(gl.GL_PROJECTION);
-	    gl.glLoadIdentity();
-	    if (USE_ORTHO) {
-		gl.glOrthof(PROJ_LEFT, PROJ_RIGHT
-			, PROJ_BOTTOM, PROJ_TOP
-			, PROJ_NEAR, PROJ_FAR);
-	    } else {
-		gl.glFrustumf(PROJ_LEFT, PROJ_RIGHT
-			, PROJ_BOTTOM, PROJ_TOP
-			, PROJ_NEAR, PROJ_FAR);
-	    }
-
 	    if (!mGLViewsCreated) {
 		initGLViews();
 	    }
