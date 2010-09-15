@@ -47,76 +47,76 @@ public class TopBar extends GLObject {
     protected LinkedList<GLObject> mList;
 
     public TopBar(float width, float height) {
-	this(width, height, null);
+        this(width, height, null);
     }
 
     public TopBar(float width, float height, String background) {
-	super(0, 0, width, height);
+        super(0, 0, width, height);
 
-	if (background != null) {
-	    super.setTextureByName(background);
-	}
+        if (background != null) {
+            super.setTextureByName(background);
+        }
 
-	resetSizeParameters();
+        resetSizeParameters();
     }
 
     protected void resetSizeParameters() {
-	float width  = mRect.width();
-	float height = mRect.height();
+        float width  = mRect.width();
+        float height = mRect.height();
 
-	mHGap = width  * BORDER_RATIO;
-	mVGap = height * BORDER_RATIO;
+        mHGap = width  * BORDER_RATIO;
+        mVGap = height * BORDER_RATIO;
 
-	float total = width - (mObjMax + 1) * mHGap;
-	mObjWidth = total / mObjMax;
-	mObjHeight = height - mVGap * 2; // top and bottom
+        float total = width - (mObjMax + 1) * mHGap;
+        mObjWidth = total / mObjMax;
+        mObjHeight = height - mVGap * 2; // top and bottom
     }
 
     public static float objWidth() {
-	return mObjWidth;
+        return mObjWidth;
     }
 
     public static float objHeight() {
-	return mObjHeight;
+        return mObjHeight;
     }
 
     @Override
     public void setSize(float width, float height) {
-	super.setSize(width, height);
-	resetSizeParameters();
+        super.setSize(width, height);
+        resetSizeParameters();
     }
 
     public void displayObj(LinkedList<GLObject> list) {
-	mList = list;
-	mHasChildren = true;  //therefore drawChildren will be called
-	resetObjPosition();
+        mList = list;
+        mHasChildren = true;  //therefore drawChildren will be called
+        resetObjPosition();
     }
 
     protected void resetObjPosition() {
-	if (mList != null) {
-	    GLObject obj;
-	    for (int i = 0; i < getChildrenCount(); i++) {
-		obj = mChildren.get(i);
-		float x = mHGap + i * (mHGap + mObjWidth);
-		float y = mVGap;
-		obj.setXY(x, y);
-	    }
-	}
+        if (mList != null) {
+            GLObject obj;
+            for (int i = 0; i < getChildrenCount(); i++) {
+                obj = mChildren.get(i);
+                float x = mHGap + i * (mHGap + mObjWidth);
+                float y = mVGap;
+                obj.setXY(x, y);
+            }
+        }
     }
 
     @Override
     protected void drawChildren(GL10 gl) {
-	if (mList == null) {
-	    return;
-	}
+        if (mList == null) {
+            return;
+        }
 
-	GLObject obj;
-	for (int i = 0; i < mList.size(); i++) {
-	    obj = mList.get(i);
-	    gl.glPushMatrix();
-	    obj.draw(gl);
-	    gl.glPopMatrix();
-	}
+        GLObject obj;
+        for (int i = 0; i < mList.size(); i++) {
+            obj = mList.get(i);
+            gl.glPushMatrix();
+            obj.draw(gl);
+            gl.glPopMatrix();
+        }
     }
 }
 

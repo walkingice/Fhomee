@@ -51,81 +51,81 @@ public class TextureManager {
     private Object mLocker;
 
     private TextureManager() {
-	mTextureMap = new HashMap<String, TextureObj>();
-	mPendingMap = new HashMap<String, TextureObj>();
-	mLocker = new Object();
+        mTextureMap = new HashMap<String, TextureObj>();
+        mPendingMap = new HashMap<String, TextureObj>();
+        mLocker = new Object();
     }
 
     synchronized static public TextureManager getInstance() {
-	if(manager == null) {
-	    manager = new TextureManager();
-	}
+        if(manager == null) {
+            manager = new TextureManager();
+        }
 
-	return manager;
+        return manager;
     }
 
     public void setGLContext(GL10 gl) {
-	mGLContext = gl;
-	clearTextures();
+        mGLContext = gl;
+        clearTextures();
     }
 
     private void clearTextures() {
-	synchronized (mLocker) {
-	    Iterator<TextureObj> iterator = mTextureMap.values().iterator();
-	    while(iterator.hasNext()) {
-		TextureObj obj = iterator.next();
-		mPendingMap.put(obj.getName(), obj);
-	    }
+        synchronized (mLocker) {
+            Iterator<TextureObj> iterator = mTextureMap.values().iterator();
+            while(iterator.hasNext()) {
+                TextureObj obj = iterator.next();
+                mPendingMap.put(obj.getName(), obj);
+            }
 
-	    mTextureMap.clear();
-	    mHasPending = true;
-	}
+            mTextureMap.clear();
+            mHasPending = true;
+        }
     }
 
     public void clearAll() {
-	Collection<TextureObj> collection = mTextureMap.values();
-	TextureObj[] array = new TextureObj[collection.size()];
-	array = collection.toArray(array);
-	for (int i = 0; i < array.length; i++) {
-	    array[i].destroy();
-	}
+        Collection<TextureObj> collection = mTextureMap.values();
+        TextureObj[] array = new TextureObj[collection.size()];
+        array = collection.toArray(array);
+        for (int i = 0; i < array.length; i++) {
+            array[i].destroy();
+        }
 
-	collection = mPendingMap.values();
-	array = new TextureObj[collection.size()];
-	array = collection.toArray(array);
-	for (int i = 0; i < array.length; i++) {
-	    array[i].destroy();
-	}
+        collection = mPendingMap.values();
+        array = new TextureObj[collection.size()];
+        array = collection.toArray(array);
+        for (int i = 0; i < array.length; i++) {
+            array[i].destroy();
+        }
 
-	mTextureMap.clear();
-	mPendingMap.clear();
+        mTextureMap.clear();
+        mPendingMap.clear();
     }
 
     public TextureObj getStringTextureObj(String name, String string, Paint paint) {
-	float width   = paint.measureText(string);
-	float ascent  = Math.abs(paint.ascent());
-	float descent = Math.abs(paint.descent());
-	float height = ascent + descent;
+        float width   = paint.measureText(string);
+        float ascent  = Math.abs(paint.ascent());
+        float descent = Math.abs(paint.descent());
+        float height = ascent + descent;
 
-	/* width and height should be the power of 2 */
-	float temp = 16;
-	while (temp < width) {
-	    temp = temp * 2;
-	}
-	width = temp;
-	temp = 16;
-	while (temp < height) {
-	    temp = temp * 2;
-	}
-	height = temp;
+        /* width and height should be the power of 2 */
+        float temp = 16;
+        while (temp < width) {
+            temp = temp * 2;
+        }
+        width = temp;
+        temp = 16;
+        while (temp < height) {
+            temp = temp * 2;
+        }
+        height = temp;
 
-	Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.ARGB_4444);
-	Canvas canvas = new Canvas(bitmap);
-	bitmap.eraseColor(Color.TRANSPARENT);
-	canvas.drawText(string, 0, ascent, paint);
-	TextureObj obj = getTextureObj(bitmap, name);
-	bitmap.recycle();
-	return obj;
+        Bitmap bitmap = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(bitmap);
+        bitmap.eraseColor(Color.TRANSPARENT);
+        canvas.drawText(string, 0, ascent, paint);
+        TextureObj obj = getTextureObj(bitmap, name);
+        bitmap.recycle();
+        return obj;
     }
 
     /* Get a texture object with specify name and bitmap.
@@ -133,98 +133,98 @@ public class TextureManager {
      */
     public TextureObj getTextureObj(Bitmap bitmap, String name) {
 
-	TextureObj obj;
+        TextureObj obj;
 
-	obj = mTextureMap.get(name);
-	if (obj != null) {
-	    return obj;
-	}
+        obj = mTextureMap.get(name);
+        if (obj != null) {
+            return obj;
+        }
 
-	obj = mPendingMap.get(name);
-	if (obj != null) {
-	    return obj;
-	}
+        obj = mPendingMap.get(name);
+        if (obj != null) {
+            return obj;
+        }
 
-	obj = new TextureObj(name, bitmap, -1);
-	synchronized (mLocker) {
-	    mPendingMap.put(name, obj);
-	    mHasPending = true;
-	}
+        obj = new TextureObj(name, bitmap, -1);
+        synchronized (mLocker) {
+            mPendingMap.put(name, obj);
+            mHasPending = true;
+        }
 
-	return obj;
+        return obj;
     }
 
     /* Remove a texture object if user doesn't need it.
      * The object will be removed really if the counter is zero.
      */
     public void removeTextureObj(TextureObj obj) {
-	if (obj.bindingCount() == 0) {
-	    synchronized(mLocker) {
-		mPendingMap.put(obj.getName(), obj);
-		mTextureMap.remove(obj.getName());
-		mHasPending = true;
-	    }
-	}
+        if (obj.bindingCount() == 0) {
+            synchronized(mLocker) {
+                mPendingMap.put(obj.getName(), obj);
+                mTextureMap.remove(obj.getName());
+                mHasPending = true;
+            }
+        }
     }
 
     public boolean hasPendingTextures() {
-	return mHasPending;
+        return mHasPending;
     }
 
     public void updateTexture() {
-	if (!mHasPending) {
-	    return;
-	}
+        if (!mHasPending) {
+            return;
+        }
 
-	synchronized(mLocker) {
-	    Collection<TextureObj> collection = mPendingMap.values();
-	    TextureObj[] array = new TextureObj[collection.size()];
-	    array = collection.toArray(array);
-	    int length = array.length;
+        synchronized(mLocker) {
+            Collection<TextureObj> collection = mPendingMap.values();
+            TextureObj[] array = new TextureObj[collection.size()];
+            array = collection.toArray(array);
+            int length = array.length;
 
-	    for (int i = 0; i < length; i++) {
-		TextureObj obj = array[i];
-		if (obj.bindingCount() > 0) {
-		    generateTexture(obj);
-		    mTextureMap.put(obj.getName(), obj);
-		} else {
-		    deleteTexture(obj);
-		    obj.destroy();
-		}
-	    }
+            for (int i = 0; i < length; i++) {
+                TextureObj obj = array[i];
+                if (obj.bindingCount() > 0) {
+                    generateTexture(obj);
+                    mTextureMap.put(obj.getName(), obj);
+                } else {
+                    deleteTexture(obj);
+                    obj.destroy();
+                }
+            }
 
-	    mPendingMap.clear();
-	    mHasPending = false;
-	}
+            mPendingMap.clear();
+            mHasPending = false;
+        }
     }
 
     private void generateTexture(TextureObj obj) {
-	int length     = 1;
-	int[] textures = new int[length];
-	mGLContext.glGenTextures(length, textures, 0);
-	mGLContext.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
+        int length     = 1;
+        int[] textures = new int[length];
+        mGLContext.glGenTextures(length, textures, 0);
+        mGLContext.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
 
-	mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-		GL10.GL_NEAREST);
-	mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D,
-		GL10.GL_TEXTURE_MAG_FILTER,
-		GL10.GL_LINEAR);
-	mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
-		GL10.GL_CLAMP_TO_EDGE);
-	mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
-		GL10.GL_CLAMP_TO_EDGE);
-	mGLContext.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
-		GL10.GL_REPLACE);
-	GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, obj.getBitmap(), 0);
+        mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+                GL10.GL_NEAREST);
+        mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D,
+                GL10.GL_TEXTURE_MAG_FILTER,
+                GL10.GL_LINEAR);
+        mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S,
+                GL10.GL_CLAMP_TO_EDGE);
+        mGLContext.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T,
+                GL10.GL_CLAMP_TO_EDGE);
+        mGLContext.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE,
+                GL10.GL_REPLACE);
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, obj.getBitmap(), 0);
 
-	obj.setTextureId(textures[0]);
+        obj.setTextureId(textures[0]);
     }
 
     private void deleteTexture(TextureObj obj) {
-	int length     = 1;
-	int[] textures = new int[length];
-	textures[0] = obj.getTextureId();
-	mGLContext.glDeleteTextures(length, textures, 0);
+        int length     = 1;
+        int[] textures = new int[length];
+        textures[0] = obj.getTextureId();
+        mGLContext.glDeleteTextures(length, textures, 0);
     }
 
     public static int getPowerOfTwo(int npot) {
@@ -236,27 +236,27 @@ public class TextureManager {
     }
 
     public class TextureObj {
-	int    mId;
-	int    mBinding;
-	String mName;
-	Bitmap mBitmap;
+        int    mId;
+        int    mBinding;
+        String mName;
+        Bitmap mBitmap;
 
         float[] mBitmapCoord = new float[8];
         int mWidthPx;
         int mHeightPx;
 
-	TextureObj(String name, Bitmap bitmap) {
-	    this(name, bitmap, -1);
-	}
+        TextureObj(String name, Bitmap bitmap) {
+            this(name, bitmap, -1);
+        }
 
-	TextureObj(String name, Bitmap bitmap, int id) {
-	    mId     = id;
-	    mName   = name;
-	    Bitmap.Config config = bitmap.getConfig();
-	    if (config == null) {
-		Log.i(TAG, "could not get bitmap config from " + name);
-		config = Bitmap.Config.ARGB_4444;
-	    }
+        TextureObj(String name, Bitmap bitmap, int id) {
+            mId     = id;
+            mName   = name;
+            Bitmap.Config config = bitmap.getConfig();
+            if (config == null) {
+                Log.i(TAG, "could not get bitmap config from " + name);
+                config = Bitmap.Config.ARGB_4444;
+            }
 
             mWidthPx  = bitmap.getWidth();
             mHeightPx = bitmap.getHeight();
@@ -279,24 +279,24 @@ public class TextureManager {
             Canvas canvas = new Canvas(mBitmap);
             canvas.drawBitmap(bitmap, 0, 0, null);
 
-	    mBinding = 1;
-	}
+            mBinding = 1;
+        }
 
         float[] getBitmapCoord() {
             return mBitmapCoord;
         }
 
-	Bitmap getBitmap() {
-	    return mBitmap;
-	}
+        Bitmap getBitmap() {
+            return mBitmap;
+        }
 
-	void setTextureId(int id) {
-	    mId = id;
-	}
+        void setTextureId(int id) {
+            mId = id;
+        }
 
-	public int getTextureId() {
-	    return mId;
-	}
+        public int getTextureId() {
+            return mId;
+        }
 
         public int getTextureWidth() {
             return mWidthPx;
@@ -306,32 +306,32 @@ public class TextureManager {
             return mHeightPx;
         }
 
-	public String getName() {
-	    return mName;
-	}
+        public String getName() {
+            return mName;
+        }
 
         /* If there is a GLObject trying to use this texture
            It should call this method*/
-	public void increaseBinding() {
-	    mBinding++;
-	}
+        public void increaseBinding() {
+            mBinding++;
+        }
 
         /* If a GLObject will not use this texture
            It should call this method */
-	public void decreaseBinding() {
-	    mBinding--;
+        public void decreaseBinding() {
+            mBinding--;
             /* If there is no GLObject using this texture
                the counter should be zero */
             manager.removeTextureObj(this);
-	}
+        }
 
-	public int bindingCount() {
-	    return mBinding;
-	}
+        public int bindingCount() {
+            return mBinding;
+        }
 
-	public void destroy() {
-	    mBitmap.recycle();
-	}
+        public void destroy() {
+            mBitmap.recycle();
+        }
     }
 }
 

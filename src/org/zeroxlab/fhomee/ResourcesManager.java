@@ -51,113 +51,113 @@ public class ResourcesManager {
     }
 
     synchronized static public ResourcesManager getInstance() {
-	if (mContext == null) {
-	    Log.i(TAG, "OOOOps..you should setContext before getInstance");
-	}
-	if(mResourcesManager == null) {
-	    mResourcesManager = new ResourcesManager();
-	}
+        if (mContext == null) {
+            Log.i(TAG, "OOOOps..you should setContext before getInstance");
+        }
+        if(mResourcesManager == null) {
+            mResourcesManager = new ResourcesManager();
+        }
 
-	return mResourcesManager;
+        return mResourcesManager;
     }
 
     public static void setContext(Context context) {
-	mContext = context;
-	updatePackageName();
-	updateResources();
+        mContext = context;
+        updatePackageName();
+        updateResources();
     }
 
     public boolean isContextAssigned() {
-	if(mContext == null) {
-	    return false;
-	}
-	return true;
+        if(mContext == null) {
+            return false;
+        }
+        return true;
     }
 
     public Bitmap getBitmapByName(String name) {
-	Bitmap bitmap;
-	Resources resources;
+        Bitmap bitmap;
+        Resources resources;
 
-	// id == 0 is illegal
-	int id = getIdByName("drawable", name);
-	if(id == 0) {
-	    id = getDefaultIdByName("drawable", name);
-	    resources = mDefaultResources;
-	} else {
-	    resources = mOuterResources;
-	}
+        // id == 0 is illegal
+        int id = getIdByName("drawable", name);
+        if(id == 0) {
+            id = getDefaultIdByName("drawable", name);
+            resources = mDefaultResources;
+        } else {
+            resources = mOuterResources;
+        }
 
-	bitmap = BitmapFactory.decodeResource(resources , id);
-	return bitmap;
+        bitmap = BitmapFactory.decodeResource(resources , id);
+        return bitmap;
     }
 
     public Drawable getDrawableByName(String name) {
-	int id = getIdByName("drawable", name);
-	Resources resources;
-	if(id == 0 ) {
-	    id = getDefaultIdByName("drawable", name);
-	    resources = mDefaultResources;
-	} else {
-	    resources = mOuterResources;
-	}
+        int id = getIdByName("drawable", name);
+        Resources resources;
+        if(id == 0 ) {
+            id = getDefaultIdByName("drawable", name);
+            resources = mDefaultResources;
+        } else {
+            resources = mOuterResources;
+        }
 
-	return resources.getDrawable(id);
+        return resources.getDrawable(id);
     }
 
     private int getDefaultIdByName(String type, String name) {
-	Resources resources = mDefaultResources;
-	String packageName  = mDefaultPackageName;
-	int id = resources.getIdentifier(name, type, packageName);
+        Resources resources = mDefaultResources;
+        String packageName  = mDefaultPackageName;
+        int id = resources.getIdentifier(name, type, packageName);
 
-	return id;
+        return id;
     }
 
     private int getIdByName(String type, String name) {
-	Resources resources = mOuterResources;
-	String packageName  = mOuterPackageName;
-	int id = resources.getIdentifier(name, type, packageName);
+        Resources resources = mOuterResources;
+        String packageName  = mOuterPackageName;
+        int id = resources.getIdentifier(name, type, packageName);
 
-	if(id == 0) {
-	    Log.i(TAG ,"BAD:id is 0,"+name+" at "+packageName);
-	}
+        if(id == 0) {
+            Log.i(TAG ,"BAD:id is 0,"+name+" at "+packageName);
+        }
 
-	return id;
+        return id;
     }
 
     private static void updateResources() {
-	updatePackageName();
-	mDefaultResources = mContext.getResources();
+        updatePackageName();
+        mDefaultResources = mContext.getResources();
 
-	String packageName = mOuterPackageName;
-	if(packageName.equals(DEFAULT_THEME)) {
-	    mOuterResources = mContext.getResources();
-	} else {
-	    /* If found target package, use the resources of it */
-	    PackageManager pm = mContext.getPackageManager();
-	    try {
-		mOuterResources = pm.getResourcesForApplication(packageName);
-	    }
-	    catch (PackageManager.NameNotFoundException ex) {
-		ex.printStackTrace();
-		mOuterResources = mContext.getResources();
-	    }
-	}
+        String packageName = mOuterPackageName;
+        if(packageName.equals(DEFAULT_THEME)) {
+            mOuterResources = mContext.getResources();
+        } else {
+            /* If found target package, use the resources of it */
+            PackageManager pm = mContext.getPackageManager();
+            try {
+                mOuterResources = pm.getResourcesForApplication(packageName);
+            }
+            catch (PackageManager.NameNotFoundException ex) {
+                ex.printStackTrace();
+                mOuterResources = mContext.getResources();
+            }
+        }
     }
 
     private static void updatePackageName() {
-	String preference = getPreference();
-	if(preference.equals(DEFAULT_VALUE)) {
-	    mOuterPackageName = mDefaultPackageName;
-	} else {
-	    mOuterPackageName = preference;
-	}
+        String preference = getPreference();
+        if(preference.equals(DEFAULT_VALUE)) {
+            mOuterPackageName = mDefaultPackageName;
+        } else {
+            mOuterPackageName = preference;
+        }
     }
 
     private static String getPreference() {
-	SharedPreferences settings = mContext.getSharedPreferences(LAUNCHER_THEME,
-		Context.MODE_WORLD_READABLE);
-	String value = settings.getString(LAUNCHER_THEME, DEFAULT_VALUE);
-	return value;
+        SharedPreferences settings = mContext.getSharedPreferences(LAUNCHER_THEME,
+                Context.MODE_WORLD_READABLE);
+        String value = settings.getString(LAUNCHER_THEME, DEFAULT_VALUE);
+        return value;
     }
 }
 

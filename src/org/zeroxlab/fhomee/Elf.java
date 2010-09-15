@@ -41,17 +41,17 @@ public class Elf extends Pet{
     private PetBar mPetBar;
 
     Elf() {
-	super();
-	setTextureByName(DEFAULT_TEXTURE);
+        super();
+        setTextureByName(DEFAULT_TEXTURE);
     }
 
     public void setPetBar(PetBar bar) {
-	mPetBar = bar;
+        mPetBar = bar;
     }
 
     @Override
     public void onClick() {
-	super.onClick();
+        super.onClick();
     }
 }
 

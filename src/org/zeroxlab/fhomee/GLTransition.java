@@ -50,46 +50,46 @@ public class GLTransition{
     protected TextureObj[] mTextures;
 
     GLTransition(String[] name, long[] time) {
-	int length = name.length;
-	mName = new String[length];
-	mTime = new long[length];
-	mTextures = new TextureObj[length];
+        int length = name.length;
+        mName = new String[length];
+        mTime = new long[length];
+        mTextures = new TextureObj[length];
 
-	for (int i = 0; i < length; i++) {
-	    mName[i] = name[i];
-	    mTime[i] = DEFAULT_TIME;
-	}
+        for (int i = 0; i < length; i++) {
+            mName[i] = name[i];
+            mTime[i] = DEFAULT_TIME;
+        }
 
-	int time_length = time.length;
-	if (time_length > mTime.length) {
-	    time_length = mTime.length;
-	}
+        int time_length = time.length;
+        if (time_length > mTime.length) {
+            time_length = mTime.length;
+        }
 
-	mTotal = 0;
-	for (int i = 0; i < time_length; i++) {
-	    mTime[i] = time[i];
-	    mTotal += mTime[i];
-	}
+        mTotal = 0;
+        for (int i = 0; i < time_length; i++) {
+            mTime[i] = time[i];
+            mTotal += mTime[i];
+        }
     }
 
     public static void setNow(long now) {
-	Now = now;
+        Now = now;
     }
 
     public long getLife() {
-	return mTotal;
+        return mTotal;
     }
 
     public void setStart(long start) {
-	mStart = start;
+        mStart = start;
     }
 
     public void generateTextures() {
-	Bitmap bitmap;
-	for (int i = 0; i < mName.length; i++) {
-	    bitmap = ResourcesMgr.getBitmapByName(mName[i]);
-	    mTextures[i] = TextureMgr.getTextureObj(bitmap, mName[i]);
-	}
+        Bitmap bitmap;
+        for (int i = 0; i < mName.length; i++) {
+            bitmap = ResourcesMgr.getBitmapByName(mName[i]);
+            mTextures[i] = TextureMgr.getTextureObj(bitmap, mName[i]);
+        }
     }
 
     /**
@@ -100,21 +100,21 @@ public class GLTransition{
      * @return the corresponding texture id
      */
     public TextureObj getNowTextureObj() {
-	if (mStart + mTotal < Now) {
-	    mStart = Now;
-	}
-	long elapse = Now - mStart;
-	int  tail   = mTime.length;
-	for (int i = 0; i < tail; i++) {
-	    elapse = elapse - mTime[i];
-	    if(elapse <= 0) {
-		//  we are at mTime[i] < Now < mTime[i+1]
-		return mTextures[i];
-	    }
-	}
+        if (mStart + mTotal < Now) {
+            mStart = Now;
+        }
+        long elapse = Now - mStart;
+        int  tail   = mTime.length;
+        for (int i = 0; i < tail; i++) {
+            elapse = elapse - mTime[i];
+            if(elapse <= 0) {
+                //  we are at mTime[i] < Now < mTime[i+1]
+                return mTextures[i];
+            }
+        }
 
-	/* If exceed, return last one */
-	return mTextures[tail];
+        /* If exceed, return last one */
+        return mTextures[tail];
     }
 }
 

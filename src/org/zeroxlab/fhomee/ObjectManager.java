@@ -43,59 +43,59 @@ public class ObjectManager{
     private int mCounter = 0;
 
     private ObjectManager() {
-	mObjectMap = new HashMap();
+        mObjectMap = new HashMap();
     }
 
     synchronized static public ObjectManager getInstance() {
-	if(manager == null) {
-	    manager = new ObjectManager();
-	}
+        if(manager == null) {
+            manager = new ObjectManager();
+        }
 
-	return manager;
+        return manager;
     }
 
     public GLObject getGLObjectById(int id) {
-	Integer target = new Integer(id);
-	GLObject obj = (GLObject)mObjectMap.get(target);
+        Integer target = new Integer(id);
+        GLObject obj = (GLObject)mObjectMap.get(target);
 
-	if (obj == null) {
-	    Log.i(TAG, "cannot find out GLObject which id = "+ id);
-	}
+        if (obj == null) {
+            Log.i(TAG, "cannot find out GLObject which id = "+ id);
+        }
 
-	return obj;
+        return obj;
     }
 
     public Integer getIdByGLObject(GLObject obj) {
-	Integer id = null;
-	Set keys = mObjectMap.keySet();
-	Iterator<Integer> iterator = keys.iterator();
-	while (id == null && iterator.hasNext()) {
-	    Integer pointer = iterator.next();
-	    if (obj.equals(mObjectMap.get(pointer))) {
-		id = pointer;
-	    }
-	}
+        Integer id = null;
+        Set keys = mObjectMap.keySet();
+        Iterator<Integer> iterator = keys.iterator();
+        while (id == null && iterator.hasNext()) {
+            Integer pointer = iterator.next();
+            if (obj.equals(mObjectMap.get(pointer))) {
+                id = pointer;
+            }
+        }
 
-	if (id == null) {
-	    Log.i(TAG, "Cannot find out the id of GLObject");
-	}
+        if (id == null) {
+            Log.i(TAG, "Cannot find out the id of GLObject");
+        }
 
-	return id;
+        return id;
     }
 
     public synchronized int register(GLObject obj) {
 
-	Integer id = null;
+        Integer id = null;
 
-	if (mObjectMap.containsValue(obj)) {
-	    id = getIdByGLObject(obj);
-	    Log.i(TAG, "GLObject already registered, ID = " + id.intValue());
-	} else {
-	    id = fetchUsableId();
-	    mObjectMap.put(id, obj);
-	}
+        if (mObjectMap.containsValue(obj)) {
+            id = getIdByGLObject(obj);
+            Log.i(TAG, "GLObject already registered, ID = " + id.intValue());
+        } else {
+            id = fetchUsableId();
+            mObjectMap.put(id, obj);
+        }
 
-	return id.intValue();
+        return id.intValue();
     }
 
     /* unregister the GLObject from manager
@@ -103,26 +103,26 @@ public class ObjectManager{
      * otherwise GC never recycle the memory.
      */
     public void unregister(GLObject obj) {
-	Integer id = new Integer(obj.getId());
-	mObjectMap.remove(id);
+        Integer id = new Integer(obj.getId());
+        mObjectMap.remove(id);
     }
 
     private Integer fetchUsableId() {
-	Integer key;
-	do {
-	    increaseCounter();
-	    key = new Integer(mCounter);
-	} while (mObjectMap.containsKey(key));
+        Integer key;
+        do {
+            increaseCounter();
+            key = new Integer(mCounter);
+        } while (mObjectMap.containsKey(key));
 
-	return key;
+        return key;
     }
 
     private void increaseCounter() {
-	if (mCounter == Integer.MAX_VALUE) {
-	    mCounter = 0;
-	} else {
-	    mCounter++;
-	}
+        if (mCounter == Integer.MAX_VALUE) {
+            mCounter = 0;
+        } else {
+            mCounter++;
+        }
     }
 }
 

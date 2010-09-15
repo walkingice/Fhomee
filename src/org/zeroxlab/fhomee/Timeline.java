@@ -58,205 +58,205 @@ public class Timeline {
     }
 
     synchronized static public Timeline getInstance() {
-	if (mTimeline == null) {
-	    mTimeline = new Timeline();
-	}
+        if (mTimeline == null) {
+            mTimeline = new Timeline();
+        }
 
-	return mTimeline;
+        return mTimeline;
     }
 
     public void addAnimation(GLAnimation animation) {
-	animation.setStart(SystemClock.uptimeMillis());
-	synchronized(mLocker) {
-	    mUpdateTime.add(animation);
-	    int position = linearSearchByEndTime(animation.getEndTime());
-	    mAnimations.add(position, animation);
-	}
+        animation.setStart(SystemClock.uptimeMillis());
+        synchronized(mLocker) {
+            mUpdateTime.add(animation);
+            int position = linearSearchByEndTime(animation.getEndTime());
+            mAnimations.add(position, animation);
+        }
 
-	updateFrequency();
+        updateFrequency();
     }
 
     public void monitor(GLSurfaceView surface) {
-	mSurface = surface;
-	mLastRedraw = SystemClock.uptimeMillis();
-	mThread = new RedrawThread();
-	mThread.start();
+        mSurface = surface;
+        mLastRedraw = SystemClock.uptimeMillis();
+        mThread = new RedrawThread();
+        mThread.start();
 
-	mLocker = new Object();
-	mAnimations = new LinkedList<GLAnimation>();
-	mUpdateTime = new LinkedList<GLAnimation>();
-	//UpdateComparator update = new UpdateComparator();
-	//mUpdateTime = new TreeSet<GLAnimation>(update);
+        mLocker = new Object();
+        mAnimations = new LinkedList<GLAnimation>();
+        mUpdateTime = new LinkedList<GLAnimation>();
+        //UpdateComparator update = new UpdateComparator();
+        //mUpdateTime = new TreeSet<GLAnimation>(update);
     }
 
     /* Find out the position for new Animation by EndTime*/
     private int linearSearchByEndTime(long endTime) {
-	long end;
-	int counter = 0;
-	for (counter = mAnimations.size() - 1; counter >= 0;counter--) {
-	    end = mAnimations.get(counter).getEndTime();
-	    if (end > endTime) {
-		return counter+1;
-	    }
-	}
-	return 0;
+        long end;
+        int counter = 0;
+        for (counter = mAnimations.size() - 1; counter >= 0;counter--) {
+            end = mAnimations.get(counter).getEndTime();
+            if (end > endTime) {
+                return counter+1;
+            }
+        }
+        return 0;
     }
 
     private boolean clearExpiredAnimation(long now) {
-	if (mAnimations.isEmpty()) {
-	    return false;
-	}
-	boolean redraw = false;
-	long minimal = DEFAULT_UPDATE;
+        if (mAnimations.isEmpty()) {
+            return false;
+        }
+        boolean redraw = false;
+        long minimal = DEFAULT_UPDATE;
 
-	boolean keepWalking = true;
-	while (keepWalking) {
-	    GLAnimation ani = mAnimations.getLast();
-	    if (ani.isFinish(now)) {
-		ani.complete();
-		redraw = true;
+        boolean keepWalking = true;
+        while (keepWalking) {
+            GLAnimation ani = mAnimations.getLast();
+            if (ani.isFinish(now)) {
+                ani.complete();
+                redraw = true;
 
-		synchronized(mLocker) {
-		    mAnimations.remove(ani);
-		    mUpdateTime.remove(ani);
-		}
+                synchronized(mLocker) {
+                    mAnimations.remove(ani);
+                    mUpdateTime.remove(ani);
+                }
 
-		if(mAnimations.isEmpty()) {
-		    keepWalking = false;
-		}
+                if(mAnimations.isEmpty()) {
+                    keepWalking = false;
+                }
 
-		updateFrequency();
-	    } else {
-		keepWalking = false;
-	    }
-	}
+                updateFrequency();
+            } else {
+                keepWalking = false;
+            }
+        }
 
-	return redraw;
+        return redraw;
     }
 
     private void updateFrequency() {
-	mUpdate = minimalFrequency();
-	return;
+        mUpdate = minimalFrequency();
+        return;
     }
 
     private long minimalFrequency() {
-	long minimal = DEFAULT_UPDATE;
-	synchronized(mLocker) {
-	    for (int i = 0; i < mUpdateTime.size(); i++) {
-		GLAnimation ani = mUpdateTime.get(i);
-		long update = ani.getUpdateTime();
+        long minimal = DEFAULT_UPDATE;
+        synchronized(mLocker) {
+            for (int i = 0; i < mUpdateTime.size(); i++) {
+                GLAnimation ani = mUpdateTime.get(i);
+                long update = ani.getUpdateTime();
 
-		if(update < minimal) {
-		    minimal = update;
-		}
-	    }
-	}
-	return minimal;
+                if(update < minimal) {
+                    minimal = update;
+                }
+            }
+        }
+        return minimal;
     }
 
     private void processRedraw() {
-	/* Making sure the redraw thread will not keep asking redraw*/
-	if (processing) {
-	    return;
-	}
-	processing = true;
+        /* Making sure the redraw thread will not keep asking redraw*/
+        if (processing) {
+            return;
+        }
+        processing = true;
 
-	boolean haveToRedraw = false;
-	long now = SystemClock.uptimeMillis();
-	GLAnimation.setNow(now);
-	GLTransition.setNow(now);
-	haveToRedraw = clearExpiredAnimation(now);
-	if (mAnimations.isEmpty()) {
-	    //No animation, do nothing
-	} else {
-	    // FIXME: the time may be reset. maybe use Math.abs?
-	    if (mLastRedraw + mUpdate < now) {
-		haveToRedraw = true;
-	    }
-	}
+        boolean haveToRedraw = false;
+        long now = SystemClock.uptimeMillis();
+        GLAnimation.setNow(now);
+        GLTransition.setNow(now);
+        haveToRedraw = clearExpiredAnimation(now);
+        if (mAnimations.isEmpty()) {
+            //No animation, do nothing
+        } else {
+            // FIXME: the time may be reset. maybe use Math.abs?
+            if (mLastRedraw + mUpdate < now) {
+                haveToRedraw = true;
+            }
+        }
 
-	if (haveToRedraw) {
-	    mSurface.requestRender();
-	    mLastRedraw = now;
-	}
+        if (haveToRedraw) {
+            mSurface.requestRender();
+            mLastRedraw = now;
+        }
 
-	processing = false;
+        processing = false;
     }
 
     private class RedrawThread extends Thread {
-	private boolean keepRunning = true;
-	RedrawThread() {
-	}
+        private boolean keepRunning = true;
+        RedrawThread() {
+        }
 
-	public void end() {
-	    keepRunning = false;
-	}
+        public void end() {
+            keepRunning = false;
+        }
 
-	public void run() {
-	    while (keepRunning) {
-		try {
-		    sleep(sleepingPeriod);
-		    processRedraw();
-		} catch (InterruptedException exception) {
-		    Log.i(TAG,"ooops, RedrawThread was interrupted!");
-		    exception.printStackTrace();
-		}
-	    }
+        public void run() {
+            while (keepRunning) {
+                try {
+                    sleep(sleepingPeriod);
+                    processRedraw();
+                } catch (InterruptedException exception) {
+                    Log.i(TAG,"ooops, RedrawThread was interrupted!");
+                    exception.printStackTrace();
+                }
+            }
 
-	    // supposed you will never be here
-	    Log.i(TAG," thread stopped. Anything go wrong?");
-	}
+            // supposed you will never be here
+            Log.i(TAG," thread stopped. Anything go wrong?");
+        }
     }
 
-//    private class AnimationComparator implements Comparator<GLAnimation> {
-//	private final int GREATER = 1;
-//	private final int EQUAL   = 0;
-//	private final int LESS    = -1;
-//
-//	public int compare(GLAnimation ani1, GLAnimation ani2) {
-//	    long end1 = ani1.getEndTime();
-//	    long end2 = ani2.getEndTime();
-//	    if(ani1.equals(ani2)) {
-//		return EQUAL;
-//	    }
-//	    if(end1 >= end2) {
-//		return GREATER;
-//	    } else if (end1 < end2) {
-//		return LESS;
-//	    } else {
-//		return EQUAL;
-//	    }
-//	}
-//
-//	public boolean equals(Object obj) {
-//	    // FIXME: why do I need this?
-//	    return false;
-//	}
-//    }
-//
-// Maybe we need it in the future
-//
-//    private class UpdateComparator implements Comparator<GLAnimation> {
-//
-//	/* do not return 0, we may add two similar Animation into TreeSet.
-//	   You cannot add Animation into TreeSet if compare() return 0 */
-//	public int compare(GLAnimation ani1, GLAnimation ani2) {
-//	    long update1 = ani1.getUpdateTime();
-//	    long update2 = ani2.getUpdateTime();
-//	    if (ani1.mId == ani2.mId) {
-//		return 0; // equal
-//	    }
-//	    if(update1 >= update2) {
-//		return 1;
-//	    } else {
-//		return -1;
-//	    }
-//	}
-//
-//	public boolean equals(Object obj) {
-//	    // FIXME: why do I need this?
-//	    return false;
-//	}
-//    }
+    //    private class AnimationComparator implements Comparator<GLAnimation> {
+    //    private final int GREATER = 1;
+    //    private final int EQUAL   = 0;
+    //    private final int LESS    = -1;
+    //
+    //    public int compare(GLAnimation ani1, GLAnimation ani2) {
+    //        long end1 = ani1.getEndTime();
+    //        long end2 = ani2.getEndTime();
+    //        if(ani1.equals(ani2)) {
+    //                return EQUAL;
+    //        }
+    //        if(end1 >= end2) {
+    //                return GREATER;
+    //        } else if (end1 < end2) {
+    //                return LESS;
+    //        } else {
+    //                return EQUAL;
+    //        }
+    //    }
+    //
+    //    public boolean equals(Object obj) {
+    //        // FIXME: why do I need this?
+    //        return false;
+    //    }
+    //    }
+    //
+    // Maybe we need it in the future
+    //
+    //    private class UpdateComparator implements Comparator<GLAnimation> {
+    //
+    //    /* do not return 0, we may add two similar Animation into TreeSet.
+    //       You cannot add Animation into TreeSet if compare() return 0 */
+    //    public int compare(GLAnimation ani1, GLAnimation ani2) {
+    //        long update1 = ani1.getUpdateTime();
+    //        long update2 = ani2.getUpdateTime();
+    //        if (ani1.mId == ani2.mId) {
+    //                return 0; // equal
+    //        }
+    //        if(update1 >= update2) {
+    //                return 1;
+    //        } else {
+    //                return -1;
+    //        }
+    //    }
+    //
+    //    public boolean equals(Object obj) {
+    //        // FIXME: why do I need this?
+    //        return false;
+    //    }
+    //    }
 }
 

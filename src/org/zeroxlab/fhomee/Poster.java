@@ -54,7 +54,7 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
 
     Poster(float x, float y, float width, float height, String textureName) {
         super(x, y, width, height);
-	setTextureByName(textureName);
+        setTextureByName(textureName);
     }
 
     public boolean invokable() {
@@ -72,79 +72,79 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
     }
 
     public void showBubble(String text, boolean showOption) {
-	if (mHasBubble) {
-	    mBubble.clearBubble();
-	}
+        if (mHasBubble) {
+            mBubble.clearBubble();
+        }
 
-	final float offset = 15f;
-	mBubble = new Bubble(this);
-	mBubble.setText(text);
-	mBubble.showOptions(showOption);
-	mHasBubble = true;
-	mBubble.setSize(186f, 70f);
-	mBubble.setXY(this.getWidth() - offset, -(mBubble.getHeight() - offset));
-	addChild(mBubble);
-	mHasBubble = true;
+        final float offset = 15f;
+        mBubble = new Bubble(this);
+        mBubble.setText(text);
+        mBubble.showOptions(showOption);
+        mHasBubble = true;
+        mBubble.setSize(186f, 70f);
+        mBubble.setXY(this.getWidth() - offset, -(mBubble.getHeight() - offset));
+        addChild(mBubble);
+        mHasBubble = true;
     }
 
     public void hideBubble() {
-	if (mBubble != null) {
-	    mBubble.clearBubble();
-	    removeChild(mBubble);
-	}
-	mHasBubble = false;
+        if (mBubble != null) {
+            mBubble.clearBubble();
+            removeChild(mBubble);
+        }
+        mHasBubble = false;
     }
 
     public void resetNumber() {
-	setNumber(0);
+        setNumber(0);
     }
 
     public void setNumber(int num) {
-	if (num > 0) {
-	    mNumber = num;
-	    removeNumber();
-	    mNumberLabel = createNumber(num);
-	    mNumberLabel.setXY(-5f, -5f);
-	    addChild(mNumberLabel);
-	} else if(num <= 0 ){
-	    removeNumber();
-	}
+        if (num > 0) {
+            mNumber = num;
+            removeNumber();
+            mNumberLabel = createNumber(num);
+            mNumberLabel.setXY(-5f, -5f);
+            addChild(mNumberLabel);
+        } else if(num <= 0 ){
+            removeNumber();
+        }
     }
 
     private GLLabel createNumber(int num) {
-	mNumber = num;
-	GLLabel label = new GLLabel();
-	String text = "" + num;
-	label.setTextSize(14);
-	label.setBackground("number");
-	label.setSize(20f, 20f);
-	label.setColor(0xFFFFFFFF); // White
-	label.setText(text);
-	return label;
+        mNumber = num;
+        GLLabel label = new GLLabel();
+        String text = "" + num;
+        label.setTextSize(14);
+        label.setBackground("number");
+        label.setSize(20f, 20f);
+        label.setColor(0xFFFFFFFF); // White
+        label.setText(text);
+        return label;
     }
 
     private void removeNumber() {
-	if (mNumberLabel == null) {
-	    return;
-	}
+        if (mNumberLabel == null) {
+            return;
+        }
 
-	super.removeChild(mNumberLabel);
-	mNumberLabel.clear();
-	mNumberLabel = null;
-	mNumber = 0;
+        super.removeChild(mNumberLabel);
+        mNumberLabel.clear();
+        mNumberLabel = null;
+        mNumber = 0;
     }
 
     @Override
     public void setSize(float width, float height) {
-	super.setSize(width, height);
-	if (mHasBubble) {
-	    mBubble.setXY(this.getWidth(), 0);
-	}
+        super.setSize(width, height);
+        if (mHasBubble) {
+            mBubble.setXY(this.getWidth(), 0);
+        }
     }
 
     @Override
     public void drawMyself(GL10 gl) {
-	super.drawMyself(gl);
+        super.drawMyself(gl);
     }
 
     @Override
@@ -154,20 +154,20 @@ public class Poster extends GLObject implements Bubble.BubbleOwner{
             return;
         }
 
-	if(mHasBubble) {
-	} else {
-	    showBubble("Hi", true);
-	}
+        if(mHasBubble) {
+        } else {
+            showBubble("Hi", true);
+        }
     }
 
     public void onBubbleFinish(int flag) {
-	hideBubble();
-	/* Testing code */
-	if (flag == Bubble.BUTTON_OK) {
-	    setNumber(++mNumber);
-	} else if (flag == Bubble.BUTTON_CANCEL) {
-	    resetNumber();
-	}
+        hideBubble();
+        /* Testing code */
+        if (flag == Bubble.BUTTON_OK) {
+            setNumber(++mNumber);
+        } else if (flag == Bubble.BUTTON_CANCEL) {
+            resetNumber();
+        }
     }
 }
 

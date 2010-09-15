@@ -60,10 +60,10 @@ public class Pet extends GLObject{
 
     protected int[]    mWalkingFootID;
     protected String[] mWalkingFoot = {
-	"elf_walk1"
-	, "elf_walk2"
-	, "elf_walk3"
-	, "elf_walk4"
+        "elf_walk1"
+            , "elf_walk2"
+            , "elf_walk3"
+            , "elf_walk4"
     };
 
     Pet() {
@@ -71,31 +71,31 @@ public class Pet extends GLObject{
     }
 
     Pet(Poster poster) {
-	super(0, 0, 20, 20);
-	int footNum = mWalkingFoot.length;
-	mWalkingFootID = new int[footNum];
+        super(0, 0, 20, 20);
+        int footNum = mWalkingFoot.length;
+        mWalkingFootID = new int[footNum];
 
         mPoster = poster;
 
-	setTextureByName("elf_body");
+        setTextureByName("elf_body");
         if (mPoster != null) {
             setTexture(mPoster.getTexture());
         }
 
-	mBorder = new GLObject(10, 10);
-	mFoot   = new GLObject(10, 10);
+        mBorder = new GLObject(10, 10);
+        mFoot   = new GLObject(10, 10);
         mBackground = new GLView();
         mBackground.setSize(super.mRect);
         TextureObj obj = TextureMgr.getTextureObj(
                 ResourcesMgr.getBitmapByName(mBackgroundName), mBackgroundName);
         mBackground.setTexture(obj);
 
-	mBorder.setTextureByName(mBorderName);
-	mFoot.setTextureByName(mStandName);
+        mBorder.setTextureByName(mBorderName);
+        mFoot.setTextureByName(mStandName);
         addChild(mBorder);
         addChild(mFoot);
 
-	mJumpAni = new Jump(1000, 0, 0);
+        mJumpAni = new Jump(1000, 0, 0);
     }
 
     @Override
@@ -156,35 +156,35 @@ public class Pet extends GLObject{
             return;
         }
 
-	mJumpAni.setDestination(mPositionX, mPositionY);
-	setAnimation(mJumpAni);
-	Timeline.getInstance().addAnimation(mJumpAni);
+        mJumpAni.setDestination(mPositionX, mPositionY);
+        setAnimation(mJumpAni);
+        Timeline.getInstance().addAnimation(mJumpAni);
     }
 
     class Jump extends GLTranslate{
-	int mTimes = 4;
-	float mHeight = -30; // negative means up
-	long mRoutine;
+        int mTimes = 4;
+        float mHeight = -30; // negative means up
+        long mRoutine;
 
-	Jump(long howlong, float endX, float endY) {
-	    super(howlong, endX, endY);
+        Jump(long howlong, float endX, float endY) {
+            super(howlong, endX, endY);
 
-	    int circle   = (int) mTimes / 2;
-	    mRoutine = mLife / circle; //   time/per-circle
-	}
+            int circle   = (int) mTimes / 2;
+            mRoutine = mLife / circle; //   time/per-circle
+        }
 
-	@Override
-	public boolean applyAnimation(GL10 gl) {
-	    boolean glObjectDrawItself = true;
-	    float elapse = GLAnimation.mNow - mStart;
-	    float percentOfTick = (float)(elapse % mRoutine) / mRoutine;
-	    float percentOfAll  = (float)(elapse / mLife);
-	    double radians = Math.toRadians(360 * percentOfTick);
+        @Override
+        public boolean applyAnimation(GL10 gl) {
+            boolean glObjectDrawItself = true;
+            float elapse = GLAnimation.mNow - mStart;
+            float percentOfTick = (float)(elapse % mRoutine) / mRoutine;
+            float percentOfAll  = (float)(elapse / mLife);
+            double radians = Math.toRadians(360 * percentOfTick);
             /* 5f is a dirty hack cause PetBar setXY(x, -5f) to this one */
-	    float offset = (float) Math.abs(Math.sin(radians)) * mHeight * (1 - percentOfAll) - 5f;
-	    mObject.setXY(mObject.getX(), offset);
-	    return glObjectDrawItself;
-	}
+            float offset = (float) Math.abs(Math.sin(radians)) * mHeight * (1 - percentOfAll) - 5f;
+            mObject.setXY(mObject.getX(), offset);
+            return glObjectDrawItself;
+        }
     }
 }
 

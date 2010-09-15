@@ -79,170 +79,170 @@ public class GLLabel extends GLObject {
     float  mTextY = 0f;
 
     GLLabel() {
-	this("");
+        this("");
     }
 
     GLLabel(String string) {
-	this(string, 255, 0, 0, 0);
+        this(string, 255, 0, 0, 0);
     }
 
     GLLabel(String string, int a, int r, int g, int b) {
-	this(mMinWidth, mMinHeight, string, a, r, g, b);
+        this(mMinWidth, mMinHeight, string, a, r, g, b);
     }
 
     GLLabel(float width, float height, String string
-	    , int a, int r, int g, int b) {
-	this(0f, 0f, width, height, string, a, r, g, b);
-    }
+            , int a, int r, int g, int b) {
+        this(0f, 0f, width, height, string, a, r, g, b);
+            }
 
     GLLabel(float x, float y, float width, float height, String string
-	    , int a, int r, int g, int b) {
-	super(x, y, width, height);
-	mTextPaint = new Paint();
-	mTextPaint.setAntiAlias(true);
-	mTextPaint.setARGB(a, r, g, b);
-	setTextSize(mDefaultTextSize);
-	if (!string.equals("")) {
-	    setText(string);
-	}
-    }
+            , int a, int r, int g, int b) {
+        super(x, y, width, height);
+        mTextPaint = new Paint();
+        mTextPaint.setAntiAlias(true);
+        mTextPaint.setARGB(a, r, g, b);
+        setTextSize(mDefaultTextSize);
+        if (!string.equals("")) {
+            setText(string);
+        }
+            }
 
     public void setLevel(int level) {
-	mLevel = level;
+        mLevel = level;
     }
 
     public void setColor(int color) {
-	mTextPaint.setColor(color);
+        mTextPaint.setColor(color);
     }
 
     public void setTextSize(float size) {
-	mTextPaint.setTextSize(size);
+        mTextPaint.setTextSize(size);
 
-	if (mTextView != null) {
-	    setText(mString);
-	}
+        if (mTextView != null) {
+            setText(mString);
+        }
     }
 
     public void setText(String text) {
-	destroyText();
-	mString = text;
-	mStringName = text;
-	createText();
+        destroyText();
+        mString = text;
+        mStringName = text;
+        createText();
     }
 
     /* setSize only change the size of background
        do not change the size of text */
     @Override
     public void setSize(float width, float height) {
-	super.setSize(width, height);
-	tweakTextPosition();
+        super.setSize(width, height);
+        tweakTextPosition();
     }
 
     private void tweakTextPosition() {
 
-	if (mTextView == null) {
-	    return;
-	}
+        if (mTextView == null) {
+            return;
+        }
 
-	float textWidth  = mTextPaint.measureText(mString);
-	float ascent     = Math.abs(mTextPaint.ascent());
-	float descent    = Math.abs(mTextPaint.descent());
-	float textHeight = ascent + descent;
+        float textWidth  = mTextPaint.measureText(mString);
+        float ascent     = Math.abs(mTextPaint.ascent());
+        float descent    = Math.abs(mTextPaint.descent());
+        float textHeight = ascent + descent;
 
-	mTextWidthPx  = textWidth;
-	mTextHeightPx = textHeight;
+        mTextWidthPx  = textWidth;
+        mTextHeightPx = textHeight;
 
         /* sadly, width and height should be the power of 2 */
-	/* Therefore, the size of TextView is usually larger than we seen */
-	Bitmap textureBitmap = mTextView.getTexture().getBitmap();
+        /* Therefore, the size of TextView is usually larger than we seen */
+        Bitmap textureBitmap = mTextView.getTexture().getBitmap();
         float textureWidth  = textureBitmap.getWidth();
         float textureHeight = textureBitmap.getHeight();
 
-	int screenWidth  = ViewManager.mScreenWidth;
-	int screenHeight = ViewManager.mScreenHeight;
-	float nearWidth  = ViewManager.PROJ_WIDTH  * textureWidth / screenWidth;
-	float nearHeight = ViewManager.PROJ_HEIGHT * textureHeight/ screenHeight;
+        int screenWidth  = ViewManager.mScreenWidth;
+        int screenHeight = ViewManager.mScreenHeight;
+        float nearWidth  = ViewManager.PROJ_WIDTH  * textureWidth / screenWidth;
+        float nearHeight = ViewManager.PROJ_HEIGHT * textureHeight/ screenHeight;
 
-	mTextureWidth  = ViewManager.convertToLevel(mLevel, nearWidth);
-	mTextureHeight = ViewManager.convertToLevel(mLevel, nearHeight);
-	mTextRect = new RectF(0, 0, mTextureWidth, mTextureHeight);
-	mTextView.setSize(mTextRect);
+        mTextureWidth  = ViewManager.convertToLevel(mLevel, nearWidth);
+        mTextureHeight = ViewManager.convertToLevel(mLevel, nearHeight);
+        mTextRect = new RectF(0, 0, mTextureWidth, mTextureHeight);
+        mTextView.setSize(mTextRect);
 
-	/* User only care about the visible area or text */
-	nearWidth  = ViewManager.PROJ_WIDTH  * textWidth / screenWidth;
-	nearHeight = ViewManager.PROJ_HEIGHT * textHeight/ screenHeight;
-	float textW = ViewManager.convertToLevel(mLevel, nearWidth);
-	float textH = ViewManager.convertToLevel(mLevel, nearHeight);
+        /* User only care about the visible area or text */
+        nearWidth  = ViewManager.PROJ_WIDTH  * textWidth / screenWidth;
+        nearHeight = ViewManager.PROJ_HEIGHT * textHeight/ screenHeight;
+        float textW = ViewManager.convertToLevel(mLevel, nearWidth);
+        float textH = ViewManager.convertToLevel(mLevel, nearHeight);
 
-	/* If we have background, move text to the center */
-	if (mGLView == null) {
-	    mTextX = 0f;
-	    mTextY = 0f;
-	    // No background, GLLabel size equals to Text size
-	    // FIXME: it might cause problem if you setSize before
-	    // setBackground. in setSize, mGLView is null yet
-	    // so the size of GLLabe will be same as Text.
-	    super.setSize(textW, textH);
-	} else {
-	    /* Put text in the center of background */
-	    mTextX = (mRect.width() - textW)/ 2;
-	    mTextY = (mRect.height()- textH)/ 2;
-	}
+        /* If we have background, move text to the center */
+        if (mGLView == null) {
+            mTextX = 0f;
+            mTextY = 0f;
+            // No background, GLLabel size equals to Text size
+            // FIXME: it might cause problem if you setSize before
+            // setBackground. in setSize, mGLView is null yet
+            // so the size of GLLabe will be same as Text.
+            super.setSize(textW, textH);
+        } else {
+            /* Put text in the center of background */
+            mTextX = (mRect.width() - textW)/ 2;
+            mTextY = (mRect.height()- textH)/ 2;
+        }
     }
 
     public void setBackground(String background) {
-	super.setTextureByName(background);
-	tweakTextPosition();
+        super.setTextureByName(background);
+        tweakTextPosition();
     }
 
     protected void createText() {
-	if (mTextView == null) {
-	    mTextView = new GLView();
+        if (mTextView == null) {
+            mTextView = new GLView();
 
-	    TextureObj texture;
-	    texture = TextureMgr.getStringTextureObj(mStringName, mString, mTextPaint);
-	    mTextView.setTexture(texture);
-	}
+            TextureObj texture;
+            texture = TextureMgr.getStringTextureObj(mStringName, mString, mTextPaint);
+            mTextView.setTexture(texture);
+        }
 
-	tweakTextPosition();
-	mVisible = true;
+        tweakTextPosition();
+        mVisible = true;
     }
 
     protected void destroyText() {
-	if (mTextView != null) {
-	    mTextView.clear();
-	    mTextView = null;
-	}
+        if (mTextView != null) {
+            mTextView.clear();
+            mTextView = null;
+        }
 
-	mVisible = (mGLView != null); // do background?
+        mVisible = (mGLView != null); // do background?
     }
 
     @Override
     protected void drawMyself(GL10 gl) {
-	if (mGLView != null) {
-	    mGLView.drawGLView(gl);
-	}
+        if (mGLView != null) {
+            mGLView.drawGLView(gl);
+        }
 
-	if (mTextView != null) {
-	    gl.glTranslatef(mTextX, mTextY, 0f);
-	    mTextView.drawGLView(gl);
-	}
+        if (mTextView != null) {
+            gl.glTranslatef(mTextX, mTextY, 0f);
+            mTextView.drawGLView(gl);
+        }
 
-	gl.glColor4f(1f, 1f, 1f, 1f);
+        gl.glColor4f(1f, 1f, 1f, 1f);
     }
 
     @Override
     public void clear() {
-	super.clear();
-	if (mTextView != null) {
-	    mTextView.clear();
-	}
+        super.clear();
+        if (mTextView != null) {
+            mTextView.clear();
+        }
     }
     @Override
     protected void destroyGLView() {
-	super.destroyGLView();
+        super.destroyGLView();
 
-	mVisible = (mTextView != null); // no backgroud but has Text
+        mVisible = (mTextView != null); // no backgroud but has Text
     }
 }
 

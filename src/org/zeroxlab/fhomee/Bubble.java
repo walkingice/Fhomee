@@ -64,143 +64,143 @@ public class Bubble extends GLObject implements GLObject.ClickListener {
     public final static float mCloseHeight = 25f;
 
     public Bubble(BubbleOwner owner) {
-	super(1f, 1f);
-	setTextureByName(background);
-	mOwner = owner;
+        super(1f, 1f);
+        setTextureByName(background);
+        mOwner = owner;
 
-	mLabel = new GLLabel();
-	mLabel.setColor(mDefaultLabelColor);
-	addChild(mLabel);
+        mLabel = new GLLabel();
+        mLabel.setColor(mDefaultLabelColor);
+        addChild(mLabel);
 
-	mOk     = new GLLabel("OK");
-	mCancel = new GLLabel("Cancel");
-	mOk.setColor(mDefaultLabelColor);
-	mCancel.setColor(mDefaultLabelColor);
-	mOk.setBackground("button");
-	mCancel.setBackground("button");
-	mOk.setVisible(false);
-	mCancel.setVisible(false);
-	addChild(mOk);
-	addChild(mCancel);
+        mOk     = new GLLabel("OK");
+        mCancel = new GLLabel("Cancel");
+        mOk.setColor(mDefaultLabelColor);
+        mCancel.setColor(mDefaultLabelColor);
+        mOk.setBackground("button");
+        mCancel.setBackground("button");
+        mOk.setVisible(false);
+        mCancel.setVisible(false);
+        addChild(mOk);
+        addChild(mCancel);
 
-	mClose = new GLObject(mCloseWidth, mCloseHeight);
-	mClose.setTextureByName(mCloseTexture);
-	float x = this.getWidth()  - mCloseWidth;
-	float y = this.getHeight() - mCloseHeight;
-	mClose.setXY(x, y);
-	addChild(mClose);
+        mClose = new GLObject(mCloseWidth, mCloseHeight);
+        mClose.setTextureByName(mCloseTexture);
+        float x = this.getWidth()  - mCloseWidth;
+        float y = this.getHeight() - mCloseHeight;
+        mClose.setXY(x, y);
+        addChild(mClose);
 
-	mOk.setListener(this);
-	mCancel.setListener(this);
-	mClose.setListener(this);
+        mOk.setListener(this);
+        mCancel.setListener(this);
+        mClose.setListener(this);
 
-	setLevel(mLevel);
+        setLevel(mLevel);
     }
 
     @Override
     public void setSize(float width, float height) {
-	super.setSize(width, height);
-	updateLayout();
+        super.setSize(width, height);
+        updateLayout();
     }
 
     public void setLevel(int level) {
-	mLevel = level;
-	mOk.setLevel(mLevel);
-	mCancel.setLevel(mLevel);
-	mLabel.setLevel(mLevel);
-	float tmp;
-	tmp = ViewManager.PROJ_WIDTH * BORDER_PX / ViewManager.mScreenWidth;
-	mBorder= ViewManager.convertToLevel(mLevel, tmp);
-	tmp = ViewManager.PROJ_WIDTH * BUTTON_WIDTH_PX / ViewManager.mScreenWidth;
-	mButtonWidth = ViewManager.convertToLevel(mLevel, tmp);
-	tmp = ViewManager.PROJ_HEIGHT * BUTTON_HEIGHT_PX / ViewManager.mScreenHeight;
-	mButtonHeight= ViewManager.convertToLevel(mLevel, tmp);
+        mLevel = level;
+        mOk.setLevel(mLevel);
+        mCancel.setLevel(mLevel);
+        mLabel.setLevel(mLevel);
+        float tmp;
+        tmp = ViewManager.PROJ_WIDTH * BORDER_PX / ViewManager.mScreenWidth;
+        mBorder= ViewManager.convertToLevel(mLevel, tmp);
+        tmp = ViewManager.PROJ_WIDTH * BUTTON_WIDTH_PX / ViewManager.mScreenWidth;
+        mButtonWidth = ViewManager.convertToLevel(mLevel, tmp);
+        tmp = ViewManager.PROJ_HEIGHT * BUTTON_HEIGHT_PX / ViewManager.mScreenHeight;
+        mButtonHeight= ViewManager.convertToLevel(mLevel, tmp);
 
-	mOk.setSize(mButtonWidth, mButtonHeight);
-	mCancel.setSize(mButtonWidth, mButtonHeight);
-	updateLayout();
+        mOk.setSize(mButtonWidth, mButtonHeight);
+        mCancel.setSize(mButtonWidth, mButtonHeight);
+        updateLayout();
     }
 
     public void showOptions(boolean display) {
-	mShowOptions = display;
+        mShowOptions = display;
 
-	mOk.setVisible(mShowOptions);
-	mCancel.setVisible(mShowOptions);
-	updateLayout();
+        mOk.setVisible(mShowOptions);
+        mCancel.setVisible(mShowOptions);
+        updateLayout();
     }
 
     public void setText(String text) {
-	mLabel.setText(text);
-	updateLayout();
+        mLabel.setText(text);
+        updateLayout();
     }
 
     public void addButton(int type) {
     }
 
     public void clearBubble() {
-	this.clear();
+        this.clear();
     }
 
     @Override
     public void clear() {
-	super.clear();
-	mLabel.clear();
-	mOk.clear();
-	mCancel.clear();
-	mClose.clear();
+        super.clear();
+        mLabel.clear();
+        mOk.clear();
+        mCancel.clear();
+        mClose.clear();
     }
 
     private void updateLayout() {
-	float w = getWidth();
-	float h = getHeight();
-	float center_x = w / 2;
-	float center_y = h / 2;
+        float w = getWidth();
+        float h = getHeight();
+        float center_x = w / 2;
+        float center_y = h / 2;
 
-	float x = w - mCloseWidth;
-	float y = 0;
-	mClose.setXY(x, y);
+        float x = w - mCloseWidth;
+        float y = 0;
+        mClose.setXY(x, y);
 
-	if (mShowOptions) {
-	    float bottomHeight = mButtonHeight + mBorder * 2;
-	    x = center_x - mBorder - mButtonWidth;
-	    y = h - bottomHeight + mBorder;
-	    mOk.setXY(x, y);
+        if (mShowOptions) {
+            float bottomHeight = mButtonHeight + mBorder * 2;
+            x = center_x - mBorder - mButtonWidth;
+            y = h - bottomHeight + mBorder;
+            mOk.setXY(x, y);
 
-	    x = center_x + mBorder;
-	    mCancel.setXY(x, y);
+            x = center_x + mBorder;
+            mCancel.setXY(x, y);
 
-	    h = h - bottomHeight;
-	    center_y = h / 2;
-	}
+            h = h - bottomHeight;
+            center_y = h / 2;
+        }
 
-	x = (w - mLabel.getWidth()) / 2;
-	y = (h - mLabel.getHeight()) / 2;
-	mLabel.setXY(x, y);
+        x = (w - mLabel.getWidth()) / 2;
+        y = (h - mLabel.getHeight()) / 2;
+        mLabel.setXY(x, y);
     }
 
     private void bubbleFinish(int code) {
-	if (mOwner != null) {
-	    mOwner.onBubbleFinish(code);
-	}
+        if (mOwner != null) {
+            mOwner.onBubbleFinish(code);
+        }
 
-	clearBubble();
+        clearBubble();
     }
 
     public void onClick(GLObject obj) {
-	int id = obj.getId();
-	if (id == mClose.getId()) {
-	    bubbleFinish(BUTTON_CANCEL);
-	} else if (id == mCancel.getId()) {
-	    bubbleFinish(BUTTON_CANCEL);
-	} else if (id == mOk.getId()) {
-	    bubbleFinish(BUTTON_OK);
-	}
+        int id = obj.getId();
+        if (id == mClose.getId()) {
+            bubbleFinish(BUTTON_CANCEL);
+        } else if (id == mCancel.getId()) {
+            bubbleFinish(BUTTON_CANCEL);
+        } else if (id == mOk.getId()) {
+            bubbleFinish(BUTTON_OK);
+        }
 
-	return;
+        return;
     }
 
     interface BubbleOwner {
-	public void onBubbleFinish(int flag);
+        public void onBubbleFinish(int flag);
     }
 }
 

@@ -60,74 +60,74 @@ public class GLView {
     public static TextureManager TextureMgr = TextureManager.getInstance();
 
     RectF mArea;// quick hack, it supposed to be 4 arbitrary points
-		// but not a Rectangle. Maybe a GLView will compose
-		// arbitrary triangle in the feature...hope so.
+    // but not a Rectangle. Maybe a GLView will compose
+    // arbitrary triangle in the feature...hope so.
 
     public GLView()  {
-	ByteBuffer index;
-	ByteBuffer vertex;
-	ByteBuffer texture;
-	ByteBuffer color;
-	// 1short = 2byte, 1float = 4 byte
-	index   = ByteBuffer.allocateDirect(6);
-	vertex  = ByteBuffer.allocateDirect(mVertexNum * VERTEX_DIMENSION * 4);
-	texture = ByteBuffer.allocateDirect(mVertexNum * TEXTURE_DIMENSION * 4);
-	color   = ByteBuffer.allocateDirect(mVertexNum * COLOR_SIZE * 4);
+        ByteBuffer index;
+        ByteBuffer vertex;
+        ByteBuffer texture;
+        ByteBuffer color;
+        // 1short = 2byte, 1float = 4 byte
+        index   = ByteBuffer.allocateDirect(6);
+        vertex  = ByteBuffer.allocateDirect(mVertexNum * VERTEX_DIMENSION * 4);
+        texture = ByteBuffer.allocateDirect(mVertexNum * TEXTURE_DIMENSION * 4);
+        color   = ByteBuffer.allocateDirect(mVertexNum * COLOR_SIZE * 4);
 
-	index.order(ByteOrder.nativeOrder());
-	vertex.order(ByteOrder.nativeOrder());
-	texture.order(ByteOrder.nativeOrder());
-	color.order(ByteOrder.nativeOrder());
+        index.order(ByteOrder.nativeOrder());
+        vertex.order(ByteOrder.nativeOrder());
+        texture.order(ByteOrder.nativeOrder());
+        color.order(ByteOrder.nativeOrder());
 
-	mIndexBuf   = index;
-	mVertexBuf  = vertex.asFloatBuffer();
-	mTextureBuf = texture.asFloatBuffer();
-	mColorBuf   = color.asFloatBuffer();
+        mIndexBuf   = index;
+        mVertexBuf  = vertex.asFloatBuffer();
+        mTextureBuf = texture.asFloatBuffer();
+        mColorBuf   = color.asFloatBuffer();
 
-	mIndexBuf.position(0);
-	mIndexBuf.put((byte)0);
-	mIndexBuf.put((byte)1);
-	mIndexBuf.put((byte)3);
-	mIndexBuf.put((byte)1);
-	mIndexBuf.put((byte)2);
-	mIndexBuf.put((byte)3);
-	mIndexBuf.position(0);
+        mIndexBuf.position(0);
+        mIndexBuf.put((byte)0);
+        mIndexBuf.put((byte)1);
+        mIndexBuf.put((byte)3);
+        mIndexBuf.put((byte)1);
+        mIndexBuf.put((byte)2);
+        mIndexBuf.put((byte)3);
+        mIndexBuf.position(0);
 
-	// clean all to zero
-	mVertexBuf.position(0);
-	for (int i=0; i< mVertexNum; i++) {
-	    mVertexBuf.put((float)0);
-	    mVertexBuf.put((float)0);
-	    mVertexBuf.put((float)0);
-	}
-	mVertexBuf.position(0);
+        // clean all to zero
+        mVertexBuf.position(0);
+        for (int i=0; i< mVertexNum; i++) {
+            mVertexBuf.put((float)0);
+            mVertexBuf.put((float)0);
+            mVertexBuf.put((float)0);
+        }
+        mVertexBuf.position(0);
 
-	// (0, 0) is Left-Top corner of Texture image
-	mTextureBuf.position(0);
-	mTextureBuf.put(0f); // (0, 0)
-	mTextureBuf.put(0f);
-	mTextureBuf.put(1f); // (1, 0)
-	mTextureBuf.put(0f);
-	mTextureBuf.put(1f); // (1, 1)
-	mTextureBuf.put(1f);
-	mTextureBuf.put(0f); // (0, 1)
-	mTextureBuf.put(1f);
-	mTextureBuf.position(0);
+        // (0, 0) is Left-Top corner of Texture image
+        mTextureBuf.position(0);
+        mTextureBuf.put(0f); // (0, 0)
+        mTextureBuf.put(0f);
+        mTextureBuf.put(1f); // (1, 0)
+        mTextureBuf.put(0f);
+        mTextureBuf.put(1f); // (1, 1)
+        mTextureBuf.put(1f);
+        mTextureBuf.put(0f); // (0, 1)
+        mTextureBuf.put(1f);
+        mTextureBuf.position(0);
 
-	mColorBuf.position(0);
-	for (int i=0; i< mVertexNum; i++) {
-	    mColorBuf.put(0f);
-	    mColorBuf.put(0f);
-	    mColorBuf.put(i*0.5f);
-	    mColorBuf.put(0.7f);
-	}
-	mColorBuf.position(0);
+        mColorBuf.position(0);
+        for (int i=0; i< mVertexNum; i++) {
+            mColorBuf.put(0f);
+            mColorBuf.put(0f);
+            mColorBuf.put(i*0.5f);
+            mColorBuf.put(0.7f);
+        }
+        mColorBuf.position(0);
 
-	mArea = new RectF();
+        mArea = new RectF();
     }
 
     public void setTexture(TextureObj obj) {
-	mTextureObj = obj;
+        mTextureObj = obj;
         if (mTextureObj != null) {
             mTextureBuf.position(0);
             mTextureBuf.put(mTextureObj.getBitmapCoord());
@@ -136,56 +136,56 @@ public class GLView {
     }
 
     public void setSize(RectF rect) {
-	/*  0      1
-	 *  +------+
-	 *  |      |
-	 *  |      |
-	 *  +------+
-	 *  3      2
-	 */
-	mArea.set(rect);
-	float height = mArea.height();
-	float width  = mArea.width();
+        /*  0      1
+         *  +------+
+         *  |      |
+         *  |      |
+         *  +------+
+         *  3      2
+         */
+        mArea.set(rect);
+        float height = mArea.height();
+        float width  = mArea.width();
 
-	mVertexBuf.position(0);
-	// point 0
-	//mVertexBuf.put(0, (float)0);
-	//mVertexBuf.put(1, (float)0);
-	//mVertexBuf.put(2, (float)0);
-	// point 1
-	mVertexBuf.put(3, (float)width);
-	//mVertexBuf.put(4, (float)0);
-	//mVertexBuf.put(5, (float)0);
-	// point 2
-	mVertexBuf.put(6, (float)width);
-	mVertexBuf.put(7, (float)height);
-	//mVertexBuf.put(8, (float)0);
-	// point 3
-	//mVertexBuf.put(9, (float)0);
-	mVertexBuf.put(10, (float)height);
-	//mVertexBuf.put(11,(float)0);
+        mVertexBuf.position(0);
+        // point 0
+        //mVertexBuf.put(0, (float)0);
+        //mVertexBuf.put(1, (float)0);
+        //mVertexBuf.put(2, (float)0);
+        // point 1
+        mVertexBuf.put(3, (float)width);
+        //mVertexBuf.put(4, (float)0);
+        //mVertexBuf.put(5, (float)0);
+        // point 2
+        mVertexBuf.put(6, (float)width);
+        mVertexBuf.put(7, (float)height);
+        //mVertexBuf.put(8, (float)0);
+        // point 3
+        //mVertexBuf.put(9, (float)0);
+        mVertexBuf.put(10, (float)height);
+        //mVertexBuf.put(11,(float)0);
 
-	mVertexBuf.position(0);
+        mVertexBuf.position(0);
     }
 
     public TextureObj getTexture() {
-	return mTextureObj;
+        return mTextureObj;
     }
 
     public void drawGLView(GL10 gl) {
-	if (!visible) {
-	    return;
-	}
+        if (!visible) {
+            return;
+        }
 
-	gl.glFrontFace(gl.GL_CW);
-	gl.glVertexPointer(VERTEX_DIMENSION, GL10.GL_FLOAT, 0, mVertexBuf);
-	if (mTextureObj != null) {
-	    gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureObj.getTextureId());
-	} else {
-	    Log.i(TAG, "Oooops, texture object is null");
-	}
-	gl.glTexCoordPointer(TEXTURE_DIMENSION, GL10.GL_FLOAT, 0, mTextureBuf);
-	gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuf);
+        gl.glFrontFace(gl.GL_CW);
+        gl.glVertexPointer(VERTEX_DIMENSION, GL10.GL_FLOAT, 0, mVertexBuf);
+        if (mTextureObj != null) {
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextureObj.getTextureId());
+        } else {
+            Log.i(TAG, "Oooops, texture object is null");
+        }
+        gl.glTexCoordPointer(TEXTURE_DIMENSION, GL10.GL_FLOAT, 0, mTextureBuf);
+        gl.glDrawElements(gl.GL_TRIANGLES, 6, gl.GL_UNSIGNED_BYTE, mIndexBuf);
     }
 
     //FIXME: should we have to perform any clear to ByteBuffer? I am not sure
@@ -193,11 +193,11 @@ public class GLView {
     }
 
     public void hide() {
-	visible = false;
+        visible = false;
     }
 
     public void show() {
-	visible = true;
+        visible = true;
     }
 }
 

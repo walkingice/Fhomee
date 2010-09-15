@@ -99,15 +99,15 @@ public class Camera {
             sRefresh = false;
         }
 
-	gl.glMatrixMode(gl.GL_MODELVIEW);
+        gl.glMatrixMode(gl.GL_MODELVIEW);
 
-	gl.glLoadIdentity();
+        gl.glLoadIdentity();
 
-	/* the coordinate of OpenGL is different from normal computer system
-	 * We may rotate the coordinate so we don't have to worry about that.
-	 */
-	gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
-					//         +y is heading for bottom
+        /* the coordinate of OpenGL is different from normal computer system
+         * We may rotate the coordinate so we don't have to worry about that.
+         */
+        gl.glRotatef(180f, 1f, 0f, 0f); // now the +x is heading for right
+        //         +y is heading for bottom
         for (int i = mLayers.size() - 1; i >= 0; i--) {
             gl.glPushMatrix();
             layer = mLayers.get(i);
@@ -122,33 +122,33 @@ public class Camera {
 
     public void addLayer(int location, Layer layer) {
         /*The first layer(position = 0) will be drawn in the last*/
-	synchronized(mChildrenLock) {
-	    int position = location;
+        synchronized(mChildrenLock) {
+            int position = location;
 
-	    if (position < 0 || position > mLayers.size()) {
-		position = mLayers.size(); // add to tail
-	    }
+            if (position < 0 || position > mLayers.size()) {
+                position = mLayers.size(); // add to tail
+            }
 
-	    mLayers.add(position, layer);
-	}
+            mLayers.add(position, layer);
+        }
     }
 
     public Layer removeChild(Layer layer) {
 
-	int index = mLayers.indexOf(layer);
-	return removeChild(index);
+        int index = mLayers.indexOf(layer);
+        return removeChild(index);
     }
 
     public Layer removeChild(int index) {
-	Layer layer;
-	synchronized(mChildrenLock) {
-	    if (index < 0 || index >= mLayers.size()) {
-		return null;
-	    }
+        Layer layer;
+        synchronized(mChildrenLock) {
+            if (index < 0 || index >= mLayers.size()) {
+                return null;
+            }
 
-	    layer = mLayers.remove(index);
-	}
-	return layer;
+            layer = mLayers.remove(index);
+        }
+        return layer;
     }
 
     public RectF getNearViewport() {

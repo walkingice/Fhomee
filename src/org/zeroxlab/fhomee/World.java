@@ -41,9 +41,9 @@ public class World extends GLObject implements Touchable {
     private final static float DEPTH = ViewManager.getZDepth(LEVEL);
 
     public final static float ROOM_WIDTH  = ViewManager.convertToLevel(
-	    LEVEL, ViewManager.PROJ_WIDTH);
+            LEVEL, ViewManager.PROJ_WIDTH);
     public final static float ROOM_HEIGHT = ViewManager.convertToLevel(
-	    LEVEL, ViewManager.PROJ_HEIGHT);
+            LEVEL, ViewManager.PROJ_HEIGHT);
 
     /* Only draw rooms which is current, left and right */
     public final static int ROOM_VISIBLE_LEFT  = 1;
@@ -55,34 +55,34 @@ public class World extends GLObject implements Touchable {
     private static GestureManager mGestureMgr;
 
     public World() {
-	super(0, 0, 0, 0);
-	mChildren = new LinkedList<GLObject>();
+        super(0, 0, 0, 0);
+        mChildren = new LinkedList<GLObject>();
 
-	/* depth : height = LEVEL_3 : ROOM_HEIGHT */
-	float height = BAR_HEIGHT + ROOM_HEIGHT + BAR_HEIGHT;
-	float depth  = height * DEPTH / ROOM_HEIGHT;
-	MINIMODE_DEPTH_OFFSET = depth - ViewManager.LEVEL_3;
+        /* depth : height = LEVEL_3 : ROOM_HEIGHT */
+        float height = BAR_HEIGHT + ROOM_HEIGHT + BAR_HEIGHT;
+        float depth  = height * DEPTH / ROOM_HEIGHT;
+        MINIMODE_DEPTH_OFFSET = depth - ViewManager.LEVEL_3;
 
-	mGestureMgr = GestureManager.getInstance();
+        mGestureMgr = GestureManager.getInstance();
     }
 
     @Override
     public void addChild(GLObject obj) {
-	Log.i(TAG, "class World only accept Room, use addRoom instead of this method");
+        Log.i(TAG, "class World only accept Room, use addRoom instead of this method");
     }
 
     @Override
     public void addChild(int location, GLObject obj) {
-	Log.i(TAG, "class World only accept Room, use addRoom instead of this method");
+        Log.i(TAG, "class World only accept Room, use addRoom instead of this method");
     }
 
     public void addRoom(Room room) {
-	this.addRoom(-1, room);
+        this.addRoom(-1, room);
     }
 
     public void addRoom(int position, Room room) {
-	super.addChild(position, room);
-	resetRoomPosition();
+        super.addChild(position, room);
+        resetRoomPosition();
     }
 
     public void addPoster(Poster poster, float x, float y) {
@@ -95,123 +95,123 @@ public class World extends GLObject implements Touchable {
     }
 
     private void resetRoomPosition() {
-	for (int i = 0; i < mChildren.size(); i++) {
-	    Room room = (Room)mChildren.get(i);
-	    room.setXY(i * ROOM_WIDTH - ROOM_WIDTH / 2, 0f - ROOM_HEIGHT / 2);
-	}
+        for (int i = 0; i < mChildren.size(); i++) {
+            Room room = (Room)mChildren.get(i);
+            room.setXY(i * ROOM_WIDTH - ROOM_WIDTH / 2, 0f - ROOM_HEIGHT / 2);
+        }
     }
 
     public LinkedList<GLObject> createRoomThumbnails() {
-	LinkedList<GLObject> list = new LinkedList<GLObject>();
-	for (int i = 0; i < mChildren.size(); i++) {
-	    Room room = (Room)mChildren.get(i);
-	    list.add(room.createThumbnail());
-	}
+        LinkedList<GLObject> list = new LinkedList<GLObject>();
+        for (int i = 0; i < mChildren.size(); i++) {
+            Room room = (Room)mChildren.get(i);
+            list.add(room.createThumbnail());
+        }
 
-	return list;
+        return list;
     }
 
     public void setMiniMode() {
-	mMiniMode = true;
+        mMiniMode = true;
     }
 
     public void setNormalMode() {
-	mMiniMode = false;
+        mMiniMode = false;
     }
 
     @Override
     public int pointerAt(float x, float y) {
-	int current = getCurrentRoom();
-	Room room = (Room)mChildren.get(current);
-	return room.pointerAt(x + current * ROOM_WIDTH , y);
+        int current = getCurrentRoom();
+        Room room = (Room)mChildren.get(current);
+        return room.pointerAt(x + current * ROOM_WIDTH , y);
     }
 
     public int getRoomNumber() {
-	return mChildren.size();
+        return mChildren.size();
     }
 
     public int getCurrentRoom() {
-	return mCurrentRoom;
+        return mCurrentRoom;
     }
 
     public void moveToNextRoom() {
-	moveToRoom(mCurrentRoom + 1);
+        moveToRoom(mCurrentRoom + 1);
     }
 
     public void moveToPrevRoom() {
-	moveToRoom(mCurrentRoom - 1);
+        moveToRoom(mCurrentRoom - 1);
     }
 
     public void moveToRoom(int newRoom) {
-	int nextRoom = newRoom;
-	long time = 100;
+        int nextRoom = newRoom;
+        long time = 100;
 
-	if (nextRoom >= mChildren.size()) {
-	    nextRoom = mChildren.size() -1;
-	} else if (nextRoom < 0) {
-	    nextRoom = 0;
-	}
+        if (nextRoom >= mChildren.size()) {
+            nextRoom = mChildren.size() -1;
+        } else if (nextRoom < 0) {
+            nextRoom = 0;
+        }
 
-	mCurrentRoom = nextRoom;
+        mCurrentRoom = nextRoom;
 
-	float endX = -1 * nextRoom * ROOM_WIDTH;
-	GLTranslate ani = new GLTranslate(time, endX, 0);
-	this.setAnimation(ani);
-	Timeline.getInstance().addAnimation(ani);
+        float endX = -1 * nextRoom * ROOM_WIDTH;
+        GLTranslate ani = new GLTranslate(time, endX, 0);
+        this.setAnimation(ani);
+        Timeline.getInstance().addAnimation(ani);
     }
 
     public boolean onPressEvent(PointF point, MotionEvent event) {
-	return true;
+        return true;
     }
 
     public boolean onReleaseEvent(PointF point, MotionEvent event) {
-	if (mGestureMgr.mSnapToNext) {
-	    this.moveToRoom(this.getCurrentRoom() + 1);
-	} else if (mGestureMgr.mSnapToPrev) {
-	    this.moveToRoom(this.getCurrentRoom() - 1);
-	} else {
-	    this.moveToRoom(this.getCurrentRoom());
-	}
+        if (mGestureMgr.mSnapToNext) {
+            this.moveToRoom(this.getCurrentRoom() + 1);
+        } else if (mGestureMgr.mSnapToPrev) {
+            this.moveToRoom(this.getCurrentRoom() - 1);
+        } else {
+            this.moveToRoom(this.getCurrentRoom());
+        }
 
-	return true;
+        return true;
     }
 
     public boolean onDragEvent(PointF point, MotionEvent event) {
-	int dx = mGestureMgr.getDeltaX();
-	float levelX = ViewManager.convertToLevel(ViewManager.LEVEL_WORLD, dx);
-	int current = this.getCurrentRoom();
-	int rooms   = this.getChildrenCount();
+        int dx = mGestureMgr.getDeltaX();
+        float levelX = ViewManager.convertToLevel(ViewManager.LEVEL_WORLD, dx);
+        int current = this.getCurrentRoom();
+        int rooms   = this.getChildrenCount();
 
-	/* At leftest room and slide to right
-	   Or at rightest romm and slide to left */
-	if ((current == 0 && dx > 0)
-		|| (current == rooms - 1 && dx < 0)) {
-	    levelX = levelX / ViewManager.PROJ_WIDTH;
-	} else {
+        /* At leftest room and slide to right
+           Or at rightest romm and slide to left */
+        if ((current == 0 && dx > 0)
+                || (current == rooms - 1 && dx < 0)) {
+            levelX = levelX / ViewManager.PROJ_WIDTH;
+        } else {
             /* the multiplier effects the scrolling behavior of draging room */
-	    levelX = levelX * 4 / ViewManager.PROJ_WIDTH;
-	}
+            levelX = levelX * 4 / ViewManager.PROJ_WIDTH;
+        }
 
-	float endX = -1 * current * Room.WIDTH + levelX;
-	float endY = 0;
+        float endX = -1 * current * Room.WIDTH + levelX;
+        float endY = 0;
 
-	this.setXY(endX, endY);
+        this.setXY(endX, endY);
 
-	return true;
+        return true;
     }
 
     public boolean onLongPressEvent(PointF point, MotionEvent event) {
-	int target = pointerAt(point.x, point.y);
-	Room room = (Room)mChildren.get(getCurrentRoom());
-	if (target != -1 && target != room.getId()) {
-	    Poster poster = room.removePoster(target);
-	    if (poster != null) {
+        int target = pointerAt(point.x, point.y);
+        Room room = (Room)mChildren.get(getCurrentRoom());
+        if (target != -1 && target != room.getId()) {
+            Poster poster = room.removePoster(target);
+            if (poster != null) {
                 ViewManager.getInstance().editPoster(poster);
-	    }
-	    return true;
-	}
+            }
+            return true;
+        }
 
-	return false;
+        return false;
     }
 }
 

@@ -55,120 +55,120 @@ public class Dock extends GLObject implements Touchable {
     protected boolean mNormal = true;
 
     public Dock(float width, float height) {
-	this(width, height, null);
+        this(width, height, null);
     }
 
     public Dock(float width, float height, String background) {
-	super(0, 0, width, height);
+        super(0, 0, width, height);
 
-	if (background != null) {
-	    super.setTextureByName(background);
-	}
+        if (background != null) {
+            super.setTextureByName(background);
+        }
     }
 
     protected void resetSizeParameters(int size) {
-	mObjNum = size;
-	float width  = mRect.width();
-	float height = mRect.height();
+        mObjNum = size;
+        float width  = mRect.width();
+        float height = mRect.height();
 
-	mHGap = width  * BORDER_RATIO * 0.1f;
-	mVGap = height * BORDER_RATIO;
+        mHGap = width  * BORDER_RATIO * 0.1f;
+        mVGap = height * BORDER_RATIO;
 
-	float total = width - (mObjNum + 1) * mHGap;
-	mObjWidth = total / mObjNum;
-	mObjHeight = height - mVGap * 2; // top and bottom
+        float total = width - (mObjNum + 1) * mHGap;
+        mObjWidth = total / mObjNum;
+        mObjHeight = height - mVGap * 2; // top and bottom
     }
 
     public static float objWidth() {
-	return mObjWidth;
+        return mObjWidth;
     }
 
     public static float objHeight() {
-	return mObjHeight;
+        return mObjHeight;
     }
 
     @Override
     public void setSize(float width, float height) {
-	super.setSize(width, height);
+        super.setSize(width, height);
     }
 
     public void readThumbnails(World world) {
-	if (world == null) {
-	    Log.i(TAG, "Error: World is null");
-	    return;
-	}
+        if (world == null) {
+            Log.i(TAG, "Error: World is null");
+            return;
+        }
 
-	mWorld = world;
+        mWorld = world;
 
-	LinkedList<GLObject> list = mWorld.createRoomThumbnails();
-	int size = list.size();
+        LinkedList<GLObject> list = mWorld.createRoomThumbnails();
+        int size = list.size();
 
-	if (size == 0) {
-	    Log.i(TAG, "Warning: No Thumbnail");
-	    return;
-	}
+        if (size == 0) {
+            Log.i(TAG, "Warning: No Thumbnail");
+            return;
+        }
 
-	resetSizeParameters(size);
+        resetSizeParameters(size);
 
-	for (int i = 0; i < list.size(); i++) {
-	    GLObject obj = list.get(i);
-	    obj.setSize(mObjWidth, mObjHeight);
-	    super.addChild(obj);
-	}
+        for (int i = 0; i < list.size(); i++) {
+            GLObject obj = list.get(i);
+            obj.setSize(mObjWidth, mObjHeight);
+            super.addChild(obj);
+        }
 
-	resetObjPosition();
+        resetObjPosition();
 
-	list.clear();
-	list = null;
+        list.clear();
+        list = null;
     }
 
     protected void resetObjPosition() {
-	if (mChildren != null) {
-	    GLObject obj;
-	    for (int i = 0; i < getChildrenCount(); i++) {
-		obj = mChildren.get(i);
-		float x = mHGap + i * (mHGap + mObjWidth);
-		float y = mVGap;
-		obj.setXY(x, y);
-	    }
-	}
+        if (mChildren != null) {
+            GLObject obj;
+            for (int i = 0; i < getChildrenCount(); i++) {
+                obj = mChildren.get(i);
+                float x = mHGap + i * (mHGap + mObjWidth);
+                float y = mVGap;
+                obj.setXY(x, y);
+            }
+        }
     }
 
     public void release(int x) {
-	mReleaseObj = getTarget(x);
+        mReleaseObj = getTarget(x);
     }
 
     public void press(int x) {
-	mPressObj = getTarget(x);
+        mPressObj = getTarget(x);
     }
 
     private int getTarget(int x) {
-	if (x > super.width() || x <  getX()) {
-	    return -1;
-	}
-	float ratio = x / super.width();
-	return (int)(ratio * mObjNum);
+        if (x > super.width() || x <  getX()) {
+            return -1;
+        }
+        float ratio = x / super.width();
+        return (int)(ratio * mObjNum);
     }
 
     public int getSelectedRoom() {
-	return mSelectRoom;
+        return mSelectRoom;
     }
 
     public boolean onPressEvent(PointF point, MotionEvent event) {
-	mPressObj = getTarget((int)point.x);
-	return true;
+        mPressObj = getTarget((int)point.x);
+        return true;
     }
 
     public boolean onReleaseEvent(PointF point, MotionEvent event) {
-	mReleaseObj = getTarget((int)point.x);
+        mReleaseObj = getTarget((int)point.x);
 
-	bumpObjects(-1);
-	return true;
+        bumpObjects(-1);
+        return true;
     }
 
     public boolean onDragEvent(PointF point, MotionEvent event) {
-	bumpObjects((int)point.x);
-	return true;
+        bumpObjects((int)point.x);
+        return true;
     }
 
     public boolean onLongPressEvent(PointF point, MotionEvent event) {
@@ -176,53 +176,53 @@ public class Dock extends GLObject implements Touchable {
     }
 
     public void bumpObjects(int press) {
-	int x = press;
+        int x = press;
 
-	if (mChildren == null || mWorld == null) {
-	    return;
-	}
+        if (mChildren == null || mWorld == null) {
+            return;
+        }
 
-	/* If out of bounds, do not bump any objects */
-	if (x < super.getX() || x > super.width()) {
-	    x = -1;
-	}
+        /* If out of bounds, do not bump any objects */
+        if (x < super.getX() || x > super.width()) {
+            x = -1;
+        }
 
-	if (x == -1 && mNormal == true) {
-	    return;
-	} else {
-	    mNormal = false;
-	}
+        if (x == -1 && mNormal == true) {
+            return;
+        } else {
+            mNormal = false;
+        }
 
-	GLObject obj;
-	for (int i = 0; i < getChildrenCount(); i++) {
-	    obj = mChildren.get(i);
-	    if (x == -1 ) {
-		float objX  = obj.getX();
-		obj.setXY(objX, mVGap);
-		obj.setDepth(0);
-	    } else {
-		int offset = Math.abs((int)obj.getX() - x);
-		float ratio = offset / super.width();
-		float objX  = obj.getX();
-		obj.setXY(objX, mVGap + 40*(ratio - 1));
-		obj.setDepth(5*(ratio - 1));
-	    }
-	}
+        GLObject obj;
+        for (int i = 0; i < getChildrenCount(); i++) {
+            obj = mChildren.get(i);
+            if (x == -1 ) {
+                float objX  = obj.getX();
+                obj.setXY(objX, mVGap);
+                obj.setDepth(0);
+            } else {
+                int offset = Math.abs((int)obj.getX() - x);
+                float ratio = offset / super.width();
+                float objX  = obj.getX();
+                obj.setXY(objX, mVGap + 40*(ratio - 1));
+                obj.setDepth(5*(ratio - 1));
+            }
+        }
 
-	if (mWorld != null && x != -1) {
-	    int now = mWorld.getCurrentRoom();
-	    int next = (int)(x * mWorld.getChildrenCount()  / super.width());
-	    if (now != next) {
-		mWorld.moveToRoom(next);
-	    }
-	}
+        if (mWorld != null && x != -1) {
+            int now = mWorld.getCurrentRoom();
+            int next = (int)(x * mWorld.getChildrenCount()  / super.width());
+            if (now != next) {
+                mWorld.moveToRoom(next);
+            }
+        }
 
-	if (x == -1) {
-	    /* Reset whole objects to normal state */
-	    mNormal = true;
-	}
+        if (x == -1) {
+            /* Reset whole objects to normal state */
+            mNormal = true;
+        }
 
-	return;
+        return;
     }
 
     @Override
@@ -236,19 +236,19 @@ public class Dock extends GLObject implements Touchable {
 
     @Override
     public void onClick() {
-	if (mReleaseObj == mPressObj && mPressObj != -1) {
-	    mSelectRoom = mReleaseObj;
-	} else {
-	    mSelectRoom = -1;
-	}
+        if (mReleaseObj == mPressObj && mPressObj != -1) {
+            mSelectRoom = mReleaseObj;
+        } else {
+            mSelectRoom = -1;
+        }
 
         if (mSelectRoom != -1) {
             mWorld.moveToRoom(mSelectRoom);
             ViewManager.getInstance().turnOffMiniMode();
         }
 
-	mReleaseObj = -1;
-	mPressObj   = -1;
+        mReleaseObj = -1;
+        mPressObj   = -1;
     }
 }
 

@@ -43,80 +43,80 @@ public class GLAnimation {
     protected GLObject mObject;
 
     GLAnimation(long howLong) {
-	this(howLong, DEFAULT_UPDATE);
+        this(howLong, DEFAULT_UPDATE);
     }
 
     GLAnimation(long howLong,long update) {
-	mLife   = howLong;
-	mUpdate = update;
+        mLife   = howLong;
+        mUpdate = update;
     }
 
     public static void setNow(long now) {
-	mNow = now;
+        mNow = now;
     }
 
     public void setListener(GLAnimationListener listener) {
-	mListener = listener;
+        mListener = listener;
     }
 
     public void setStart(long start) {
-	mStart = start;
-	mEnd   = mStart + mLife;
+        mStart = start;
+        mEnd   = mStart + mLife;
     }
 
     public void setUpdateTime(long update) {
-	mUpdate = update;
+        mUpdate = update;
     }
 
     public long getUpdateTime() {
-	return mUpdate;
+        return mUpdate;
     }
 
     public long getEndTime() {
-	return mEnd;
+        return mEnd;
     }
 
     public boolean isFinish(long now) {
-	if (now > mEnd) {
-	    return true;
-	}
-	return false;
+        if (now > mEnd) {
+            return true;
+        }
+        return false;
     }
 
     public void bindGLObject(GLObject object) {
-	mObject = object;
+        mObject = object;
     }
 
     public void unbindGLObject() {
-	mObject = null;
+        mObject = null;
     }
 
     /* This method was called iff this Animation complete but not be interrupted.*/
     public void complete() {
-	if (mListener != null) {
-	    mListener.onAnimationEnd();
-	}
+        if (mListener != null) {
+            mListener.onAnimationEnd();
+        }
 
-	/* If this animation is interrupted, mObject becomes null */
-	if (mObject != null) {
-	    mObject.clearAnimation();
-	}
-	unbindGLObject();
+        /* If this animation is interrupted, mObject becomes null */
+        if (mObject != null) {
+            mObject.clearAnimation();
+        }
+        unbindGLObject();
     }
 
     public boolean applyAnimation(GL10 gl) {
-	// do nothing yet, subclass overwrite me
-	/* FIXME: if a subclass want to operate mObject at applyAnimation
-	   it might cause a null pointer exception because while another thread
-	   set a new animation to GLObject, it call unbindGLObject
-	   then clear mObject
-	 */
-	boolean glObjectDrawItself = true;
-	return glObjectDrawItself;
+        // do nothing yet, subclass overwrite me
+        /* FIXME: if a subclass want to operate mObject at applyAnimation
+           it might cause a null pointer exception because while another thread
+           set a new animation to GLObject, it call unbindGLObject
+           then clear mObject
+           */
+        boolean glObjectDrawItself = true;
+        return glObjectDrawItself;
     }
 
     interface GLAnimationListener {
-	public void onAnimationEnd();
+        public void onAnimationEnd();
     }
 }
 

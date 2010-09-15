@@ -52,30 +52,30 @@ public class TouchSurface extends GLObject {
     private float mSightHeight = 20f;
 
     TouchSurface() {
-	super(0, 0, Width, Height);
+        super(0, 0, Width, Height);
 
-	mTimeline = Timeline.getInstance();
+        mTimeline = Timeline.getInstance();
 
-	mSight = new GLObject(0f, 0f, mSightWidth, mSightHeight);
-	mSight.setTextureByName("sight00");
+        mSight = new GLObject(0f, 0f, mSightWidth, mSightHeight);
+        mSight.setTextureByName("sight00");
 
-	String name[] = new String[] {"sight01", "sight02", "sight03", "sight04"};
-	long time[] = new long[] {80, 50, 50, 50};
-	mNotify = new GLTransition(name, time);
+        String name[] = new String[] {"sight01", "sight02", "sight03", "sight04"};
+        long time[] = new long[] {80, 50, 50, 50};
+        mNotify = new GLTransition(name, time);
     }
 
     public void clickAt(float x, float y) {
-	x = x - mSightWidth / 2;
-	y = y - mSightHeight / 2;
-	GLTransAni notify = new GLTransAni(mNotify);
-	mSight.setXY(x, y);
-	Log.i(TAG, "Set to "+x+" "+y);
-	mSight.setAnimation(notify);
-	mTimeline.addAnimation(notify);
+        x = x - mSightWidth / 2;
+        y = y - mSightHeight / 2;
+        GLTransAni notify = new GLTransAni(mNotify);
+        mSight.setXY(x, y);
+        Log.i(TAG, "Set to "+x+" "+y);
+        mSight.setAnimation(notify);
+        mTimeline.addAnimation(notify);
     }
 
     public void draw(GL10 gl) {
-	mSight.draw(gl);
+        mSight.draw(gl);
     }
 }
 

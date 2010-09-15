@@ -35,26 +35,26 @@ public class GLTransAni extends GLAnimation {
     protected GLTransition mTransition;
 
     GLTransAni(GLTransition transition) {
-	super(transition.getLife());
-	super.setUpdateTime(TRANSITION_UPDATE);
-	mTransition = transition;
-	mTransition.setStart(GLTransition.Now);
+        super(transition.getLife());
+        super.setUpdateTime(TRANSITION_UPDATE);
+        mTransition = transition;
+        mTransition.setStart(GLTransition.Now);
     }
 
     /* This method was called iff this Animation complete but not be interrupted.*/
     public void complete() {
-	if (mObject != null) {
-	    TextureObj obj = mObject.getTexture();
-	    mObject.setTexture(obj);
-	}
-	super.complete();
+        if (mObject != null) {
+            TextureObj obj = mObject.getTexture();
+            mObject.setTexture(obj);
+        }
+        super.complete();
     }
 
     public boolean applyAnimation(GL10 gl) {
-	boolean glObjectDrawItself = true;
-	TextureObj obj = mTransition.getNowTextureObj();
-	mObject.setTexture(obj);
-	return glObjectDrawItself;
+        boolean glObjectDrawItself = true;
+        TextureObj obj = mTransition.getNowTextureObj();
+        mObject.setTexture(obj);
+        return glObjectDrawItself;
     }
 }
 

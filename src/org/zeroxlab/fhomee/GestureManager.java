@@ -92,16 +92,16 @@ public class GestureManager {
     public long mReleaseTime = 0;
 
     private GestureManager() {
-	updateScreenSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-	mWhere = TOPLEVEL;
+        updateScreenSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        mWhere = TOPLEVEL;
     }
 
     synchronized static public GestureManager getInstance() {
-	if (mGestureMgr == null) {
-	    mGestureMgr = new GestureManager();
-	}
+        if (mGestureMgr == null) {
+            mGestureMgr = new GestureManager();
+        }
 
-	return mGestureMgr;
+        return mGestureMgr;
     }
 
     /* It return a value that indicate should ViewManager keep processing this event.
@@ -109,8 +109,8 @@ public class GestureManager {
     public int processMotionEvent(MotionEvent event) {
         int next;
         int forward = KEEP_FORWARD;
-	if(mWhere == TOPLEVEL) {
-	    next = eventAtToplevel(event);
+        if(mWhere == TOPLEVEL) {
+            next = eventAtToplevel(event);
             if (next == PRESSING) {
                 /* Only send Press Event once */
                 forward = (mNow == PRESS) ? STOP_FORWARD : KEEP_FORWARD;
@@ -121,8 +121,8 @@ public class GestureManager {
                 forward = mModeChange ? STOP_FORWARD : KEEP_FORWARD;
             }
             mNow = next;
-	}
-	return forward;
+        }
+        return forward;
     }
 
     public int getState() {
@@ -130,79 +130,79 @@ public class GestureManager {
     }
 
     public int getDeltaX() {
-	return mDeltaX;
+        return mDeltaX;
     }
 
     public int getDeltaY() {
-	return mDeltaY;
+        return mDeltaY;
     }
 
     public long pressTime() {
-	return mReleaseTime - mPressTime;
+        return mReleaseTime - mPressTime;
     }
 
     private void updateSnappingState() {
-	int threshold = (int) (mScreenWidth / 2.5);
-	if (Math.abs(mDeltaX) < threshold) {
-	    mSnapToNext = false;
-	    mSnapToPrev = false;
-	} else if (mDeltaX > 0) {
-	    mSnapToNext = false;
-	    mSnapToPrev = true;
-	} else {
-	    mSnapToNext = true;
-	    mSnapToPrev = false;
-	}
+        int threshold = (int) (mScreenWidth / 2.5);
+        if (Math.abs(mDeltaX) < threshold) {
+            mSnapToNext = false;
+            mSnapToPrev = false;
+        } else if (mDeltaX > 0) {
+            mSnapToNext = false;
+            mSnapToPrev = true;
+        } else {
+            mSnapToNext = true;
+            mSnapToPrev = false;
+        }
     }
 
     private int eventAtToplevel(MotionEvent event) {
-	int action = event.getAction();
-	int x = (int) event.getX();
-	int y = (int) event.getY();
-	mNowX = x;
-	mNowY = y;
-	mDeltaX = mNowX - mPressX;
-	mDeltaY = mNowY - mPressY;
-	int next = mNow;
+        int action = event.getAction();
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        mNowX = x;
+        mNowY = y;
+        mDeltaX = mNowX - mPressX;
+        mDeltaY = mNowY - mPressY;
+        int next = mNow;
 
-	switch (action) {
-	    case MotionEvent.ACTION_UP:
-		mReleaseTime = event.getEventTime();
-		mReleaseX = x;
-		mReleaseY = y;
-		updateSnappingState();
-		mPressSwitch = false;
-		mModeChange = false;
+        switch (action) {
+            case MotionEvent.ACTION_UP:
+                mReleaseTime = event.getEventTime();
+                mReleaseX = x;
+                mReleaseY = y;
+                updateSnappingState();
+                mPressSwitch = false;
+                mModeChange = false;
 
-		next = RELEASE;
-		break;
-	    case MotionEvent.ACTION_DOWN:
-		mPressTime = event.getDownTime();
-		mPressX = x;
-		mPressY = y;
-		mReleaseX = -1;
-		mReleaseY = -1;
-		mDeltaX   = 0;
-		mDeltaY   = 0;
+                next = RELEASE;
+                break;
+            case MotionEvent.ACTION_DOWN:
+                mPressTime = event.getDownTime();
+                mPressX = x;
+                mPressY = y;
+                mReleaseX = -1;
+                mReleaseY = -1;
+                mDeltaX   = 0;
+                mDeltaY   = 0;
 
-		mPressSwitch = mMiniSwitchOn.contains(x, y) || mMiniSwitchOff.contains(x, y);
-		mMiniMode    = mMiniSwitchOn.contains(x, y);
+                mPressSwitch = mMiniSwitchOn.contains(x, y) || mMiniSwitchOff.contains(x, y);
+                mMiniMode    = mMiniSwitchOn.contains(x, y);
 
-		/* Reset flag */
-		mIsDragging = false;
-		mIsLongPress = false;
-		mModeChange  = false;
+                /* Reset flag */
+                mIsDragging = false;
+                mIsLongPress = false;
+                mModeChange  = false;
 
-		next = PRESS;
-		break;
-	    case MotionEvent.ACTION_MOVE:
+                next = PRESS;
+                break;
+            case MotionEvent.ACTION_MOVE:
                 if (mNow == PRESS || mNow == PRESSING) {
                     mIsHDrag = Math.abs(mDeltaX) > DRAG_H_THRESHOLD;
-		    mIsVDrag = Math.abs(mDeltaY) > DRAG_V_THRESHOLD;
-		    mIsDragging = mIsHDrag || mIsVDrag;
+                    mIsVDrag = Math.abs(mDeltaY) > DRAG_V_THRESHOLD;
+                    mIsDragging = mIsHDrag || mIsVDrag;
 
-		    long time = event.getEventTime();
-		    mIsLongPress = (time - mPressTime > LONGPRESS_THRESHOLD);
+                    long time = event.getEventTime();
+                    mIsLongPress = (time - mPressTime > LONGPRESS_THRESHOLD);
 
                     if (mIsDragging) {
                         next = DRAGGING;
@@ -212,38 +212,38 @@ public class GestureManager {
                         next = PRESSING;
                     }
                 }
-		// Decide the state with priority
-		// Dragging is the first, and then is HDragging, Long pressing
-		if (mNow == DRAGGING) {
+                // Decide the state with priority
+                // Dragging is the first, and then is HDragging, Long pressing
+                if (mNow == DRAGGING) {
                     if (mIsVDrag && mPressSwitch) {
                         mModeChange = ((mMiniMode && mMiniSwitchOff.contains(x, y))
                                 ||(!mMiniMode && mMiniSwitchOn.contains(x, y)));
                         mMiniMode = mMiniSwitchOn.contains(x, y);
                     }
                     next = DRAGGING;
-		}
-		break;
-	    default:
-		next = RELEASE;
-	}
+                }
+                break;
+            default:
+                next = RELEASE;
+        }
 
-	return next;
+        return next;
     }
 
     public void updateScreenSize(int width, int height) {
-	mScreenWidth  = width;
-	mScreenHeight = height;
+        mScreenWidth  = width;
+        mScreenHeight = height;
 
-	int switchHeight = (int) (height * 0.25f);
+        int switchHeight = (int) (height * 0.25f);
 
-	mSwitchLeft  = 0;
-	mSwitchRight = (int) (width  * 0.33f);
-	mSwitchTop   = (int) (height * 0.6f);
-	mSwitchBottom = mSwitchTop + switchHeight;
+        mSwitchLeft  = 0;
+        mSwitchRight = (int) (width  * 0.33f);
+        mSwitchTop   = (int) (height * 0.6f);
+        mSwitchBottom = mSwitchTop + switchHeight;
 
-	mMiniSwitchOff  = new Rect(mSwitchLeft, mSwitchTop, mSwitchRight, mSwitchBottom);
-	mMiniSwitchOn = new Rect(mMiniSwitchOff);
-	mMiniSwitchOn.offsetTo(mSwitchLeft, mSwitchBottom);
+        mMiniSwitchOff  = new Rect(mSwitchLeft, mSwitchTop, mSwitchRight, mSwitchBottom);
+        mMiniSwitchOn = new Rect(mMiniSwitchOff);
+        mMiniSwitchOn.offsetTo(mSwitchLeft, mSwitchBottom);
     }
 }
 

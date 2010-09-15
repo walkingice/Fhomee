@@ -43,63 +43,63 @@ public class GLTranslate extends GLAnimation{
     private float mIncludedAngle = 0f;
 
     GLTranslate(long howlong, float endX, float endY) {
-	super(howlong, 10);
-	setDestination(endX, endY);
+        super(howlong, 10);
+        setDestination(endX, endY);
     }
 
     public void setAngle(float endAngle) {
-	float startAngle = 0f;
-	if (mObject != null) {
-	    startAngle = mObject.getAngle();
-	}
+        float startAngle = 0f;
+        if (mObject != null) {
+            startAngle = mObject.getAngle();
+        }
 
-	setAngle(startAngle, endAngle);
+        setAngle(startAngle, endAngle);
     }
 
     public void setAngle(float startAngle, float endAngle) {
-	mStartAngle = startAngle;
-	mEndAngle   = endAngle;
-	mIncludedAngle = mEndAngle - mStartAngle;
+        mStartAngle = startAngle;
+        mEndAngle   = endAngle;
+        mIncludedAngle = mEndAngle - mStartAngle;
     }
 
     public void bindGLObject(GLObject object) {
-	super.bindGLObject(object);
-	mStartX = mObject.getX();
-	mStartY = mObject.getY();
-	setDestination(mEndX, mEndY);
-	float angle = mObject.getAngle();
-	Log.i(TAG, "Reset angle while binding object:"+mObject.getId());
-	setAngle(mObject.getAngle(), mObject.getAngle());
+        super.bindGLObject(object);
+        mStartX = mObject.getX();
+        mStartY = mObject.getY();
+        setDestination(mEndX, mEndY);
+        float angle = mObject.getAngle();
+        Log.i(TAG, "Reset angle while binding object:"+mObject.getId());
+        setAngle(mObject.getAngle(), mObject.getAngle());
     }
 
     public void setDestination(float destX, float destY) {
-	mEndX = destX;
-	mEndY = destY;
-	mGapX = mEndX - mStartX;
-	mGapY = mEndY - mStartY;
+        mEndX = destX;
+        mEndY = destY;
+        mGapX = mEndX - mStartX;
+        mGapY = mEndY - mStartY;
     }
 
     public void complete() {
-	/* if this animation is interrupted, mObject becomes null */
-	if (mObject != null) {
-	    mObject.setXY(mEndX, mEndY);
-	    mObject.setAngle(mEndAngle);
-	}
-	super.complete();
+        /* if this animation is interrupted, mObject becomes null */
+        if (mObject != null) {
+            mObject.setXY(mEndX, mEndY);
+            mObject.setAngle(mEndAngle);
+        }
+        super.complete();
     }
 
     public boolean applyAnimation(GL10 gl) {
-	boolean glObjectDrawItself = true;
-	float now  = GLAnimation.mNow;
-	float life = mLife;
-	float elapse = now - mStart;
-	float ratio = elapse / life;
-	float x = mGapX * ratio + mStartX;
-	float y = mGapY * ratio + mStartY;
-	float angle = mIncludedAngle * ratio + mStartAngle;
-	mObject.setXY(x, y);
-	mObject.setAngle(angle);
-	return glObjectDrawItself;
+        boolean glObjectDrawItself = true;
+        float now  = GLAnimation.mNow;
+        float life = mLife;
+        float elapse = now - mStart;
+        float ratio = elapse / life;
+        float x = mGapX * ratio + mStartX;
+        float y = mGapY * ratio + mStartY;
+        float angle = mIncludedAngle * ratio + mStartAngle;
+        mObject.setXY(x, y);
+        mObject.setAngle(angle);
+        return glObjectDrawItself;
     }
 }
 

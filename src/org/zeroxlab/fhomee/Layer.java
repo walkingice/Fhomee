@@ -62,12 +62,12 @@ public class Layer {
 
     Layer(float depth) {
         if (sProjNearWidth == -1
-            || sProjNearHeight == -1
-            || sProjNear == -1
-            || sProjLeft == -1
-            || sProjBottom == -1) {
+                || sProjNearHeight == -1
+                || sProjNear == -1
+                || sProjLeft == -1
+                || sProjBottom == -1) {
             Log.e(TAG, "please initialize Projector related parameters");
-        }
+                }
 
         mDepth = depth;
         mZn = mDepth / sProjNear;
