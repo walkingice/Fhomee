@@ -201,6 +201,17 @@ public class Camera {
         return null;
     }
 
+    public int getIdContains(PointF nearPoint) {
+        for (int i = 0; i < mLayers.size(); i++) {
+            int id = getIdContains(nearPoint, mLayers.get(i));
+            if (id != -1) {
+                return id;
+            }
+        }
+
+        return -1;
+    }
+
     public int getIdContains(PointF nearPoint, Layer layer) {
         mEventPoint.set(nearPoint.x + mNearViewport.left, nearPoint.y + mNearViewport.top);
         return layer.getIdContains(mEventPoint);
