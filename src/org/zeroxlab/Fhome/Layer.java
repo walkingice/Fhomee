@@ -270,7 +270,7 @@ public class Layer {
         return false;
     }
 
-    public boolean onLongPress(PointF nearPoint, MotionEvent event) {
+    public boolean onLongPressEvent(PointF nearPoint, MotionEvent event) {
         if (mVisible == false) {
             return false;
         }
