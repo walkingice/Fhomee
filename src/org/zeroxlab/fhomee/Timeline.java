@@ -17,6 +17,9 @@
  */
 package org.zeroxlab.fhomee;
 
+import org.zeroxlab.fhomee.time.GLAnimation;
+import org.zeroxlab.fhomee.time.GLTransition;
+
 import android.util.Log;
 
 import android.content.Context;

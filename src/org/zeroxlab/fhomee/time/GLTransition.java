@@ -17,8 +17,9 @@
  */
 
 
-package org.zeroxlab.fhomee;
+package org.zeroxlab.fhomee.time;
 
+import org.zeroxlab.fhomee.*;
 import org.zeroxlab.fhomee.entity.GLObject;
 
 import android.util.Log;
@@ -49,7 +50,7 @@ public class GLTransition{
     protected long[]   mTime;
     protected TextureObj[] mTextures;
 
-    GLTransition(String[] name, long[] time) {
+    public GLTransition(String[] name, long[] time) {
         int length = name.length;
         mName = new String[length];
         mTime = new long[length];

@@ -20,6 +20,8 @@
 package org.zeroxlab.fhomee;
 
 import org.zeroxlab.fhomee.entity.GLObject;
+import org.zeroxlab.fhomee.time.GLTransition;
+import org.zeroxlab.fhomee.time.GLTransAni;
 
 import android.util.Log;
 

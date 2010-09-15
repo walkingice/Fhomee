@@ -19,6 +19,7 @@
 
 package org.zeroxlab.fhomee.entity;
 
+import org.zeroxlab.fhomee.time.GLAnimation;
 import org.zeroxlab.fhomee.*;
 
 import android.util.Log;

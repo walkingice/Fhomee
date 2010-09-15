@@ -17,7 +17,7 @@
  */
 
 
-package org.zeroxlab.fhomee;
+package org.zeroxlab.fhomee.time;
 
 import org.zeroxlab.fhomee.entity.GLObject;
 

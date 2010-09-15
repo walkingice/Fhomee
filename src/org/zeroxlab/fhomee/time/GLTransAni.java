@@ -17,7 +17,9 @@
  */
 
 
-package org.zeroxlab.fhomee;
+package org.zeroxlab.fhomee.time;
+
+import org.zeroxlab.fhomee.time.GLTranslate;
 
 import android.util.Log;
 
@@ -34,7 +36,7 @@ public class GLTransAni extends GLAnimation {
 
     protected GLTransition mTransition;
 
-    GLTransAni(GLTransition transition) {
+    public GLTransAni(GLTransition transition) {
         super(transition.getLife());
         super.setUpdateTime(TRANSITION_UPDATE);
         mTransition = transition;

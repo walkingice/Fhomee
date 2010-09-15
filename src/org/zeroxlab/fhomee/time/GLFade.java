@@ -17,7 +17,7 @@
  */
 
 
-package org.zeroxlab.fhomee;
+package org.zeroxlab.fhomee.time;
 
 import android.util.Log;
 

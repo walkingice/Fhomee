@@ -17,7 +17,7 @@
  */
 
 
-package org.zeroxlab.fhomee;
+package org.zeroxlab.fhomee.time;
 
 import org.zeroxlab.fhomee.entity.GLObject;
 
@@ -42,7 +42,7 @@ public class GLTranslate extends GLAnimation{
     private float mEndAngle   = 0f;
     private float mIncludedAngle = 0f;
 
-    GLTranslate(long howlong, float endX, float endY) {
+    public GLTranslate(long howlong, float endX, float endY) {
         super(howlong, 10);
         setDestination(endX, endY);
     }

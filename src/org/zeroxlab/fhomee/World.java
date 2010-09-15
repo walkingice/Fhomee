@@ -20,6 +20,7 @@
 package org.zeroxlab.fhomee;
 
 import org.zeroxlab.fhomee.entity.GLObject;
+import org.zeroxlab.fhomee.time.GLTranslate;
 
 import android.util.Log;
 
