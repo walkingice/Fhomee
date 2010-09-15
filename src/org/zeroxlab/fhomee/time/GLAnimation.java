@@ -27,18 +27,9 @@ import android.content.Context;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class GLAnimation {
+public class GLAnimation extends Timer{
 
     final static String TAG="GLAnimation";
-    final public static long DEFAULT_UPDATE = 500;
-
-    protected static long mNow = 0;
-
-    private GLAnimationListener mListener;
-    protected long mStart  = 0;
-    protected long mEnd    = 0;
-    protected long mLife   = 0;
-    protected long mUpdate = 0;
 
     protected GLObject mObject;
 
@@ -47,40 +38,7 @@ public class GLAnimation {
     }
 
     GLAnimation(long howLong,long update) {
-        mLife   = howLong;
-        mUpdate = update;
-    }
-
-    public static void setNow(long now) {
-        mNow = now;
-    }
-
-    public void setListener(GLAnimationListener listener) {
-        mListener = listener;
-    }
-
-    public void setStart(long start) {
-        mStart = start;
-        mEnd   = mStart + mLife;
-    }
-
-    public void setUpdateTime(long update) {
-        mUpdate = update;
-    }
-
-    public long getUpdateTime() {
-        return mUpdate;
-    }
-
-    public long getEndTime() {
-        return mEnd;
-    }
-
-    public boolean isFinish(long now) {
-        if (now > mEnd) {
-            return true;
-        }
-        return false;
+        super(howLong, update);
     }
 
     public void bindGLObject(GLObject object) {
@@ -93,9 +51,7 @@ public class GLAnimation {
 
     /* This method was called iff this Animation complete but not be interrupted.*/
     public void complete() {
-        if (mListener != null) {
-            mListener.onAnimationEnd();
-        }
+        super.complete();
 
         /* If this animation is interrupted, mObject becomes null */
         if (mObject != null) {
@@ -113,10 +69,6 @@ public class GLAnimation {
            */
         boolean glObjectDrawItself = true;
         return glObjectDrawItself;
-    }
-
-    interface GLAnimationListener {
-        public void onAnimationEnd();
     }
 }
 
