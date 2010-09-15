@@ -215,7 +215,7 @@ public class ViewManager {
            */
 
         if (mPressId != -1 && mReleaseId == mPressId && !mGestureMgr.mIsDragging) {
-            GLObject obj = ObjectManager.getInstance().getGLObjectById(mPressId);
+            GLObject obj = (GLObject)EntityManager.getInstance().getEntityById(mPressId);
             obj.onClick();
         }
     }
