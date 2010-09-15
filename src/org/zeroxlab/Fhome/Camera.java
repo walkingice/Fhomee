@@ -201,6 +201,44 @@ public class Camera {
         return null;
     }
 
+    public Layer onDragEvent(PointF nearPoint, MotionEvent event) {
+        for (int i = 0; i < mLayers.size(); i++) {
+            if(onDragEvent(nearPoint, event, mLayers.get(i)) != null) {
+                return mLayers.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    public Layer onDragEvent(PointF nearPoint, MotionEvent event, Layer layer) {
+        mEventPoint.set(nearPoint.x + mCenter.x + LEFT, nearPoint.y + mCenter.y + TOP);
+        if(layer.onDragEvent(mEventPoint, event)) {
+            return layer;
+        }
+
+        return null;
+    }
+
+    public Layer onLongPressEvent(PointF nearPoint, MotionEvent event) {
+        for (int i = 0; i < mLayers.size(); i++) {
+            if(onLongPressEvent(nearPoint, event, mLayers.get(i)) != null) {
+                return mLayers.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    public Layer onLongPressEvent(PointF nearPoint, MotionEvent event, Layer layer) {
+        mEventPoint.set(nearPoint.x + mCenter.x + LEFT, nearPoint.y + mCenter.y + TOP);
+        if(layer.onLongPressEvent(mEventPoint, event)) {
+            return layer;
+        }
+
+        return null;
+    }
+
     public int getIdContains(PointF nearPoint) {
         for (int i = 0; i < mLayers.size(); i++) {
             int id = getIdContains(nearPoint, mLayers.get(i));
