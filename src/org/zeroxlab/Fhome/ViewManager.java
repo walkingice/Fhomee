@@ -222,6 +222,9 @@ public class ViewManager {
      * This method was called while user Moving on the screen.
      */
     public void onMove(int screenX, int screenY, MotionEvent event) {
+        getNearLocation(mNearPoint, screenX, screenY);
+        Layer layer = mCamera.onDragEvent(mNearPoint, event);
+
         /*
 	getNearLocation(mNearPoint, screenX, screenY);
 
@@ -250,6 +253,8 @@ public class ViewManager {
     }
 
     public void onLongPressing(int screenX, int screenY, MotionEvent event) {
+        getNearLocation(mNearPoint, screenX, screenY);
+        Layer layer = mCamera.onLongPressEvent(mNearPoint, event);
         /*
         getNearLocation(mNearPoint, screenX, screenY);
         if (mEditSurface.isEditing()) {
