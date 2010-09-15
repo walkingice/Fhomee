@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest  xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.zeroxlab.Fhome">
+	package="org.zeroxlab.fhomee">
     <application
-	android:label="Fhome"
+	android:label="Fhomee"
         android:icon="@drawable/icon"
 	android:debuggable="true"
     >
 	<activity
 	android:name="Launcher"
 	android:theme="@style/Theme"
-	android:label="Fhome"
+	android:label="Fhomee"
         android:icon="@drawable/icon"
 	>
 	<intent-filter>

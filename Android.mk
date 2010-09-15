@@ -21,7 +21,7 @@ LOCAL_MODULE_TAGS := user
 
 LOCAL_SRC_FILES := $(call all-subdir-java-files)
 
-LOCAL_PACKAGE_NAME := Fhome
+LOCAL_PACKAGE_NAME := Fhomee
 LOCAL_CERTIFICATE := shared
 
 include $(BUILD_PACKAGE)
