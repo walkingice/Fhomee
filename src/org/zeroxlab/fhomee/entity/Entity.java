@@ -45,8 +45,10 @@ import org.zeroxlab.fhomee.TextureManager.TextureObj;
 public class Entity {
 
     public final String TAG = "Entity";
+    public final static float UNDEFINE = -1f;
 
     protected int mID = -1;
+
 
     public Entity() {
         mID = EntityManager.getInstance().register(this);
