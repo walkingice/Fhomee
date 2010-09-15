@@ -18,7 +18,7 @@
 
 package org.zeroxlab.fhomee;
 
-import org.zeroxlab.fhomee.core.GLObject;
+import org.zeroxlab.fhomee.entity.GLObject;
 
 import android.util.Log;
 

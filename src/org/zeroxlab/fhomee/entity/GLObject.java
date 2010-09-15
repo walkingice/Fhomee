@@ -17,7 +17,7 @@
  */
 
 
-package org.zeroxlab.fhomee.core;
+package org.zeroxlab.fhomee.entity;
 
 import org.zeroxlab.fhomee.*;
 
