@@ -165,11 +165,7 @@ public class ViewManager {
     public void onPress(int screenX, int screenY, MotionEvent event) {
 	getNearLocation(mNearPoint, screenX, screenY);
         Layer layer = mCamera.onPressEvent(mNearPoint, event);
-        if (layer != null) {
-            mPressId = mCamera.getIdContains(mNearPoint, layer);
-        } else {
-            mPressId = -1;
-        }
+        mPressId = mCamera.getIdContains(mNearPoint);
 
         Log.i(TAG,"Press, id = " + mPressId + " layer is " + layer);
         /*
@@ -195,11 +191,7 @@ public class ViewManager {
     public void onRelease(int screenX, int screenY, MotionEvent event) {
 	getNearLocation(mNearPoint, screenX, screenY);
         Layer layer = mCamera.onReleaseEvent(mNearPoint, event);
-        if (layer != null) {
-            mReleaseId = mCamera.getIdContains(mNearPoint, layer);
-        } else {
-            mReleaseId = -1;
-        }
+        mReleaseId = mCamera.getIdContains(mNearPoint);
 
         Log.i(TAG,"Release, id = " + mReleaseId + " layer is " + layer);
 
