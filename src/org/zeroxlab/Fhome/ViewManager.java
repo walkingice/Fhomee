@@ -172,10 +172,6 @@ public class ViewManager {
         }
 
         Log.i(TAG,"Press, id = " + mPressId + " layer is " + layer);
-        Log.i(TAG,"Paint object *" + demo04.getX() + ","+ demo04.getY()
-                +" w=" +demo04.getWidth()+" h="+demo04.getHeight());
-
-        Log.i(TAG,"mPetBar is at" +mPetBar.getX() + " " + mPetBar.getY() + " w:"+mPetBar.getWidth());
         /*
         if (mEditSurface.isEditing()) {
             mEditLayer.onPressEvent(mNearPoint, event, mEditSurface);
