@@ -17,7 +17,7 @@
  */
 package org.zeroxlab.fhomee;
 
-import org.zeroxlab.fhomee.time.GLAnimation;
+import org.zeroxlab.fhomee.time.Timer;
 import org.zeroxlab.fhomee.time.GLTransition;
 
 import android.util.Log;
@@ -43,17 +43,17 @@ public class Timeline {
     private int DEFAULT_UPDATE = 5000; // 5 secs
 
     private static Timeline mTimeline = new Timeline();
-    private static int sleepingPeriod = 15;
+    private static int sleepingTimer = 15;
 
-    private long mLastRedraw;
+    private long mLastUpdate;
     private long mUpdate = DEFAULT_UPDATE;
 
     private GLSurfaceView mSurface;
     private RedrawThread  mThread;
 
     private Object mLocker;
-    private LinkedList<GLAnimation> mAnimations;
-    private LinkedList<GLAnimation> mUpdateTime;
+    private LinkedList<Timer> mTimers;
+    private LinkedList<Timer> mUpdateTime;
 
     private boolean processing = false;
 
@@ -68,12 +68,12 @@ public class Timeline {
         return mTimeline;
     }
 
-    public void addAnimation(GLAnimation animation) {
-        animation.setStart(SystemClock.uptimeMillis());
+    public void addTimer(Timer timer) {
+        timer.setStart(SystemClock.uptimeMillis());
         synchronized(mLocker) {
-            mUpdateTime.add(animation);
-            int position = linearSearchByEndTime(animation.getEndTime());
-            mAnimations.add(position, animation);
+            mUpdateTime.add(timer);
+            int position = linearSearchByEndTime(timer.getEndTime());
+            mTimers.add(position, timer);
         }
 
         updateFrequency();
@@ -81,23 +81,23 @@ public class Timeline {
 
     public void monitor(GLSurfaceView surface) {
         mSurface = surface;
-        mLastRedraw = SystemClock.uptimeMillis();
+        mLastUpdate = SystemClock.uptimeMillis();
         mThread = new RedrawThread();
         mThread.start();
 
         mLocker = new Object();
-        mAnimations = new LinkedList<GLAnimation>();
-        mUpdateTime = new LinkedList<GLAnimation>();
+        mTimers = new LinkedList<Timer>();
+        mUpdateTime = new LinkedList<Timer>();
         //UpdateComparator update = new UpdateComparator();
-        //mUpdateTime = new TreeSet<GLAnimation>(update);
+        //mUpdateTime = new TreeSet<GLTimer>(update);
     }
 
-    /* Find out the position for new Animation by EndTime*/
+    /* Find out the position for new Timer by EndTime*/
     private int linearSearchByEndTime(long endTime) {
         long end;
         int counter = 0;
-        for (counter = mAnimations.size() - 1; counter >= 0;counter--) {
-            end = mAnimations.get(counter).getEndTime();
+        for (counter = mTimers.size() - 1; counter >= 0;counter--) {
+            end = mTimers.get(counter).getEndTime();
             if (end > endTime) {
                 return counter+1;
             }
@@ -105,8 +105,8 @@ public class Timeline {
         return 0;
     }
 
-    private boolean clearExpiredAnimation(long now) {
-        if (mAnimations.isEmpty()) {
+    private boolean clearExpiredTimer(long now) {
+        if (mTimers.isEmpty()) {
             return false;
         }
         boolean redraw = false;
@@ -114,17 +114,17 @@ public class Timeline {
 
         boolean keepWalking = true;
         while (keepWalking) {
-            GLAnimation ani = mAnimations.getLast();
-            if (ani.isFinish(now)) {
-                ani.complete();
+            Timer timer = mTimers.getLast();
+            if (timer.isFinish(now)) {
+                timer.complete();
                 redraw = true;
 
                 synchronized(mLocker) {
-                    mAnimations.remove(ani);
-                    mUpdateTime.remove(ani);
+                    mTimers.remove(timer);
+                    mUpdateTime.remove(timer);
                 }
 
-                if(mAnimations.isEmpty()) {
+                if(mTimers.isEmpty()) {
                     keepWalking = false;
                 }
 
@@ -146,8 +146,8 @@ public class Timeline {
         long minimal = DEFAULT_UPDATE;
         synchronized(mLocker) {
             for (int i = 0; i < mUpdateTime.size(); i++) {
-                GLAnimation ani = mUpdateTime.get(i);
-                long update = ani.getUpdateTime();
+                Timer timer = mUpdateTime.get(i);
+                long update = timer.getUpdateTime();
 
                 if(update < minimal) {
                     minimal = update;
@@ -164,23 +164,27 @@ public class Timeline {
         }
         processing = true;
 
-        boolean haveToRedraw = false;
+        boolean haveToUpdate = false;
         long now = SystemClock.uptimeMillis();
-        GLAnimation.setNow(now);
+        long past = now - mLastUpdate;
+        Timer.setNow(now);
         GLTransition.setNow(now);
-        haveToRedraw = clearExpiredAnimation(now);
-        if (mAnimations.isEmpty()) {
-            //No animation, do nothing
+        haveToUpdate = clearExpiredTimer(now);
+        if (mTimers.isEmpty()) {
+            //No Timer, do nothing
         } else {
             // FIXME: the time may be reset. maybe use Math.abs?
-            if (mLastRedraw + mUpdate < now) {
-                haveToRedraw = true;
+            if (mUpdate < past) {
+                haveToUpdate = true;
             }
         }
 
-        if (haveToRedraw) {
+        if (haveToUpdate) {
+            for (int i = 0; i < mTimers.size(); i++) {
+                mTimers.get(i).update();
+            }
             mSurface.requestRender();
-            mLastRedraw = now;
+            mLastUpdate = now;
         }
 
         processing = false;
@@ -198,7 +202,7 @@ public class Timeline {
         public void run() {
             while (keepRunning) {
                 try {
-                    sleep(sleepingPeriod);
+                    sleep(sleepingTimer);
                     processRedraw();
                 } catch (InterruptedException exception) {
                     Log.i(TAG,"ooops, RedrawThread was interrupted!");
@@ -211,12 +215,12 @@ public class Timeline {
         }
     }
 
-    //    private class AnimationComparator implements Comparator<GLAnimation> {
+    //    private class TimerComparator implements Comparator<GLTimer> {
     //    private final int GREATER = 1;
     //    private final int EQUAL   = 0;
     //    private final int LESS    = -1;
     //
-    //    public int compare(GLAnimation ani1, GLAnimation ani2) {
+    //    public int compare(GLTimer ani1, GLTimer ani2) {
     //        long end1 = ani1.getEndTime();
     //        long end2 = ani2.getEndTime();
     //        if(ani1.equals(ani2)) {
@@ -239,11 +243,11 @@ public class Timeline {
     //
     // Maybe we need it in the future
     //
-    //    private class UpdateComparator implements Comparator<GLAnimation> {
+    //    private class UpdateComparator implements Comparator<GLTimer> {
     //
-    //    /* do not return 0, we may add two similar Animation into TreeSet.
-    //       You cannot add Animation into TreeSet if compare() return 0 */
-    //    public int compare(GLAnimation ani1, GLAnimation ani2) {
+    //    /* do not return 0, we may add two similar Timer into TreeSet.
+    //       You cannot add Timer into TreeSet if compare() return 0 */
+    //    public int compare(GLTimer ani1, GLTimer ani2) {
     //        long update1 = ani1.getUpdateTime();
     //        long update2 = ani2.getUpdateTime();
     //        if (ani1.mId == ani2.mId) {
