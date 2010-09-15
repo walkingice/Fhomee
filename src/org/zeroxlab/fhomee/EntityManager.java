@@ -3,8 +3,7 @@
  *
  * Copyright (c) 2009 0xlab.org - http://0xlab.org/
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * Licensed under the Apache License, Version 2.0 (the "License")entity* you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
@@ -19,7 +18,7 @@
 
 package org.zeroxlab.fhomee;
 
-import org.zeroxlab.fhomee.entity.GLObject;
+import org.zeroxlab.fhomee.entity.Entity;
 
 import android.util.Log;
 
@@ -30,81 +29,81 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-/* ObjectManager is a singleton instance */
-public class ObjectManager{
+/* EntityManager is a singleton instance */
+public class EntityManager{
 
-    final String TAG = "ObjectManager";
+    final String TAG = "EntityManager";
 
-    private static ObjectManager manager = new ObjectManager();
+    private static EntityManager manager = new EntityManager();
 
-    // Key: Id, Value: GLObject
-    private HashMap mObjectMap;
+    // Key: Id, Value: Entity
+    private HashMap mEntityMap;
 
     private int mCounter = 0;
 
-    private ObjectManager() {
-        mObjectMap = new HashMap();
+    private EntityManager() {
+        mEntityMap = new HashMap();
     }
 
-    synchronized static public ObjectManager getInstance() {
+    synchronized static public EntityManager getInstance() {
         if(manager == null) {
-            manager = new ObjectManager();
+            manager = new EntityManager();
         }
 
         return manager;
     }
 
-    public GLObject getGLObjectById(int id) {
+    public Entity getEntityById(int id) {
         Integer target = new Integer(id);
-        GLObject obj = (GLObject)mObjectMap.get(target);
+        Entity entity = (Entity)mEntityMap.get(target);
 
-        if (obj == null) {
-            Log.i(TAG, "cannot find out GLObject which id = "+ id);
+        if (entity == null) {
+            Log.i(TAG, "cannot find out Entity which id = "+ id);
         }
 
-        return obj;
+        return entity;
     }
 
-    public Integer getIdByGLObject(GLObject obj) {
+    public Integer getIdByEntity(Entity entity) {
         Integer id = null;
-        Set keys = mObjectMap.keySet();
+        Set keys = mEntityMap.keySet();
         Iterator<Integer> iterator = keys.iterator();
         while (id == null && iterator.hasNext()) {
             Integer pointer = iterator.next();
-            if (obj.equals(mObjectMap.get(pointer))) {
+            if (entity.equals(mEntityMap.get(pointer))) {
                 id = pointer;
             }
         }
 
         if (id == null) {
-            Log.i(TAG, "Cannot find out the id of GLObject");
+            Log.i(TAG, "Cannot find out the id of Entity");
         }
 
         return id;
     }
 
-    public synchronized int register(GLObject obj) {
+    public synchronized int register(Entity entity) {
 
         Integer id = null;
 
-        if (mObjectMap.containsValue(obj)) {
-            id = getIdByGLObject(obj);
-            Log.i(TAG, "GLObject already registered, ID = " + id.intValue());
+        if (mEntityMap.containsValue(entity)) {
+            id = getIdByEntity(entity);
+            Log.i(TAG, "Entity already registered, ID = " + id.intValue());
         } else {
             id = fetchUsableId();
-            mObjectMap.put(id, obj);
+            mEntityMap.put(id, entity);
         }
 
         return id.intValue();
     }
 
-    /* unregister the GLObject from manager
+    /* unregister the Entity from manager
      * NOTICE: Dont forget to call this method
      * otherwise GC never recycle the memory.
      */
-    public void unregister(GLObject obj) {
-        Integer id = new Integer(obj.getId());
-        mObjectMap.remove(id);
+    public void unregister(Entity entity) {
+        Integer id = new Integer(entity.getId());
+        mEntityMap.remove(id);
     }
 
     private Integer fetchUsableId() {
@@ -112,7 +111,7 @@ public class ObjectManager{
         do {
             increaseCounter();
             key = new Integer(mCounter);
-        } while (mObjectMap.containsKey(key));
+        } while (mEntityMap.containsKey(key));
 
         return key;
     }
