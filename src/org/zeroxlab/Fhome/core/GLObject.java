@@ -19,6 +19,8 @@
 
 package org.zeroxlab.Fhome.core;
 
+import org.zeroxlab.Fhome.*;
+
 import android.util.Log;
 
 import android.graphics.Bitmap;
@@ -48,13 +50,13 @@ public class GLObject {
 
     protected float mDepth = 0f;
 
-    ClickListener mListener;
-    GLView mGLView;
-    PointF mPosition;
-    RectF  mRect;
-    RectF  mCoverage;
-    RectF  mTmpRect;
-    float  mAngle = 0f;
+    protected ClickListener mListener;
+    protected GLView mGLView;
+    protected PointF mPosition;
+    protected RectF  mRect;
+    protected RectF  mCoverage;
+    protected RectF  mTmpRect;
+    protected float  mAngle = 0f;
 
     /* Stores the position, size of this GLObject
      * These data represent in Pixel-base of Screen.
@@ -80,17 +82,17 @@ public class GLObject {
     protected boolean mChildrenVisible = true;
     protected boolean mHasChildren = false;
     protected GLObject mParent = null;
-    LinkedList<GLObject> mChildren;
+    protected LinkedList<GLObject> mChildren;
 
     protected GLAnimation mAnimation;
     protected Object mAnimationLock;
     protected Object mChildrenLock;
 
-    GLObject(float width, float height) {
+    public GLObject(float width, float height) {
         this(0f, 0f, width, height);
     }
 
-    GLObject(float x, float y, float width, float height) {
+    public GLObject(float x, float y, float width, float height) {
         mRect = new RectF(0, 0, width, height);
         mCoverage = new RectF(mRect);
         mTmpRect  = new RectF();
@@ -621,7 +623,7 @@ public class GLObject {
         }
     }
 
-    interface ClickListener {
+    public interface ClickListener {
         public void onClick(GLObject obj);
     }
 }
