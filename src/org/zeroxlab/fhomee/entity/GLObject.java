@@ -42,44 +42,21 @@ import org.zeroxlab.fhomee.TextureManager.TextureObj;
  * GLObject represent any Object on the screen
  * it encapsulants the information including position, size...etc
  */
-public class GLObject {
+public class GLObject extends Rectangle {
 
     final String TAG = "GLObject";
-
     protected static ResourcesManager ResourcesMgr = ResourcesManager.getInstance();
     protected static TextureManager   TextureMgr   = TextureManager.getInstance();
 
-    protected float mDepth = 0f;
-
     protected ClickListener mListener;
     protected GLView mGLView;
-    protected PointF mPosition;
-    protected RectF  mRect;
-    protected RectF  mCoverage;
-    protected RectF  mTmpRect;
-    protected float  mAngle = 0f;
-
-    /* Stores the position, size of this GLObject
-     * These data represent in Pixel-base of Screen.
-     * Once method measure was called, reset position
-     * and size according to these data
-     */
-    public final static float UNDEFINE = -1f;
-    protected float mXPx = UNDEFINE;
-    protected float mYPx = UNDEFINE;
-    protected float mWidthPx  = UNDEFINE;
-    protected float mHeightPx = UNDEFINE;
 
     protected boolean mVisible = false;
 
-    Matrix mAbsTranslate;
-    Matrix mTranslate;
-    Matrix mInvert;
-    float mPts[];
     float mViewport[];
     protected boolean inViewport = true;
+    protected Matrix mAbsTranslate;
 
-    private int mID = -1;
     protected boolean mChildrenVisible = true;
     protected boolean mHasChildren = false;
     protected GLObject mParent = null;
@@ -94,23 +71,14 @@ public class GLObject {
     }
 
     public GLObject(float x, float y, float width, float height) {
-        mRect = new RectF(0, 0, width, height);
-        mCoverage = new RectF(mRect);
-        mTmpRect  = new RectF();
-        mPosition = new PointF();
+        super(x, y, width, height);
+
         mAnimationLock = new Object();
         mChildrenLock  = new Object();
 
-        mID = ObjectManager.getInstance().register(this);
-
         mAbsTranslate = new Matrix();
-        mTranslate = new Matrix();
-        mInvert = new Matrix();
-        mPts    = new float[2];
         mViewport = new float[8];
         setXY(x, y);
-        resetInvertMatrix();
-        resetTranslateMatrix();
     }
 
     public void checkViewport(float[] viewport) {
@@ -149,11 +117,13 @@ public class GLObject {
         return;
     }
 
-    public boolean contains(float x, float y) {
-        mPts[0] = x;
-        mPts[1] = y;
-        mInvert.mapPoints(mPts);
-        return mRect.contains(mPts[0], mPts[1]);
+    public void setSize(float width, float height) {
+        super.setSize(width, height);
+        if (mGLView != null) {
+            mGLView.setSize(mRect);
+        }
+
+        updateCoverage();
     }
 
     public int pointerAt(float x, float y) {
@@ -215,6 +185,10 @@ public class GLObject {
         Camera.sRefresh = true;
     }
 
+    public Matrix getAbsTranslateMatrix() {
+        return mAbsTranslate;
+    }
+
     public void getCoverage(RectF dst) {
         dst.set(mCoverage);
     }
@@ -223,22 +197,12 @@ public class GLObject {
         mTranslate.mapRect(dst, mCoverage);
     }
 
-    public Matrix getAbsTranslateMatrix() {
-        return mAbsTranslate;
-    }
-
-    public Matrix getTranslateMatrix() {
-        return mTranslate;
-    }
-
-    private void resetTranslateMatrix() {
-        mTranslate.reset();
-        mTranslate.postTranslate(mPosition.x, mPosition.y);
-        mTranslate.postRotate(mAngle);
+    protected void resetTranslateMatrix() {
+        super.resetTranslateMatrix();
         resetAbsTranslateMatrix();
     }
 
-    private void resetAbsTranslateMatrix() {
+    protected void resetAbsTranslateMatrix() {
         mAbsTranslate.reset();
         if (mParent != null) {
             mAbsTranslate.preConcat(mParent.getAbsTranslateMatrix());
@@ -254,42 +218,13 @@ public class GLObject {
         }
     }
 
-    /* A GLObject may be Translated or Rotated from Origin.
-     * mInvert holds a reverse matrix that could invert a point.
-     */
-    private void resetInvertMatrix() {
-        mInvert.reset();
-        mInvert.postTranslate(-1 * mPosition.x, -1 * mPosition.y);
-        mInvert.postRotate(-1 * mAngle);
-    }
-
     /* Before you drop this GLObject, please call this method
      * for reducing your memory usage.
      */
     public void clear() {
-        ObjectManager.getInstance().unregister(this);
+        super.clear();
         setTexture(null);
         destroyGLView();
-    }
-
-    public int getId() {
-        return mID;
-    }
-
-    public float getXPx() {
-        return mXPx;
-    }
-
-    public float getYPx() {
-        return mYPx;
-    }
-
-    public float getX() {
-        return mPosition.x;
-    }
-
-    public float getY() {
-        return mPosition.y;
     }
 
     public void setVisible(boolean visible) {
@@ -306,66 +241,6 @@ public class GLObject {
 
     public boolean getChildrenVisible(boolean visible) {
         return mChildrenVisible;
-    }
-
-    public void setSizePx(float widthPx, float heightPx) {
-        mWidthPx  = widthPx;
-        mHeightPx = heightPx;
-    }
-
-    public void setSize(float width, float height) {
-        mRect.set(0, 0, width, height);
-        if (mGLView != null) {
-            mGLView.setSize(mRect);
-        }
-
-        updateCoverage();
-    }
-
-    public void setAngle(float angle) {
-        mAngle = angle % 360;
-        resetInvertMatrix();
-        resetTranslateMatrix();
-    }
-
-    public float getAngle() {
-        return mAngle;
-    }
-
-    public float getWidthPx() {
-        return mWidthPx;
-    }
-
-    public float getHeightPx() {
-        return mHeightPx;
-    }
-
-    public float getWidth() {
-        return this.width();
-    }
-
-    public float getHeight() {
-        return this.height();
-    }
-
-    public float width() {
-        return mRect.width();
-    }
-
-    public float height() {
-        return mRect.height();
-    }
-
-    public void setXYPx(float xPx, float yPx) {
-        mXPx = xPx;
-        mYPx = yPx;
-    }
-
-    public void setXY(float x, float y) {
-        mPosition.x = x;
-        mPosition.y = y;
-        resetInvertMatrix();
-        resetTranslateMatrix();
     }
 
     public boolean measure(float ratioX, float ratioY) {
@@ -553,10 +428,6 @@ public class GLObject {
             return 0;
         }
         return mChildren.size();
-    }
-
-    public void setDepth(float depth) {
-        mDepth = depth;
     }
 
     /* This GLObject locate at a position which relate to its parent
