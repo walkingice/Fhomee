@@ -49,6 +49,9 @@ public class Layer {
     public static float sRatioH = 1;
     public static float sRatioV = 1;
 
+    /* if not visible, this layer will not be drawn neither handling event */
+    protected boolean mVisible = true;
+
     private float mDepth = 0;
     private float mZn = 0;
     private PointF mPoint;
@@ -78,6 +81,10 @@ public class Layer {
                 ,sProjNearWidth
                 ,sProjNearHeight);
         setViewport(nearViewport);
+    }
+
+    public void setVisible(boolean visible) {
+        mVisible = visible;
     }
 
     public void setViewport(RectF nearViewport) {
@@ -125,6 +132,10 @@ public class Layer {
     }
 
     public void onDraw(GL10 gl) {
+        if (mVisible == false) {
+            return;
+        }
+
         for (int i = 0; i < mChildren.size(); i++) {
             gl.glPushMatrix();
             gl.glTranslatef(0f, 0f, mDepth);
@@ -137,6 +148,10 @@ public class Layer {
      * return the id of the object which contains the point
      */
     public int getIdContains(PointF nearPoint, GLObject specificTarget) {
+        if (mVisible == false) {
+            return -1;
+        }
+
         pointNearToLayer(mZn, nearPoint, mPoint);
         if (mChildren.contains(specificTarget)) {
             return specificTarget.pointerAt(mPoint.x, mPoint.y);
@@ -145,6 +160,10 @@ public class Layer {
     }
 
     public int getIdContains(PointF nearPoint) {
+        if (mVisible == false) {
+            return -1;
+        }
+
         for (int i = 0; i < mChildren.size(); i++) {
             GLObject obj = mChildren.get(i);
             int id = getIdContains(nearPoint, obj);
@@ -157,6 +176,10 @@ public class Layer {
     }
 
     public boolean onPressEvent(PointF nearPoint, MotionEvent event, Touchable specificTarget) {
+        if (mVisible == false) {
+            return false;
+        }
+
         if (mTouchableItems.contains(specificTarget)) {
             pointNearToLayer(mZn, nearPoint, mPoint);
             return specificTarget.onPressEvent(mPoint, event);
@@ -166,6 +189,10 @@ public class Layer {
     }
 
     public boolean onReleaseEvent(PointF nearPoint, MotionEvent event, Touchable specificTarget) {
+        if (mVisible == false) {
+            return false;
+        }
+
         if (mTouchableItems.contains(specificTarget)) {
             pointNearToLayer(mZn, nearPoint, mPoint);
             return specificTarget.onReleaseEvent(mPoint, event);
@@ -175,6 +202,10 @@ public class Layer {
     }
 
     public boolean onDragEvent(PointF nearPoint, MotionEvent event, Touchable specificTarget) {
+        if (mVisible == false) {
+            return false;
+        }
+
         if (mTouchableItems.contains(specificTarget)) {
             pointNearToLayer(mZn, nearPoint, mPoint);
             return specificTarget.onDragEvent(mPoint, event);
@@ -184,6 +215,10 @@ public class Layer {
     }
 
     public boolean onLongPressEvent(PointF nearPoint, MotionEvent event, Touchable specificTarget) {
+        if (mVisible == false) {
+            return false;
+        }
+
         if (mTouchableItems.contains(specificTarget)) {
             pointNearToLayer(mZn, nearPoint, mPoint);
             return specificTarget.onLongPressEvent(mPoint, event);
@@ -194,6 +229,10 @@ public class Layer {
 
 
     public boolean onPressEvent(PointF nearPoint, MotionEvent event) {
+        if (mVisible == false) {
+            return false;
+        }
+
         for (int i = 0; i < mTouchableItems.size(); i++) {
             Touchable touchable = mTouchableItems.get(i);
             if (onPressEvent(nearPoint, event, touchable)) {
@@ -204,6 +243,10 @@ public class Layer {
     }
 
     public boolean onReleaseEvent(PointF nearPoint, MotionEvent event) {
+        if (mVisible == false) {
+            return false;
+        }
+
         for (int i = 0; i < mTouchableItems.size(); i++) {
             Touchable touchable = mTouchableItems.get(i);
             if (onReleaseEvent(nearPoint, event, touchable)) {
@@ -214,6 +257,10 @@ public class Layer {
     }
 
     public boolean onDragEvent(PointF nearPoint, MotionEvent event) {
+        if (mVisible == false) {
+            return false;
+        }
+
         for (int i = 0; i < mTouchableItems.size(); i++) {
             Touchable touchable = mTouchableItems.get(i);
             if (onDragEvent(nearPoint, event, touchable)) {
@@ -224,6 +271,10 @@ public class Layer {
     }
 
     public boolean onLongPress(PointF nearPoint, MotionEvent event) {
+        if (mVisible == false) {
+            return false;
+        }
+
         for (int i = 0; i < mTouchableItems.size(); i++) {
             Touchable touchable = mTouchableItems.get(i);
             if (onLongPressEvent(nearPoint, event, touchable)) {
