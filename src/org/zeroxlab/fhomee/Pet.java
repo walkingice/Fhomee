@@ -160,7 +160,7 @@ public class Pet extends GLObject{
 
         mJumpAni.setDestination(mPositionX, mPositionY);
         setAnimation(mJumpAni);
-        Timeline.getInstance().addAnimation(mJumpAni);
+        Timeline.getInstance().addTimer(mJumpAni);
     }
 
     class Jump extends GLTranslate{

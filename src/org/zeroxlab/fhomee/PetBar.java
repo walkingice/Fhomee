@@ -110,7 +110,7 @@ public class PetBar extends GLObject implements Touchable {
         float y = super.getY();
         mShiftAnimation.setDestination(x, y);
         this.setAnimation(mShiftAnimation);
-        Timeline.getInstance().addAnimation(mShiftAnimation);
+        Timeline.getInstance().addTimer(mShiftAnimation);
     }
 
     public void addPet(Pet elf) {

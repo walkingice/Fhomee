@@ -158,7 +158,7 @@ public class World extends GLObject implements Touchable {
         float endX = -1 * nextRoom * ROOM_WIDTH;
         GLTranslate ani = new GLTranslate(time, endX, 0);
         this.setAnimation(ani);
-        Timeline.getInstance().addAnimation(ani);
+        Timeline.getInstance().addTimer(ani);
     }
 
     public boolean onPressEvent(PointF point, MotionEvent event) {

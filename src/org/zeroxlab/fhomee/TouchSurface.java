@@ -73,7 +73,7 @@ public class TouchSurface extends GLObject {
         mSight.setXY(x, y);
         Log.i(TAG, "Set to "+x+" "+y);
         mSight.setAnimation(notify);
-        mTimeline.addAnimation(notify);
+        mTimeline.addTimer(notify);
     }
 
     public void draw(GL10 gl) {
