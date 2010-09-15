@@ -19,6 +19,8 @@
 
 package org.zeroxlab.Fhome;
 
+import org.zeroxlab.Fhome.core.GLObject;
+
 import android.util.Log;
 
 import android.graphics.Bitmap;
@@ -103,7 +105,7 @@ public class TopBar extends GLObject {
     }
 
     @Override
-    public void drawChildren(GL10 gl) {
+    protected void drawChildren(GL10 gl) {
 	if (mList == null) {
 	    return;
 	}

@@ -19,6 +19,8 @@
 
 package org.zeroxlab.Fhome;
 
+import org.zeroxlab.Fhome.core.GLObject;
+
 import android.util.Log;
 
 import android.graphics.Bitmap;

@@ -16,8 +16,9 @@
  * limitations under the License.
  */
 
-
 package org.zeroxlab.Fhome;
+
+import org.zeroxlab.Fhome.core.GLObject;
 
 import android.util.Log;
 

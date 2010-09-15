@@ -235,7 +235,7 @@ public class TextureManager {
         return temp;
     }
 
-    class TextureObj {
+    public class TextureObj {
 	int    mId;
 	int    mBinding;
 	String mName;
@@ -294,42 +294,42 @@ public class TextureManager {
 	    mId = id;
 	}
 
-	int getTextureId() {
+	public int getTextureId() {
 	    return mId;
 	}
 
-        int getTextureWidth() {
+        public int getTextureWidth() {
             return mWidthPx;
         }
 
-        int getTextureHeight() {
+        public int getTextureHeight() {
             return mHeightPx;
         }
 
-	String getName() {
+	public String getName() {
 	    return mName;
 	}
 
         /* If there is a GLObject trying to use this texture
            It should call this method*/
-	void increaseBinding() {
+	public void increaseBinding() {
 	    mBinding++;
 	}
 
         /* If a GLObject will not use this texture
            It should call this method */
-	void decreaseBinding() {
+	public void decreaseBinding() {
 	    mBinding--;
             /* If there is no GLObject using this texture
                the counter should be zero */
             manager.removeTextureObj(this);
 	}
 
-	int bindingCount() {
+	public int bindingCount() {
 	    return mBinding;
 	}
 
-	void destroy() {
+	public void destroy() {
 	    mBitmap.recycle();
 	}
     }
