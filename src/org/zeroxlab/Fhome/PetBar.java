@@ -166,18 +166,26 @@ public class PetBar extends GLObject implements Touchable {
 
     public boolean onPressEvent(PointF point, MotionEvent event) {
 	mPressPoint.x = point.x;
-	return true;
+        if (contains(point.x, point.y)) {
+	    return true;
+        }
+
+        return false;
     }
 
     public boolean onReleaseEvent(PointF point, MotionEvent event) {
 	this.backToCenter();
-	return true;
+        if (contains(point.x, point.y)) {
+	    return true;
+        }
+
+        return false;
     }
 
     public boolean onDragEvent(PointF point, MotionEvent event) {
 	if (mWorld == null) {
 	    Log.i(TAG, "World is null");
-	    return true;
+	    return false;
 	}
 
 	float dx = point.x - mPressPoint.x;
@@ -188,7 +196,11 @@ public class PetBar extends GLObject implements Touchable {
 	    setXY((dx / 3) - getWidth() / 2, getY());
 	}
 
-	return true;
+        if (contains(point.x, point.y)) {
+	    return true;
+        }
+
+        return false;
     }
 
     public boolean onLongPressEvent(PointF point, MotionEvent event) {
@@ -204,6 +216,11 @@ public class PetBar extends GLObject implements Touchable {
                 return true;
             }
         }
+
+        if (contains(point.x, point.y)) {
+	    return true;
+        }
+
         return false;
     }
 }
