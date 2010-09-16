@@ -146,7 +146,7 @@ public class Room extends GLObject {
         protected void drawChildren(GL10 gl) {
             GLObject obj;
             for (int i = 0; i < mChildren.size(); i++) {
-                obj = mChildren.get(i);
+                obj = (GLObject)mChildren.get(i);
 
                 gl.glPushMatrix();
                 gl.glRotatef(90f, 1f, 0f, 0f);

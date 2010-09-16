@@ -96,7 +96,7 @@ public class TopBar extends GLObject {
         if (mList != null) {
             GLObject obj;
             for (int i = 0; i < getChildrenCount(); i++) {
-                obj = mChildren.get(i);
+                obj = (GLObject)mChildren.get(i);
                 float x = mHGap + i * (mHGap + mObjWidth);
                 float y = mVGap;
                 obj.setXY(x, y);

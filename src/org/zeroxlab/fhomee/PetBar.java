@@ -161,7 +161,7 @@ public class PetBar extends GLObject implements Touchable {
     private void resetPetsVisibility() {
         GLObject obj;
         for (int i = 0; i < getChildrenCount(); i++) {
-            obj = mChildren.get(i);
+            obj = (GLObject)mChildren.get(i);
             boolean visible = i < mPetMax;
             obj.setVisible(visible);
         }

@@ -57,7 +57,6 @@ public class World extends GLObject implements Touchable {
 
     public World() {
         super(0, 0, 0, 0);
-        mChildren = new LinkedList<GLObject>();
 
         /* depth : height = LEVEL_3 : ROOM_HEIGHT */
         float height = BAR_HEIGHT + ROOM_HEIGHT + BAR_HEIGHT;
@@ -65,16 +64,6 @@ public class World extends GLObject implements Touchable {
         MINIMODE_DEPTH_OFFSET = depth - ViewManager.LEVEL_3;
 
         mGestureMgr = GestureManager.getInstance();
-    }
-
-    @Override
-    public void addChild(GLObject obj) {
-        Log.i(TAG, "class World only accept Room, use addRoom instead of this method");
-    }
-
-    @Override
-    public void addChild(int location, GLObject obj) {
-        Log.i(TAG, "class World only accept Room, use addRoom instead of this method");
     }
 
     public void addRoom(Room room) {
