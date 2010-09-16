@@ -37,6 +37,7 @@ public class Rectangle extends Particle {
 
     public final String TAG = "Rectangle";
 
+    protected boolean mVisible = false;
     protected Rectangle mParent;
     protected RectF  mRect;
     protected RectF  mCoverage;
@@ -74,6 +75,14 @@ public class Rectangle extends Particle {
 
     public void setParent(Rectangle parent) {
         mParent = parent;
+    }
+
+    public void setVisible(boolean visible) {
+        mVisible = visible;
+    }
+
+    public boolean getVisible() {
+        return mVisible;
     }
 
     public float getWidth() {
@@ -192,6 +201,10 @@ public class Rectangle extends Particle {
     }
 
     public int pointerAt(float x, float y) {
+        if (!mVisible) {
+            return -1;
+        }
+
         int id = -1;
 
         /* GLView is a rectangle. However, GLObject may be Rotated
@@ -274,9 +287,11 @@ public class Rectangle extends Particle {
     }
 
     public void draw(GL10 gl) {
-        moveModelViewToPosition(gl);
-        drawMyself(gl);
-        drawChildren(gl);
+        if (mVisible) {
+            moveModelViewToPosition(gl);
+            drawMyself(gl);
+            drawChildren(gl);
+        }
     }
 
     protected boolean applyAnimation(GL10 gl) {
