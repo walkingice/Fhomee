@@ -19,6 +19,7 @@
 package org.zeroxlab.fhomee;
 
 import org.zeroxlab.fhomee.entity.GLObject;
+import org.zeroxlab.fhomee.entity.Rectangle;
 
 import android.util.Log;
 
@@ -57,7 +58,7 @@ public class Layer {
     private float mZn = 0;
     private PointF mPoint;
     private float mViewport[];
-    private LinkedList<GLObject>  mChildren;
+    private LinkedList<Rectangle>  mChildren;
     private LinkedList<Touchable> mTouchableItems;
 
     Layer(float depth) {
@@ -75,7 +76,7 @@ public class Layer {
            (0, 0) is at Left-Top */
         mPoint = new PointF();
         mViewport = new float[8];
-        mChildren = new LinkedList<GLObject>();
+        mChildren = new LinkedList<Rectangle>();
         mTouchableItems = new LinkedList<Touchable>();
 
         RectF nearViewport = new RectF(0, 0
@@ -111,14 +112,14 @@ public class Layer {
     }
 
     public void measure() {
-        GLObject obj;
+        Rectangle obj;
         for (int i = 0; i < mChildren.size(); i++) {
             obj = mChildren.get(i);
             obj.measure(mZn * sRatioH, mZn * sRatioV);
         }
     }
 
-    public void addChild(GLObject obj, boolean isTouchable) {
+    public void addChild(Rectangle obj, boolean isTouchable) {
         mChildren.add(obj);
         if (isTouchable) {
             Touchable t = (Touchable) obj;
@@ -148,7 +149,7 @@ public class Layer {
     /* if the specificTarget is at this Layer,
      * return the id of the object which contains the point
      */
-    public int getIdContains(PointF nearPoint, GLObject specificTarget) {
+    public int getIdContains(PointF nearPoint, Rectangle specificTarget) {
         if (mVisible == false) {
             return -1;
         }
@@ -166,7 +167,7 @@ public class Layer {
         }
 
         for (int i = 0; i < mChildren.size(); i++) {
-            GLObject obj = mChildren.get(i);
+            Rectangle obj = mChildren.get(i);
             int id = getIdContains(nearPoint, obj);
             if (id != -1) {
                 return id;
