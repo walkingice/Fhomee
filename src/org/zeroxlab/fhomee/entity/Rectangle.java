@@ -113,6 +113,22 @@ public class Rectangle extends Particle {
         mHeightPx = heightPx;
     }
 
+    public boolean measure(float ratioX, float ratioY) {
+        boolean updated = false;
+
+        if (mXPx != UNDEFINE && mYPx != UNDEFINE) {
+            setXY(ratioX * mXPx, ratioY * mYPx);
+            updated = true;
+        }
+
+        if (mWidthPx != UNDEFINE && mHeightPx != UNDEFINE) {
+            setSize(ratioX * mWidthPx, ratioY * mHeightPx);
+            updated = true;
+        }
+
+        return updated;
+    }
+
     public boolean contains(float x, float y) {
         mPts[0] = x;
         mPts[1] = y;

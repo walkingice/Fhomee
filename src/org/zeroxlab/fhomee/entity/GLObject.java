@@ -244,22 +244,10 @@ public class GLObject extends Rectangle {
     }
 
     public boolean measure(float ratioX, float ratioY) {
-        boolean updated = false;
-
-        if (mXPx != UNDEFINE && mYPx != UNDEFINE) {
-            setXY(ratioX * mXPx, ratioY * mYPx);
-            Log.i(TAG,mGLView.getTexture().getName() + " set xy to ("+ratioX * mXPx +","+ratioY * mYPx+")");
-            updated = true;
-        }
-
-        if (mWidthPx != UNDEFINE && mHeightPx != UNDEFINE) {
-            setSize(ratioX * mWidthPx, ratioY * mHeightPx);
-            Log.i(TAG,mGLView.getTexture().getName() + " set width to ("+ratioX * mWidthPx +","+ratioY * mHeightPx+")");
-            updated = true;
-        }
+        boolean updated = super.measure(ratioX, ratioY);
 
         if (mHasChildren) {
-            updated = measureChildren(ratioX, ratioY);
+            updated = updated || measureChildren(ratioX, ratioY);
         }
 
         return updated;
