@@ -20,6 +20,7 @@
 package org.zeroxlab.fhomee;
 
 import org.zeroxlab.fhomee.entity.GLObject;
+import org.zeroxlab.fhomee.entity.RectangleGroup;
 import org.zeroxlab.fhomee.time.GLTranslate;
 
 import android.util.Log;
@@ -33,7 +34,7 @@ import android.content.res.Resources;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class PetBar extends GLObject implements Touchable {
+public class PetBar extends RectangleGroup implements Touchable {
 
     final String TAG = "PetBar";
     final int mPetMax = 4;
@@ -108,9 +109,11 @@ public class PetBar extends GLObject implements Touchable {
     public void backToCenter() {
         float x = 0 - getWidth() / 2;
         float y = super.getY();
-        mShiftAnimation.setDestination(x, y);
-        this.setAnimation(mShiftAnimation);
-        Timeline.getInstance().addTimer(mShiftAnimation);
+        setXY(x, y);
+        /*FIXME: no animation yet*/
+        //mShiftAnimation.setDestination(x, y);
+        //this.setAnimation(mShiftAnimation);
+        //Timeline.getInstance().addTimer(mShiftAnimation);
     }
 
     public void addPet(Pet elf) {
