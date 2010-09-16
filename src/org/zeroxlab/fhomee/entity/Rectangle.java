@@ -37,7 +37,7 @@ public class Rectangle extends Particle {
 
     public final String TAG = "Rectangle";
 
-    protected boolean mVisible = false;
+    protected boolean mVisible = true;
     protected Rectangle mParent;
     protected RectF  mRect;
     protected RectF  mCoverage;
