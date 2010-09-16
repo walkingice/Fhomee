@@ -293,22 +293,16 @@ public class ViewManager {
         }
         mMiniMode = true;
         mDock.setVisible(true);
-        mDock.setChildrenVisible(true);
         mTopBar.setVisible(true);
-        mTopBar.setChildrenVisible(true);
         mPetBar.setVisible(false);
-        mPetBar.setChildrenVisible(false);
         mWorld.setMiniMode();
     }
 
     public void turnOffMiniMode() {
         mMiniMode = false;
         mDock.setVisible(false);
-        mDock.setChildrenVisible(false);
         mTopBar.setVisible(false);
-        mTopBar.setChildrenVisible(false);
         mPetBar.setVisible(true);
-        mPetBar.setChildrenVisible(true);
         mWorld.setNormalMode();
     }
 
