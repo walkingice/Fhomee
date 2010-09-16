@@ -37,14 +37,19 @@ public class Rectangle extends Particle {
 
     public final String TAG = "Rectangle";
 
+    protected Rectangle mParent;
     protected RectF  mRect;
     protected RectF  mCoverage;
     protected RectF  mTmpRect;
     protected float  mAngle = 0f;
     protected Matrix mTranslate;
     protected Matrix mInvert;
+    protected Matrix mAbsTranslate;
 
     protected float mPts[];
+
+    float mViewport[];
+    protected boolean inViewport = true;
 
     /* Stores the size of this Rectangle
      * These data represent in Pixel-base of Screen.
@@ -61,7 +66,14 @@ public class Rectangle extends Particle {
 
         mTranslate = new Matrix();
         mInvert = new Matrix();
+        mAbsTranslate = new Matrix();
         mPts = new float[2];
+        mViewport = new float[8];
+
+    }
+
+    public void setParent(Rectangle parent) {
+        mParent = parent;
     }
 
     public float getWidth() {
@@ -126,7 +138,14 @@ public class Rectangle extends Particle {
             updated = true;
         }
 
+        updated = updated || measureChildren(ratioX, ratioY);
+
         return updated;
+    }
+
+    /* Rectangle group overwrite this method */
+    protected boolean measureChildren(float ratioX, float ratioY) {
+        return false;
     }
 
     public boolean contains(float x, float y) {
@@ -136,8 +155,86 @@ public class Rectangle extends Particle {
         return mRect.contains(mPts[0], mPts[1]);
     }
 
+    public Matrix getAbsTranslateMatrix() {
+        return mAbsTranslate;
+    }
+
     public Matrix getTranslateMatrix() {
         return mTranslate;
+    }
+
+    public void checkViewport(float[] viewport) {
+        mViewport[0] = viewport[0];
+        mViewport[1] = viewport[1];
+        mViewport[2] = viewport[2];
+        mViewport[3] = viewport[3];
+        mViewport[4] = viewport[4];
+        mViewport[5] = viewport[5];
+        mViewport[6] = viewport[6];
+        mViewport[7] = viewport[7];
+        mInvert.mapPoints(mViewport);
+        mTmpRect.setEmpty();
+        mTmpRect.offset(mViewport[0], mViewport[1]);
+        mTmpRect.union(mViewport[2], mViewport[3]);
+        mTmpRect.union(mViewport[4], mViewport[5]);
+        mTmpRect.union(mViewport[6], mViewport[7]);
+
+        boolean inViewport = RectF.intersects(mCoverage, mTmpRect);
+
+        if (inViewport) {
+            checkChildrenViewport(mViewport);
+        }
+
+        return;
+    }
+
+    protected void checkChildrenViewport(float[] viewport) {
+    }
+
+    public int pointerAt(float x, float y) {
+        int id = -1;
+
+        /* GLView is a rectangle. However, GLObject may be Rotated
+         * or Translated. If we got a Point, just apply a reverse
+         * matrix to the point then we can regard the GLObject
+         * is alinging the Origin.
+         */
+        mPts[0] = x;
+        mPts[1] = y;
+        mInvert.mapPoints(mPts); // apply reverse matrix
+
+        id = pointerAtChildren(mPts[0], mPts[1]);
+
+        if (id == -1 && mRect.contains(mPts[0], mPts[1])) {
+            id = mID;
+        }
+
+        return id;
+    }
+
+    protected int pointerAtChildren(float convertedX, float convertedY) {
+        return -1;
+    }
+
+    public void updateCoverage() {
+        mCoverage.set(mRect);
+
+        if (mParent != null) {
+            mParent.updateCoverage();
+        }
+
+        Camera.sRefresh = true;
+    }
+
+    protected void updateChildrenCoverage() {
+    }
+
+    public void getCoverage(RectF dst) {
+        dst.set(mCoverage);
+    }
+
+    public void getTranslatedCoverage(RectF dst) {
+        mTranslate.mapRect(dst, mCoverage);
     }
 
     /* A Rectangle may be Translated or Rotated from Origin.
@@ -155,5 +252,41 @@ public class Rectangle extends Particle {
         mTranslate.postRotate(mAngle);
     }
 
+    protected void resetAbsTranslateMatrix() {
+        mAbsTranslate.reset();
+        if (mParent != null) {
+            mAbsTranslate.preConcat(mParent.getAbsTranslateMatrix());
+        }
+        mAbsTranslate.preTranslate(mPosition.x, mPosition.y);
+        mAbsTranslate.preRotate(mAngle);
+
+        resetChildrenAbsTranslateMatrix();
+    }
+
+    protected void resetChildrenAbsTranslateMatrix() {
+    }
+
+    /* This Rectangle locate at a position which relate to its parent
+       Move the ModelView Matrix to the position */
+    protected void moveModelViewToPosition(GL10 gl) {
+        gl.glTranslatef(mPosition.x, mPosition.y, mDepth);
+        gl.glRotatef(mAngle, 0, 0, 1f);
+    }
+
+    public void draw(GL10 gl) {
+        moveModelViewToPosition(gl);
+        drawMyself(gl);
+        drawChildren(gl);
+    }
+
+    protected boolean applyAnimation(GL10 gl) {
+        return true;
+    }
+
+    protected void drawMyself(GL10 gl) {
+    }
+
+    protected void drawChildren(GL10 gl) {
+    }
 }
 
