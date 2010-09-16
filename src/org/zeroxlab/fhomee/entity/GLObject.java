@@ -51,8 +51,6 @@ public class GLObject extends RectangleGroup {
     protected ClickListener mListener;
     protected GLView mGLView;
 
-    protected boolean mVisible = false;
-
     protected boolean mHasChildren = false;
     protected GLObject mParent = null;
 
@@ -87,14 +85,6 @@ public class GLObject extends RectangleGroup {
         super.clear();
         setTexture(null);
         destroyGLView();
-    }
-
-    public void setVisible(boolean visible) {
-        mVisible = visible;
-    }
-
-    public boolean getVisible() {
-        return mVisible;
     }
 
     public void setAnimation(GLAnimation animation) {
