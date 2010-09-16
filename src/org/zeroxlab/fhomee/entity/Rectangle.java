@@ -289,7 +289,9 @@ public class Rectangle extends Particle {
     public void draw(GL10 gl) {
         if (mVisible) {
             moveModelViewToPosition(gl);
-            drawMyself(gl);
+            if (applyAnimation(gl)) {
+                drawMyself(gl);
+            }
             drawChildren(gl);
         }
     }
