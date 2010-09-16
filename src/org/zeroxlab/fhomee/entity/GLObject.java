@@ -52,7 +52,6 @@ public class GLObject extends RectangleGroup {
     protected GLView mGLView;
 
     protected boolean mHasChildren = false;
-    protected GLObject mParent = null;
 
     protected GLAnimation mAnimation;
     protected Object mAnimationLock;
@@ -158,10 +157,6 @@ public class GLObject extends RectangleGroup {
         }
 
         mVisible = false;
-    }
-
-    public GLObject getParent() {
-        return mParent;
     }
 
     protected boolean applyAnimation(GL10 gl) {
