@@ -33,9 +33,8 @@ import java.util.LinkedList;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class Bubble extends GLObject implements GLObject.ClickListener {
+public class Bubble extends GLObject implements IFhomee, GLObject.ClickListener {
 
-    final String TAG = "Bubble";
     public static String background = "bubble";
     private BubbleOwner mOwner;
 

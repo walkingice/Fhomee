@@ -49,7 +49,7 @@ import android.graphics.RectF;
 
 import java.nio.*;
 
-public class ViewManager {
+public class ViewManager implements IFhomee {
 
     public static boolean USE_ORTHO = false; // use Ortho or Frustum?
     public static float PROJ_LEFT   = -16f;
@@ -107,7 +107,6 @@ public class ViewManager {
     private int mPressId;
     private int mReleaseId;
 
-    private static final String TAG="ViewManager";
     private static ViewManager mViewMgr;
     private Rect mViewPort;
     private static GLSurfaceView mSurfaceView;

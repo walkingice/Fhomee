@@ -37,10 +37,9 @@ import java.util.Iterator;
 import java.nio.IntBuffer;
 
 /* TextureManager is a singleton instance */
-public class TextureManager {
+public class TextureManager implements IFhomee {
 
     private static TextureManager manager = new TextureManager();
-    final String TAG="TextureManager";
 
     private GL10 mGLContext;
 

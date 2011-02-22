@@ -48,9 +48,8 @@ import org.zeroxlab.fhomee.TextureManager.TextureObj;
  * Text always display at the center of GLLabel, setSize never
  * effect the size of Text but only background.
  */
-public class GLLabel extends GLObject {
+public class GLLabel extends GLObject implements IFhomee {
 
-    final String TAG = "GLLabel";
     public final static float mMinWidth  = 200;
     public final static float mMinHeight = 200;
 

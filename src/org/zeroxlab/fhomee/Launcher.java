@@ -34,9 +34,8 @@ import android.graphics.*;
 /* Arty Wall (Temporary Name) is the Launcher of 0xLab for Android.  *\
    \* This Launcher is disigned by CMLab of National Taiwan University. */
 
-public class Launcher extends Activity {
+public class Launcher extends Activity implements IFhomee {
 
-    final String TAG="Launcher";
     TotalScreen mScreen;
     GestureManager mGestureMgr;
     public static int mDefaultWidth  = 320;

@@ -36,7 +36,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class PetBar extends RectangleGroup implements Touchable {
 
-    final String TAG = "PetBar";
     final int mPetMax = 4;
     float CELL_WIDTH  = 0f;
     float CELL_HEIGHT = 0f;

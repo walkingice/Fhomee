@@ -40,9 +40,7 @@ import android.content.res.Resources;
 /** 
  * TouchSurface is the first surface glue on the Near surface 
  */
-public class TouchSurface extends GLObject {
-
-    final String TAG = "TouchSurface";
+public class TouchSurface extends GLObject implements IFhomee {
 
     Timeline mTimeline;
 

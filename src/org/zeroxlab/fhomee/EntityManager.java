@@ -30,9 +30,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /* EntityManager is a singleton instance */
-public class EntityManager{
-
-    final String TAG = "EntityManager";
+public class EntityManager implements IFhomee {
 
     private static EntityManager manager = new EntityManager();
 

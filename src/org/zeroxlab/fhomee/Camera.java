@@ -34,7 +34,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
 
-public class Camera {
+public class Camera implements IFhomee {
     public final static boolean USE_ORTHO = ViewManager.USE_ORTHO;
     public float LEFT   = ViewManager.PROJ_LEFT;
     public float RIGHT  = ViewManager.PROJ_RIGHT;

@@ -31,9 +31,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class GestureManager {
+public class GestureManager implements IFhomee {
 
-    final String TAG="GestureManager";
     private static GestureManager mGestureMgr = new GestureManager();
     private final static int DEFAULT_WIDTH  = 320;
     private final static int DEFAULT_HEIGHT = 480;

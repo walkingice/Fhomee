@@ -37,9 +37,7 @@ import android.content.res.Resources;
 
 import org.zeroxlab.fhomee.TextureManager.TextureObj;
 
-public class Poster extends GLObject implements Bubble.BubbleOwner{
-
-    final String TAG = "Poster";
+public class Poster extends GLObject implements IFhomee, Bubble.BubbleOwner{
 
     public boolean mHasBubble = false;
     private Bubble mBubble;

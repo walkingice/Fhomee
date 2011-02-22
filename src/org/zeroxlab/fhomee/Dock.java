@@ -34,9 +34,7 @@ import java.util.LinkedList;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class Dock extends GLObject implements Touchable {
-
-    final String TAG = "Dock";
+public class Dock extends GLObject implements IFhomee, Touchable {
 
     public final static float BORDER_RATIO = 0.1f; // 10%
     protected float mHGap = 0f;

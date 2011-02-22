@@ -39,9 +39,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import org.zeroxlab.fhomee.TextureManager.TextureObj;
 
-public class GLView {
+public class GLView implements IFhomee {
 
-    final static String TAG = "GLView";
     final static int VERTEX_DIMENSION  = 3;
     final static int TEXTURE_DIMENSION = 2;
     final static int COLOR_SIZE = 4; // RGBA

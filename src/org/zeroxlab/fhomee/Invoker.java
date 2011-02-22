@@ -25,10 +25,9 @@ import android.content.Intent;
 
 import java.util.LinkedList;
 
-public class Invoker {
+public class Invoker implements IFhomee {
 
     Intent mIntent;
-    final String TAG = "Invoker";
 
     Invoker(String packageName, String className) {
         ComponentName component = new ComponentName(packageName, className);

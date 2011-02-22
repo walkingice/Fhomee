@@ -35,9 +35,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 
 /* Timeline is a singleton instance. It maintain OpenGL redraw rate */
-public class Timeline {
-
-    final String TAG="Timeline";
+public class Timeline implements IFhomee {
 
     public  static int ENDLESS = -1;
     private int DEFAULT_UPDATE = 5000; // 5 secs

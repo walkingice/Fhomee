@@ -35,9 +35,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import javax.microedition.khronos.opengles.GL10;
 
-public class Layer {
+public class Layer implements IFhomee {
 
-    public final static String TAG = "Layer";
     public static float sProjNearWidth  = -1;
     public static float sProjNearHeight = -1;
     public static float sProjNear   = -1;

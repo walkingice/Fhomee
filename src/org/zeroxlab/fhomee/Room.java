@@ -34,9 +34,7 @@ import javax.microedition.khronos.opengles.GL10;
 /** 
  * Room is a basic data structure which contain a Wall, Ground and other GLObjects.
  */
-public class Room extends GLObject {
-
-    final String TAG = "Room";
+public class Room extends GLObject implements IFhomee {
 
     Wall mWall;
     Ground mGround;

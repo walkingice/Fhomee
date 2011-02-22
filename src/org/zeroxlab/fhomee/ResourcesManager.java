@@ -34,9 +34,8 @@ import android.os.Bundle;
  * It is a singleton instance. It read Drawable from outer package and provide
  * to component of Launcher.
  */
-public class ResourcesManager {
+public class ResourcesManager implements IFhomee {
 
-    static final String TAG="ResourcesManager";
     static final String DEFAULT_THEME  = "org.zeroxlab.fhomee"; // hard code to itself
     static final String DEFAULT_VALUE  = "Default";
     static final String LAUNCHER_THEME = "LAUNCHER_THEME";

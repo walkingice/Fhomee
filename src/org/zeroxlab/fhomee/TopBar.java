@@ -33,9 +33,8 @@ import java.util.LinkedList;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class TopBar extends GLObject {
+public class TopBar extends GLObject implements IFhomee {
 
-    final String TAG = "TopBar";
     protected int mObjMax = 4;
 
     public final static float BORDER_RATIO = 0.1f; // 10%

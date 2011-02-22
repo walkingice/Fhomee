@@ -39,9 +39,7 @@ import android.content.res.Resources;
 
 import org.zeroxlab.fhomee.TextureManager.TextureObj;
 
-public class Pet extends GLObject{
-
-    final String TAG = "Pet";
+public class Pet extends GLObject implements IFhomee {
 
     protected float mPositionX;
     protected float mPositionY;

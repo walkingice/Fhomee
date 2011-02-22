@@ -33,9 +33,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import android.content.res.Resources;
 
-public class Elf extends Pet{
-
-    final String TAG = "Elf";
+public class Elf extends Pet implements IFhomee {
 
     final String DEFAULT_TEXTURE = "goodman";
     private PetBar mPetBar;

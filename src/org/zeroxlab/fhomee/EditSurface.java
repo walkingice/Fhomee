@@ -38,9 +38,7 @@ import android.content.res.Resources;
 
 import org.zeroxlab.fhomee.TextureManager.TextureObj;
 
-public class EditSurface extends GLObject implements Touchable, GLObject.ClickListener {
-
-    final String TAG = "EditSurface";
+public class EditSurface extends GLObject implements IFhomee, Touchable, GLObject.ClickListener {
 
     Timeline    mTimeline;
     ViewManager mViewMgr;

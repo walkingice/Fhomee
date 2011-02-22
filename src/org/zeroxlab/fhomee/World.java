@@ -31,9 +31,7 @@ import android.view.MotionEvent;
 import java.util.LinkedList;
 import javax.microedition.khronos.opengles.GL10;
 
-public class World extends GLObject implements Touchable {
-
-    final String TAG = "World";
+public class World extends GLObject implements IFhomee, Touchable {
 
     private int mCurrentRoom = 0;
 
