@@ -102,6 +102,10 @@ public class ViewManager implements IFhomee {
     /* convert Near location into specific Level */
     private static PointF mLevelPoint;
 
+    private float mCameraStartX = 0f;
+    private float mCameraStartY = 0f;
+    private float mPressNearX = 0f;
+    private float mPressNearY = 0f;
     private int mDownId;
     private int mUpId;
     private int mPressId;
@@ -165,6 +169,10 @@ public class ViewManager implements IFhomee {
      */
     public void onPress(int screenX, int screenY, MotionEvent event) {
         getNearLocation(mNearPoint, screenX, screenY);
+        mCameraStartX = mCamera.getCenterX();
+        mCameraStartY = mCamera.getCenterY();
+        mPressNearX = mNearPoint.x;
+        mPressNearY = mNearPoint.y;
         Layer layer = mCamera.onPressEvent(mNearPoint, event);
         mPressId = mCamera.getIdContains(mNearPoint);
 
@@ -225,6 +233,14 @@ public class ViewManager implements IFhomee {
     public void onMove(int screenX, int screenY, MotionEvent event) {
         getNearLocation(mNearPoint, screenX, screenY);
         Layer layer = mCamera.onDragEvent(mNearPoint, event);
+
+        float vectorX = mNearPoint.x - mPressNearX;
+        float vectorY = mNearPoint.y - mPressNearY;
+        /* We rotate the coordinate in Camera due to the coordinate of OpenGL
+         * is different from normal computer system. If we drag from left to
+         * right, the camera should move from right to left due to we think
+         * we are draging the visible stuffs but not camera. */
+        mCamera.setCenter(mCameraStartX - vectorX, mCameraStartY + vectorY);
 
         /*
            getNearLocation(mNearPoint, screenX, screenY);
