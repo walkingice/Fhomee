@@ -75,6 +75,18 @@ public class Camera implements IFhomee {
         setNearViewport();
     }
 
+    public float getCenterX() {
+        return mCenter.x;
+    }
+
+    public float getCenterY() {
+        return mCenter.y;
+    }
+
+    public void setCenter(float x, float y) {
+        mCenter.set(x, y);
+    }
+
     public void onDraw(GL10 gl) {
         gl.glMatrixMode(gl.GL_PROJECTION);
         gl.glLoadIdentity();
