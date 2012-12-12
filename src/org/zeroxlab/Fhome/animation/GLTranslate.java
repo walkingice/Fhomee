@@ -88,13 +88,10 @@ public class GLTranslate extends GLAnimation{
 
     public boolean applyAnimation(GL10 gl) {
 	boolean glObjectDrawItself = true;
-	float now  = GLAnimation.mNow;
-	float life = mLife;
-	float elapse = now - mStart;
-	float ratio = elapse / life;
-	float x = mGapX * ratio + mStartX;
-	float y = mGapY * ratio + mStartY;
-	float angle = mIncludedAngle * ratio + mStartAngle;
+	long elapse = GLAnimation.mNow - mStart;
+	float x = ((mGapX * elapse) / mLife) + mStartX;
+	float y = ((mGapY * elapse) / mLife) + mStartY;
+	float angle = ((mIncludedAngle * elapse) / mLife) + mStartAngle;
 	mObject.setXY(x, y);
 	mObject.setAngle(angle);
 	return glObjectDrawItself;
