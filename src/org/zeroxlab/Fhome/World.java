@@ -159,7 +159,7 @@ public class World extends GLObject implements Touchable {
 
     public void moveToRoom(int newRoom) {
 	int nextRoom = newRoom;
-	long time = 100;
+	long time = 400;
 
 	if (nextRoom >= mChildren.size()) {
 	    nextRoom = mChildren.size() -1;
