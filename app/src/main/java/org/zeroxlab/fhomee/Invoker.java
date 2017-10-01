@@ -40,7 +40,7 @@ public class Invoker {
 
     public boolean invoke() {
         if (mIntent != null) {
-            Launcher.getActivity().startActivity(mIntent);
+            MainActivity.getActivity().startActivity(mIntent);
         } else {
             Log.i(TAG, "Invoke nothing");
             return false;
