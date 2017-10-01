@@ -1,5 +1,13 @@
 local.properties
+gradle.properties
 gen
 bin
 proguard-project.txt
 project.properties
+
+.idea
+*.iml
+.DS_Store
+/build
+/.gradle
+
