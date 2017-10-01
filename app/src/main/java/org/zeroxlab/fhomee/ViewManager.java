@@ -424,9 +424,10 @@ public class ViewManager {
         mPetBar.addPet(pet02);
         mPetBar.addPet(pet03);
 
-        Invoker invoker01 = new Invoker("com.android.contacts", "com.android.contacts.DialtactsActivity");
+        Invoker invoker01 = new Invoker(new Intent(Intent.ACTION_DIAL));
         p1.setInvoker(invoker01);
-        Invoker invoker02 = new Invoker("com.google.android.music", "com.android.music.AlbumBrowserActivity");
+        Intent musicIntent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_MUSIC);
+        Invoker invoker02 = new Invoker(musicIntent);
         p3.setInvoker(invoker02);
         Invoker invoker03 = new Invoker("com.google.android.deskclock", "com.android.deskclock.DeskClock");
         demo05.setInvoker(invoker03);
@@ -494,7 +495,7 @@ public class ViewManager {
         mBarLayer.onDraw(gl);
 
         mEditLayer.onDraw(gl);
-	/* Draw the TouchSurface */
+    /* Draw the TouchSurface */
         drawTouchSurface(gl);
     }
 
