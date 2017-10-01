@@ -152,7 +152,7 @@ public class ResourcesManager {
 
     private static String getPreference() {
         SharedPreferences settings = mContext.getSharedPreferences(LAUNCHER_THEME,
-                Context.MODE_WORLD_READABLE);
+                Context.MODE_PRIVATE);
         String value = settings.getString(LAUNCHER_THEME, DEFAULT_VALUE);
         return value;
     }
